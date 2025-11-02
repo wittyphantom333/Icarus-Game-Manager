@@ -166,7 +166,7 @@ export default function ServerControls({ status, onStatusChange, onStatusRefresh
         <button
           onClick={handleStart}
           disabled={status !== 'stopped'}
-          className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors"
         >
           Start Server
         </button>
@@ -174,7 +174,7 @@ export default function ServerControls({ status, onStatusChange, onStatusRefresh
         <button
           onClick={handleStop}
           disabled={status !== 'running'}
-          className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors"
         >
           Stop Server
         </button>
@@ -182,7 +182,7 @@ export default function ServerControls({ status, onStatusChange, onStatusRefresh
         <button
           onClick={handleRestart}
           disabled={status === 'starting' || status === 'stopping'}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors"
         >
           Restart Server
         </button>
@@ -191,12 +191,12 @@ export default function ServerControls({ status, onStatusChange, onStatusRefresh
       <div className="flex space-x-3">
         <button
           onClick={handleForceKill}
-          className="px-4 py-2 bg-red-800 text-white rounded-md hover:bg-red-900 text-sm border border-red-600"
+          className="px-4 py-2 bg-red-800 text-white rounded-md hover:bg-red-900 text-sm border border-red-600 dark:border-red-500 transition-colors"
           title="Emergency: Force kill all IcarusServer processes"
         >
           🚨 Force Kill All Processes
         </button>
-        <span className="text-xs text-gray-500 self-center">
+        <span className="text-xs text-gray-500 dark:text-gray-400 self-center">
           Use only if server is stuck or not responding
         </span>
       </div>

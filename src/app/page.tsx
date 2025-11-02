@@ -6,13 +6,16 @@ import ServerControls from '@/components/ServerControls';
 import LogViewer from '@/components/LogViewer';
 import ModManager from '@/components/ModManager';
 import ServerConfiguration from '@/components/ServerConfiguration';
+import ServerStats from '@/components/ServerStats';
+import BackupRestore from '@/components/BackupRestore';
+import ThemeToggle from '@/components/ThemeToggle';
 
 export default function Home() {
   const [serverStatus, setServerStatus] = useState<'stopped' | 'running' | 'starting' | 'stopping'>('stopped');
   const [logs, setLogs] = useState<string[]>([]);
   const [wsConnected, setWsConnected] = useState(false);
   const [wsConnection, setWsConnection] = useState<WebSocket | null>(null);
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'config'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'config' | 'mods' | 'backup'>('dashboard');
 
   useEffect(() => {
     // Check initial server status
@@ -133,42 +136,65 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-100 p-8">
+    <main className="min-h-screen bg-gray-100 dark:bg-gray-900 p-8 transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-4xl font-bold text-gray-900">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
             Icarus Game Manager
           </h1>
-          <div className="flex items-center space-x-2">
-            <div className={`w-3 h-3 rounded-full ${wsConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
-            <span className="text-sm text-gray-600">
-              {wsConnected ? 'Connected' : 'Disconnected'}
-            </span>
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <div className={`w-3 h-3 rounded-full ${wsConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+              <span className="text-sm text-gray-600 dark:text-gray-400">
+                {wsConnected ? 'Connected' : 'Disconnected'}
+              </span>
+            </div>
+            <ThemeToggle />
           </div>
         </div>
 
         {/* Tab Navigation */}
         <div className="mb-8">
-          <nav className="flex space-x-8">
+          <nav className="flex space-x-8 border-b border-gray-200 dark:border-gray-700">
             <button
               onClick={() => setActiveTab('dashboard')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`py-2 px-4 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'dashboard'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
               }`}
             >
               Dashboard
             </button>
             <button
               onClick={() => setActiveTab('config')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`py-2 px-4 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'config'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
               }`}
             >
               Server Configuration
+            </button>
+            <button
+              onClick={() => setActiveTab('mods')}
+              className={`py-2 px-4 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === 'mods'
+                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
+              }`}
+            >
+              Mod Manager
+            </button>
+            <button
+              onClick={() => setActiveTab('backup')}
+              className={`py-2 px-4 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === 'backup'
+                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
+              }`}
+            >
+              Backup & Restore
             </button>
           </nav>
         </div>
@@ -177,8 +203,8 @@ export default function Home() {
         {activeTab === 'dashboard' && (
           <>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-2xl font-semibold mb-4">Server Status</h2>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Server Status</h2>
                 <ServerStatus status={serverStatus} />
                 <ServerControls 
                   status={serverStatus} 
@@ -187,25 +213,25 @@ export default function Home() {
                 />
               </div>
               
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-2xl font-semibold mb-4">Mod Manager</h2>
-                <ModManager />
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Server Statistics</h2>
+                <ServerStats />
               </div>
             </div>
             
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-semibold">Server Logs</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Server Logs</h2>
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={clearLogs}
-                    className="px-3 py-1 text-sm bg-gray-500 text-white rounded hover:bg-gray-600"
+                    className="px-3 py-1 text-sm bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
                   >
                     Clear Logs
                   </button>
                   <button
                     onClick={() => window.location.reload()}
-                    className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
+                    className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
                   >
                     Refresh Page
                   </button>
@@ -218,6 +244,16 @@ export default function Home() {
 
         {activeTab === 'config' && (
           <ServerConfiguration />
+        )}
+
+        {activeTab === 'mods' && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <ModManager />
+          </div>
+        )}
+
+        {activeTab === 'backup' && (
+          <BackupRestore />
         )}
       </div>
     </main>

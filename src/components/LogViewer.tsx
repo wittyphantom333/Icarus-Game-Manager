@@ -38,10 +38,10 @@ export default function LogViewer({ logs }: LogViewerProps) {
       <div 
         ref={scrollRef}
         onScroll={handleScroll}
-        className="bg-black text-green-400 p-4 rounded-md h-96 overflow-y-auto font-mono text-sm"
+        className="bg-black dark:bg-gray-900 text-green-400 dark:text-green-300 p-4 rounded-md h-96 overflow-y-auto font-mono text-sm border border-gray-300 dark:border-gray-600"
       >
         {logs.length === 0 ? (
-          <p className="text-gray-500">No logs available. Start the server to see logs.</p>
+          <p className="text-gray-500 dark:text-gray-400">No logs available. Start the server to see logs.</p>
         ) : (
           logs.map((log, index) => (
             <div key={index} className="mb-1 whitespace-pre-wrap">
@@ -60,7 +60,7 @@ export default function LogViewer({ logs }: LogViewerProps) {
         </button>
       )}
       
-      <div className="mt-2 flex items-center justify-between text-sm text-gray-600">
+      <div className="mt-2 flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
         <span>{logs.length} log entries</span>
         <div className="flex items-center space-x-2">
           <label className="flex items-center">

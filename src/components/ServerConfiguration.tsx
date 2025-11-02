@@ -91,21 +91,21 @@ export default function ServerConfiguration() {
 
   if (!config) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-        <p className="text-red-800">Failed to load server configuration</p>
+      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+        <p className="text-red-800 dark:text-red-300">Failed to load server configuration</p>
       </div>
     );
   }
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Server Configuration</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Server Configuration</h1>
           <button
             onClick={saveConfig}
             disabled={saving}
-            className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+            className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 dark:disabled:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
           >
             {saving ? (
               <>
@@ -121,8 +121,8 @@ export default function ServerConfiguration() {
         {message && (
           <div className={`mb-6 p-4 rounded-lg ${
             message.type === 'success' 
-              ? 'bg-green-50 text-green-800 border border-green-200' 
-              : 'bg-red-50 text-red-800 border border-red-200'
+              ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300 border border-green-200 dark:border-green-800' 
+              : 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-800'
           }`}>
             {message.text}
           </div>
@@ -130,23 +130,23 @@ export default function ServerConfiguration() {
 
         <div className="grid gap-6">
           {/* Basic Server Settings */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h2 className="text-lg font-semibold mb-4 text-gray-800">Basic Server Settings</h2>
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+            <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Basic Server Settings</h2>
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Server Name
                 </label>
                 <input
                   type="text"
                   value={config.SessionName}
                   onChange={(e) => updateConfig('SessionName', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                   placeholder="My Icarus Server"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Max Players
                 </label>
                 <input
@@ -155,37 +155,37 @@ export default function ServerConfiguration() {
                   max="64"
                   value={config.MaxPlayers}
                   onChange={(e) => updateConfig('MaxPlayers', parseInt(e.target.value) || 8)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 />
               </div>
             </div>
           </div>
 
           {/* Security Settings */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h2 className="text-lg font-semibold mb-4 text-gray-800">Security Settings</h2>
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+            <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Security Settings</h2>
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Join Password
                 </label>
                 <input
                   type="password"
                   value={config.JoinPassword}
                   onChange={(e) => updateConfig('JoinPassword', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                   placeholder="Leave empty for no password"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Admin Password
                 </label>
                 <input
                   type="password"
                   value={config.AdminPassword}
                   onChange={(e) => updateConfig('AdminPassword', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                   placeholder="Admin password"
                 />
               </div>
@@ -193,11 +193,11 @@ export default function ServerConfiguration() {
           </div>
 
           {/* Timeout Settings */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h2 className="text-lg font-semibold mb-4 text-gray-800">Timeout Settings</h2>
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+            <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Timeout Settings</h2>
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Shutdown if Not Joined For (seconds)
                 </label>
                 <input
@@ -206,12 +206,12 @@ export default function ServerConfiguration() {
                   step="1"
                   value={config.ShutdownIfNotJoinedFor}
                   onChange={(e) => updateConfig('ShutdownIfNotJoinedFor', parseFloat(e.target.value) || 0)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 />
-                <p className="text-xs text-gray-500 mt-1">0 = Never shutdown</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">0 = Never shutdown</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Shutdown if Empty For (seconds)
                 </label>
                 <input
@@ -220,51 +220,51 @@ export default function ServerConfiguration() {
                   step="1"
                   value={config.ShutdownIfEmptyFor}
                   onChange={(e) => updateConfig('ShutdownIfEmptyFor', parseFloat(e.target.value) || 0)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 />
-                <p className="text-xs text-gray-500 mt-1">0 = Never shutdown</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">0 = Never shutdown</p>
               </div>
             </div>
           </div>
 
           {/* Prospect Settings */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h2 className="text-lg font-semibold mb-4 text-gray-800">Prospect Settings</h2>
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+            <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Prospect Settings</h2>
             <div className="grid gap-4">
               <div className="grid md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Load Prospect
                   </label>
                   <input
                     type="text"
                     value={config.LoadProspect}
                     onChange={(e) => updateConfig('LoadProspect', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                     placeholder="Prospect file name"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Create Prospect
                   </label>
                   <input
                     type="text"
                     value={config.CreateProspect}
                     onChange={(e) => updateConfig('CreateProspect', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                     placeholder="New prospect name"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Last Prospect Name
                   </label>
                   <input
                     type="text"
                     value={config.LastProspectName}
                     onChange={(e) => updateConfig('LastProspectName', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                     placeholder="Last prospect"
                   />
                 </div>
@@ -312,8 +312,8 @@ export default function ServerConfiguration() {
           </div>
 
           {/* Game Settings */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h2 className="text-lg font-semibold mb-4 text-gray-800">Game Settings</h2>
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+            <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Game Settings</h2>
             <div className="grid gap-4">
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="flex items-center">
@@ -355,7 +355,7 @@ export default function ServerConfiguration() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Game Save Frequency (minutes)
                 </label>
                 <input
@@ -364,9 +364,9 @@ export default function ServerConfiguration() {
                   step="0.1"
                   value={config.GameSaveFrequency}
                   onChange={(e) => updateConfig('GameSaveFrequency', parseFloat(e.target.value) || 10)}
-                  className="w-full md:w-48 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full md:w-48 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 />
-                <p className="text-xs text-gray-500 mt-1">How often to auto-save the game</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">How often to auto-save the game</p>
               </div>
             </div>
           </div>

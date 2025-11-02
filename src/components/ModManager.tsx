@@ -147,19 +147,19 @@ export default function ModManager() {
   );
 
   if (loading) {
-    return <div className="text-center py-4">Loading mods...</div>;
+    return <div className="text-center py-4 text-gray-600 dark:text-gray-400">Loading mods...</div>;
   }
 
   return (
     <div className="space-y-4">
       {/* Tab Navigation */}
-      <div className="flex space-x-1 border-b border-gray-200">
+      <div className="flex space-x-1 border-b border-gray-200 dark:border-gray-600">
         <button
           onClick={() => setActiveTab('installed')}
           className={`px-4 py-2 font-medium text-sm transition-colors ${
             activeTab === 'installed'
-              ? 'text-blue-600 border-b-2 border-blue-600'
-              : 'text-gray-500 hover:text-gray-700'
+              ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+              : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
           }`}
         >
           Installed Mods
@@ -168,8 +168,8 @@ export default function ModManager() {
           onClick={() => setActiveTab('browse')}
           className={`px-4 py-2 font-medium text-sm transition-colors ${
             activeTab === 'browse'
-              ? 'text-blue-600 border-b-2 border-blue-600'
-              : 'text-gray-500 hover:text-gray-700'
+              ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+              : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
           }`}
         >
           Browse Mods
@@ -181,17 +181,17 @@ export default function ModManager() {
         <div>
           <div className="space-y-2">
             {installedMods.length === 0 ? (
-              <p className="text-gray-500 text-center py-8">
+              <p className="text-gray-500 dark:text-gray-400 text-center py-8">
                 No mods installed yet. Go to the Browse Mods tab to install some!
               </p>
             ) : (
               installedMods.map((mod: InstalledMod) => (
-                <div key={mod.id} className="flex items-center justify-between p-2 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors">
+                <div key={mod.id} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-medium text-gray-900">{mod.name}</h3>
-                      <span className="text-xs text-gray-500">v{mod.version}</span>
-                      <span className="text-xs text-gray-400">by {mod.author || 'Unknown'}</span>
+                      <h3 className="font-medium text-gray-900 dark:text-gray-100">{mod.name}</h3>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">v{mod.version}</span>
+                      <span className="text-xs text-gray-400 dark:text-gray-500">by {mod.author || 'Unknown'}</span>
                     </div>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -213,7 +213,7 @@ export default function ModManager() {
         <div>
           <div className="mb-6 space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Install Local Mod File
               </label>
               <input
@@ -223,9 +223,9 @@ export default function ModManager() {
                   const file = e.target.files?.[0];
                   if (file) installModFromFile(file);
                 }}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                className="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900 file:text-blue-700 dark:file:text-blue-300 hover:file:bg-blue-100 dark:hover:file:bg-blue-800"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 Upload .pak, .zip, or .EXMODZ files directly
               </p>
             </div>
@@ -236,7 +236,7 @@ export default function ModManager() {
                 placeholder="Search community mods..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
               />
             </div>
           </div>
@@ -244,26 +244,26 @@ export default function ModManager() {
           {loadingAvailable ? (
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="mt-2 text-gray-600">Loading available mods...</p>
+              <p className="mt-2 text-gray-600 dark:text-gray-400">Loading available mods...</p>
             </div>
           ) : (
             <div className="grid gap-4">
               {filteredAvailableMods.map((mod) => (
-                <div key={mod.name} className="border border-gray-200 rounded-lg p-4">
+                <div key={mod.name} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-800">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-semibold text-lg">{mod.name}</h3>
+                        <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100">{mod.name}</h3>
                         {mod.installed && (
-                          <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+                          <span className="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-xs rounded-full">
                             Installed
                           </span>
                         )}
                       </div>
-                      <p className="text-sm text-gray-600 mb-2">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                         <strong>Author:</strong> {mod.author} | <strong>Version:</strong> {mod.version}
                       </p>
-                      <p className="text-sm text-gray-700 mb-3">{mod.description}</p>
+                      <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">{mod.description}</p>
                       {mod.imageURL && (
                         <img 
                           src={mod.imageURL} 
@@ -276,14 +276,14 @@ export default function ModManager() {
                       {mod.installed ? (
                         <button 
                           disabled
-                          className="px-4 py-2 bg-gray-100 text-gray-500 rounded-md cursor-not-allowed"
+                          className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-md cursor-not-allowed"
                         >
                           Already Installed
                         </button>
                       ) : downloading.includes(mod.name) ? (
                         <button 
                           disabled
-                          className="px-4 py-2 bg-blue-100 text-blue-600 rounded-md cursor-not-allowed flex items-center gap-2"
+                          className="px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-md cursor-not-allowed flex items-center gap-2"
                         >
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
                           Installing...
@@ -308,7 +308,7 @@ export default function ModManager() {
                 </div>
               ))}
               {filteredAvailableMods.length === 0 && (
-                <p className="text-center text-gray-500 py-8">
+                <p className="text-center text-gray-500 dark:text-gray-400 py-8">
                   No mods found matching your search.
                 </p>
               )}
