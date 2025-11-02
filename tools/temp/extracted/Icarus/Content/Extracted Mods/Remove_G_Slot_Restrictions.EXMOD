@@ -1,0 +1,41 @@
+{
+        "name": "Remove G Slot Restrictions",
+        "author": "Jimk72",
+        "version": "1.0",
+        "description": "This mod allows you to place normaly G slot only items(Extractors, radars, ect) in any slot including character inventory. Really helps out the solo players!",
+        "fileName": "Remove_G_Slot_Restrictions",
+        "readmeURL": "",
+        "imageURL": "",
+        "Level2": "True",
+        "Rows": [
+        {
+            "CurrentFile": "Tags-D_TagQueries.json",
+            "File_Items": [
+                {
+                    "Name": "General_Inventory_Slot",
+                    "Query": {
+                        "TagDictionary": [
+                            {
+                                "TagName": "Item.Utilty"
+                            }
+                        ],
+                        "QueryTokenStream": [
+                            0,
+                            1,
+                            5,
+                            1,
+                            3,
+                            1,
+                            0
+                        ],
+                        "UserDescription": "General Inventory Slot",
+                        "AutoDescription": " ALL(  NONE( Item.Utility ) )"
+                    }
+                }
+            ]
+        },
+        {
+            "CurrentFile": "EndOfMod"
+        }
+    ]
+}

@@ -277,9 +277,9 @@ export default function ServerConfiguration() {
                     id="resumeProspect"
                     checked={config.ResumeProspect}
                     onChange={(e) => updateConfig('ResumeProspect', e.target.checked)}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
                   />
-                  <label htmlFor="resumeProspect" className="ml-2 text-sm font-medium text-gray-700">
+                  <label htmlFor="resumeProspect" className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                     Resume Prospect
                   </label>
                 </div>
@@ -289,9 +289,9 @@ export default function ServerConfiguration() {
                     id="allowNonAdminsToLaunch"
                     checked={config.AllowNonAdminsToLaunchProspects}
                     onChange={(e) => updateConfig('AllowNonAdminsToLaunchProspects', e.target.checked)}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
                   />
-                  <label htmlFor="allowNonAdminsToLaunch" className="ml-2 text-sm font-medium text-gray-700">
+                  <label htmlFor="allowNonAdminsToLaunch" className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                     Allow Non-Admins to Launch Prospects
                   </label>
                 </div>
@@ -301,13 +301,24 @@ export default function ServerConfiguration() {
                     id="allowNonAdminsToDelete"
                     checked={config.AllowNonAdminsToDeleteProspects}
                     onChange={(e) => updateConfig('AllowNonAdminsToDeleteProspects', e.target.checked)}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
                   />
-                  <label htmlFor="allowNonAdminsToDelete" className="ml-2 text-sm font-medium text-gray-700">
+                  <label htmlFor="allowNonAdminsToDelete" className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                     Allow Non-Admins to Delete Prospects
                   </label>
                 </div>
               </div>
+              
+              {(!config.LoadProspect && !config.CreateProspect) && (
+                <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                  <p className="text-sm text-blue-800 dark:text-blue-300">
+                    <strong>No World Selected:</strong> To start the server, you need to either:
+                    <br />• Enter a prospect name in "Load Prospect" to load an existing world
+                    <br />• Enter a name in "Create Prospect" to create a new world
+                    <br />• Popular prospects: Olympus, Styx, Prometheus, Elysium
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -322,9 +333,9 @@ export default function ServerConfiguration() {
                     id="fiberFoliageRespawn"
                     checked={config.FiberFoliageRespawn}
                     onChange={(e) => updateConfig('FiberFoliageRespawn', e.target.checked)}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
                   />
-                  <label htmlFor="fiberFoliageRespawn" className="ml-2 text-sm font-medium text-gray-700">
+                  <label htmlFor="fiberFoliageRespawn" className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                     Fiber Foliage Respawn
                   </label>
                 </div>
@@ -334,9 +345,9 @@ export default function ServerConfiguration() {
                     id="largeStonesRespawn"
                     checked={config.LargeStonesRespawn}
                     onChange={(e) => updateConfig('LargeStonesRespawn', e.target.checked)}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
                   />
-                  <label htmlFor="largeStonesRespawn" className="ml-2 text-sm font-medium text-gray-700">
+                  <label htmlFor="largeStonesRespawn" className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                     Large Stones Respawn
                   </label>
                 </div>
@@ -346,9 +357,9 @@ export default function ServerConfiguration() {
                     id="saveGameOnExit"
                     checked={config.SaveGameOnExit}
                     onChange={(e) => updateConfig('SaveGameOnExit', e.target.checked)}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
                   />
-                  <label htmlFor="saveGameOnExit" className="ml-2 text-sm font-medium text-gray-700">
+                  <label htmlFor="saveGameOnExit" className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                     Save Game on Exit
                   </label>
                 </div>
@@ -372,8 +383,8 @@ export default function ServerConfiguration() {
           </div>
         </div>
 
-        <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <p className="text-sm text-yellow-800">
+        <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+          <p className="text-sm text-yellow-800 dark:text-yellow-300">
             <strong>Note:</strong> Changes will be saved to ServerSettings.ini. The server may need to be restarted for some changes to take effect.
           </p>
         </div>

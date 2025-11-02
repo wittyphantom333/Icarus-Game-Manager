@@ -1,1 +1,1 @@
-"C:\Users\Administrator\Documents\IcarusGameManager\tools\temp\extracted\Icarus\Content\Extracted Mods\Jimk_Increased_Slots.EXMOD" "../../../Icarus/Content/Extracted Mods/Jimk_Increased_Slots.EXMOD"
+"C:\Users\Administrator\Documents\IcarusGameManager\tools\temp\extracted\Icarus\Content\Extracted Mods\Remove_G_Slot_Restrictions.EXMOD" "../../../Icarus/Content/Extracted Mods/Remove_G_Slot_Restrictions.EXMOD"

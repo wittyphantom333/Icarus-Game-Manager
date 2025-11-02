@@ -90,12 +90,44 @@ SaveGameOnExit=${config.SaveGameOnExit}
 
 export async function GET() {
   try {
-    if (!fs.existsSync(CONFIG_FILE_PATH)) {
-      return NextResponse.json({ error: 'Configuration file not found' }, { status: 404 });
-    }
+    let config: ServerConfig;
     
-    const content = fs.readFileSync(CONFIG_FILE_PATH, 'utf8');
-    const config = parseIniFile(content);
+    if (!fs.existsSync(CONFIG_FILE_PATH)) {
+      console.log('Config file not found, creating default configuration');
+      
+      // Create default configuration
+      config = {
+        SessionName: 'Icarus Server',
+        JoinPassword: '',
+        MaxPlayers: 8,
+        ShutdownIfNotJoinedFor: 300,
+        ShutdownIfEmptyFor: 60,
+        AdminPassword: 'admin123',
+        LoadProspect: '',
+        CreateProspect: '',
+        ResumeProspect: false,
+        LastProspectName: '',
+        AllowNonAdminsToLaunchProspects: false,
+        AllowNonAdminsToDeleteProspects: false,
+        FiberFoliageRespawn: true,
+        LargeStonesRespawn: true,
+        GameSaveFrequency: 300,
+        SaveGameOnExit: true
+      };
+      
+      // Create the config file with defaults
+      const configDir = path.dirname(CONFIG_FILE_PATH);
+      if (!fs.existsSync(configDir)) {
+        fs.mkdirSync(configDir, { recursive: true });
+      }
+      
+      const iniContent = generateIniContent(config);
+      fs.writeFileSync(CONFIG_FILE_PATH, iniContent, 'utf8');
+      console.log('Default configuration file created');
+    } else {
+      const content = fs.readFileSync(CONFIG_FILE_PATH, 'utf8');
+      config = parseIniFile(content);
+    }
     
     return NextResponse.json({ config });
   } catch (error) {
