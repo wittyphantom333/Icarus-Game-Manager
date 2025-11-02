@@ -116,20 +116,50 @@ Through the web interface, you can:
 - Restart the server (stop + start)
 - Monitor real-time server status
 
-## API Endpoints
+## API Documentation
 
-### Server Management
-- `GET /api/server/status` - Get current server status
-- `POST /api/server/start` - Start the server
-- `POST /api/server/stop` - Stop the server  
-- `POST /api/server/restart` - Restart the server
+### Interactive Documentation
+The application provides comprehensive API documentation with interactive testing capabilities:
 
-### Mod Management
-- `GET /api/mods` - List all installed mods
+- **Web Interface**: Navigate to the "API Documentation" tab in the main application
+- **Swagger UI**: Full OpenAPI 3.0 specification with interactive request testing
+- **Direct Access**: Visit [http://localhost:3000/docs](http://localhost:3000/docs) for standalone documentation
+- **Raw Specification**: OpenAPI YAML available at [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
+
+### Quick API Reference
+
+#### Server Management
+- `GET /api/server/status` - Get current server status (running/stopped)
+- `POST /api/server/start` - Start the Icarus server process
+- `POST /api/server/stop` - Gracefully stop the server
+- `POST /api/server/restart` - Restart the server (stop + start)
+- `POST /api/server/force-kill` - Force terminate the server process
+- `GET /api/server/stats` - Get server performance statistics
+- `GET /api/server/config` - Get server configuration
+- `POST /api/server/config` - Update server configuration
+
+#### Mod Management
+- `GET /api/mods` - List all installed mods with metadata
 - `GET /api/mods/browse` - Browse available community mods
-- `POST /api/mods/download` - Download and install community mods (auto-converts EXMODZ to PAK)
+- `POST /api/mods/download` - Download and install community mods
 - `POST /api/mods/install` - Install a local mod file
-- `POST /api/mods/[modId]/toggle` - Enable/disable a mod
+- `POST /api/mods/{modId}/toggle` - Enable/disable a specific mod
+
+#### Log Management
+- `POST /api/logs/clear` - Clear server log files
+
+#### Backup & Restore
+- `GET /api/backups` - List available backup files
+- `POST /api/backups` - Create a new backup
+- `POST /api/backups/restore` - Restore from a backup
+- `POST /api/backups/delete` - Delete a backup file
+
+### API Features
+- **OpenAPI 3.0 Compliant**: Full specification with request/response schemas
+- **Interactive Testing**: Test all endpoints directly from the documentation
+- **Request Examples**: Sample requests and responses for all endpoints
+- **Error Handling**: Comprehensive error response documentation
+- **Authentication**: Ready for future authentication implementation
 
 ## WebSocket Integration
 

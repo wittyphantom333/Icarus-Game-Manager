@@ -1,0 +1,692 @@
+openapi: 3.0.3
+info:
+  title: Icarus Game Manager API
+  description: |
+    API for managing Icarus game servers, mods, and configurations.
+    
+    This API provides endpoints for:
+    - Server management (start/stop/restart)
+    - Real-time log monitoring
+    - Mod installation and management
+    - Server configuration
+    - Backup and restore operations
+  version: 1.0.0
+  contact:
+    name: Icarus Game Manager
+  license:
+    name: MIT
+
+servers:
+  - url: /api
+    description: Local development server
+
+tags:
+  - name: Server Control
+    description: Operations for starting, stopping, and managing the Icarus server
+  - name: Server Status
+    description: Get server status and statistics
+  - name: Logs
+    description: Server log management and monitoring
+  - name: Mods
+    description: Mod installation and management
+  - name: Configuration
+    description: Server configuration management
+  - name: Backups
+    description: Backup and restore operations
+
+paths:
+  /server/status:
+    get:
+      tags:
+        - Server Status
+      summary: Get server status
+      description: Check if the Icarus server is currently running or stopped
+      responses:
+        '200':
+          description: Server status retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [running, stopped]
+                    description: Current status of the Icarus server
+              examples:
+                running:
+                  summary: Server is running
+                  value:
+                    status: running
+                stopped:
+                  summary: Server is stopped
+                  value:
+                    status: stopped
+        '500':
+          description: Failed to get server status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /server/start:
+    post:
+      tags:
+        - Server Control
+      summary: Start the Icarus server
+      description: Start the IcarusServer-Win64-Shipping.exe process
+      responses:
+        '200':
+          description: Server start command executed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+              example:
+                success: true
+                message: "Server start command executed"
+        '500':
+          description: Failed to start server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /server/stop:
+    post:
+      tags:
+        - Server Control
+      summary: Stop the Icarus server
+      description: Gracefully stop the IcarusServer-Win64-Shipping.exe process
+      responses:
+        '200':
+          description: Server stop command executed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+              example:
+                success: true
+                message: "Server stop command executed"
+        '500':
+          description: Failed to stop server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /server/restart:
+    post:
+      tags:
+        - Server Control
+      summary: Restart the Icarus server
+      description: Stop and then start the IcarusServer-Win64-Shipping.exe process
+      responses:
+        '200':
+          description: Server restart command executed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+              example:
+                success: true
+                message: "Server restart command executed"
+        '500':
+          description: Failed to restart server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /server/force-kill:
+    post:
+      tags:
+        - Server Control
+      summary: Force kill the Icarus server
+      description: Forcefully terminate the IcarusServer-Win64-Shipping.exe process
+      responses:
+        '200':
+          description: Server force kill command executed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+              example:
+                success: true
+                message: "Server force kill command executed"
+        '500':
+          description: Failed to force kill server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /server/stats:
+    get:
+      tags:
+        - Server Status
+      summary: Get server statistics
+      description: Retrieve current server performance statistics
+      responses:
+        '200':
+          description: Server statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cpu:
+                    type: number
+                    description: CPU usage percentage
+                  memory:
+                    type: number
+                    description: Memory usage in MB
+                  uptime:
+                    type: string
+                    description: Server uptime
+              example:
+                cpu: 15.2
+                memory: 1024
+                uptime: "2h 30m"
+        '500':
+          description: Failed to get server statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /server/config:
+    get:
+      tags:
+        - Configuration
+      summary: Get server configuration
+      description: Retrieve current server configuration settings
+      responses:
+        '200':
+          description: Server configuration retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  config:
+                    type: object
+                    description: Server configuration object
+        '500':
+          description: Failed to get server configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - Configuration
+      summary: Update server configuration
+      description: Update server configuration settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                config:
+                  type: object
+                  description: Configuration object to update
+      responses:
+        '200':
+          description: Server configuration updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '500':
+          description: Failed to update server configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /logs/clear:
+    post:
+      tags:
+        - Logs
+      summary: Clear server logs
+      description: Clear all server log files
+      responses:
+        '200':
+          description: Logs cleared successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '500':
+          description: Failed to clear logs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /mods:
+    get:
+      tags:
+        - Mods
+      summary: List installed mods
+      description: Get a list of all installed mods
+      responses:
+        '200':
+          description: List of installed mods retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mods:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Mod'
+        '500':
+          description: Failed to get mods list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /mods/browse:
+    get:
+      tags:
+        - Mods
+      summary: Browse available mods
+      description: Browse mods available for download
+      responses:
+        '200':
+          description: Available mods retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mods:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AvailableMod'
+        '500':
+          description: Failed to browse mods
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /mods/download:
+    post:
+      tags:
+        - Mods
+      summary: Download a mod
+      description: Download a mod from the repository
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                modId:
+                  type: string
+                  description: ID of the mod to download
+      responses:
+        '200':
+          description: Mod download started successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '500':
+          description: Failed to download mod
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /mods/install:
+    post:
+      tags:
+        - Mods
+      summary: Install a mod
+      description: Install a downloaded mod
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                modPath:
+                  type: string
+                  description: Path to the mod file to install
+      responses:
+        '200':
+          description: Mod installed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '500':
+          description: Failed to install mod
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /mods/{modId}/toggle:
+    post:
+      tags:
+        - Mods
+      summary: Toggle mod status
+      description: Enable or disable a mod
+      parameters:
+        - name: modId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the mod to toggle
+      responses:
+        '200':
+          description: Mod status toggled successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  enabled:
+                    type: boolean
+                    description: New status of the mod
+        '500':
+          description: Failed to toggle mod status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /backups:
+    get:
+      tags:
+        - Backups
+      summary: List available backups
+      description: Get a list of all available backup files
+      responses:
+        '200':
+          description: List of backups retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  backups:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Backup'
+        '500':
+          description: Failed to get backups list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - Backups
+      summary: Create a backup
+      description: Create a new backup of the server data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name for the backup
+      responses:
+        '200':
+          description: Backup created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  backupId:
+                    type: string
+                    description: ID of the created backup
+        '500':
+          description: Failed to create backup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /backups/restore:
+    post:
+      tags:
+        - Backups
+      summary: Restore from backup
+      description: Restore server data from a backup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                backupId:
+                  type: string
+                  description: ID of the backup to restore
+      responses:
+        '200':
+          description: Backup restored successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '500':
+          description: Failed to restore backup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /backups/delete:
+    post:
+      tags:
+        - Backups
+      summary: Delete a backup
+      description: Delete a backup file
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                backupId:
+                  type: string
+                  description: ID of the backup to delete
+      responses:
+        '200':
+          description: Backup deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '500':
+          description: Failed to delete backup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+      required:
+        - error
+
+    Mod:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the mod
+        name:
+          type: string
+          description: Display name of the mod
+        version:
+          type: string
+          description: Version of the mod
+        enabled:
+          type: boolean
+          description: Whether the mod is currently enabled
+        description:
+          type: string
+          description: Description of the mod
+        author:
+          type: string
+          description: Author of the mod
+        size:
+          type: number
+          description: Size of the mod in bytes
+        installDate:
+          type: string
+          format: date-time
+          description: Date when the mod was installed
+      required:
+        - id
+        - name
+        - version
+        - enabled
+
+    AvailableMod:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the mod
+        name:
+          type: string
+          description: Display name of the mod
+        version:
+          type: string
+          description: Version of the mod
+        description:
+          type: string
+          description: Description of the mod
+        author:
+          type: string
+          description: Author of the mod
+        downloadUrl:
+          type: string
+          description: URL to download the mod
+        size:
+          type: number
+          description: Size of the mod in bytes
+        rating:
+          type: number
+          description: User rating of the mod (1-5)
+        downloads:
+          type: number
+          description: Number of downloads
+      required:
+        - id
+        - name
+        - version
+        - downloadUrl
+
+    Backup:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the backup
+        name:
+          type: string
+          description: Display name of the backup
+        createdAt:
+          type: string
+          format: date-time
+          description: Date when the backup was created
+        size:
+          type: number
+          description: Size of the backup in bytes
+        type:
+          type: string
+          enum: [manual, automatic]
+          description: Type of backup
+      required:
+        - id
+        - name
+        - createdAt
+        - size
+        - type
