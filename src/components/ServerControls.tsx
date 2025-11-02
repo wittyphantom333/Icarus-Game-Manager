@@ -4,10 +4,26 @@ interface ServerControlsProps {
   onStatusRefresh?: () => void;
 }
 
+// Helper function to notify WebSocket of server actions
+const notifyServerAction = (action: 'start' | 'stop' | 'restart') => {
+  try {
+    // Try to find any existing WebSocket connection and notify it
+    const ws = new WebSocket('ws://localhost:3000/ws');
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ type: 'server-action', action }));
+      ws.close();
+    };
+  } catch (error) {
+    console.log('Could not notify WebSocket of server action:', error);
+  }
+};
+
 export default function ServerControls({ status, onStatusChange, onStatusRefresh }: ServerControlsProps) {
   
   const handleStart = async () => {
     onStatusChange('starting');
+    notifyServerAction('start'); // Notify WebSocket to reset startup detection
+    
     try {
       const response = await fetch('/api/server/start', { method: 'POST' });
       const data = await response.json();
@@ -37,6 +53,8 @@ export default function ServerControls({ status, onStatusChange, onStatusRefresh
 
   const handleStop = async () => {
     onStatusChange('stopping');
+    notifyServerAction('stop'); // Notify WebSocket to reset startup detection
+    
     try {
       const response = await fetch('/api/server/stop', { method: 'POST' });
       const data = await response.json();
@@ -66,6 +84,8 @@ export default function ServerControls({ status, onStatusChange, onStatusRefresh
 
   const handleRestart = async () => {
     onStatusChange('stopping');
+    notifyServerAction('restart'); // Notify WebSocket to reset startup detection
+    
     try {
       const response = await fetch('/api/server/restart', { method: 'POST' });
       const data = await response.json();

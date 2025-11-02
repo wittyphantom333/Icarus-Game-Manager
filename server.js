@@ -33,6 +33,15 @@ function findLogFile() {
 }
 
 let lastLogSize = 0;
+let serverStartupDetected = false; // Global flag to track if we've already detected this server startup
+let currentServerStartTime = null; // Track when current server session started
+
+// Function to reset server startup detection (call when server stops/starts)
+function resetServerStartupDetection() {
+  serverStartupDetected = false;
+  currentServerStartTime = new Date();
+  console.log('[Server] Reset startup detection, new session started at:', currentServerStartTime.toISOString());
+}
 
 app.prepare().then(() => {
   const server = createServer(async (req, res) => {
@@ -120,8 +129,14 @@ app.prepare().then(() => {
                   ws.send(JSON.stringify({ type: 'log', message: line }));
                   
                   // Check for server readiness indicator (only from NEW logs, not initial history)
-                  if (!isReadingInitialLogs && line.includes('OnServerStartedEmpty()') && line !== lastServerReadyCheck) {
+                  if (!isReadingInitialLogs && 
+                      line.includes('OnServerStartedEmpty()') && 
+                      line !== lastServerReadyCheck && 
+                      !serverStartupDetected) {
+                    
                     lastServerReadyCheck = line;
+                    serverStartupDetected = true; // Mark as detected globally
+                    
                     console.log('[WebSocket] Server readiness detected from new log entry:', line);
                     ws.send(JSON.stringify({ 
                       type: 'server-ready', 
@@ -148,12 +163,18 @@ app.prepare().then(() => {
           lastLogSize = 0;
           lastServerReadyCheck = '';
           isReadingInitialLogs = false; // Treat as fresh start after clearing
+          resetServerStartupDetection(); // Reset server startup detection
           
           // Send confirmation
           ws.send(JSON.stringify({ 
             type: 'logs-cleared', 
             message: 'Log tracking reset' 
           }));
+        } else if (message.type === 'server-action') {
+          // Reset server startup detection when server starts/stops
+          if (message.action === 'start' || message.action === 'stop' || message.action === 'restart') {
+            resetServerStartupDetection();
+          }
         }
       } catch (error) {
         console.error('Error handling WebSocket message:', error);
