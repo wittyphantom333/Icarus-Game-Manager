@@ -1,0 +1,267 @@
+{
+    "name": "Increase Slots",
+    "author": "Jimk72",
+    "version": "2.1",
+    "description": "There are several versions people have made this is mine that I use. It bumps up a few storage and firepits storage slots.",
+    "fileName": "Jimk_Increased_Slots",
+    "readmeURL": "",
+    "imageURL": "",
+    "Level2": "True",
+    "Rows": [
+        {
+            "CurrentFile": "Inventory-D_InventoryInfo.json",
+            "File_Items": [
+                {
+                    "Name": "Backpack",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "Processor",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "Processor_T3",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "Container",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "Space_Player_Loadout",
+                    "StartingSlots": 20
+                },
+                {
+                    "Name": "Campfire",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "Medium_Container",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "DropShip_Equipment",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "Refrigerator",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "PotBellyStove",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "Cleaner_T3",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "Storage_Wood_Crate_Small",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "Storage_Wood_Crate_Medium",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "Storage_Metal_Crate_Small",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "Storage_Metal_Crate_Medium",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "IceBox",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "Firepit",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "Fireplace",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "Kitchen_Stove",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "Storage_Faction_Crate",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "Expedition_CrashSite",
+                    "StartingSlots": 20
+                },
+                {
+                    "Name": "Storage_Printed_Crate",
+                    "StartingSlots": 60
+                },
+                {
+                    "Name": "Drying_Rack",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "Storage_Faction_Crate_Open",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "Vapour_Condenser",
+                    "StartingSlots": 20
+                },
+                {
+                    "Name": "Waterwheel",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "Repair_Bench",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "Deep_Freeze",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "Fishing_Trap",
+                    "StartingSlots": 20
+                },
+                {
+                    "Name": "Advanced_Fishing_Trap",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "General20",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "Storage_Prototype_Printed_Crate",
+                    "StartingSlots": 60
+                },
+                {
+                    "Name": "Seed_Pouch",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "Basic_Turret_Rifle_Precision",
+                    "StartingSlots": 20
+                },
+                {
+                    "Name": "Chicken_Coop",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "BeehiveStorage",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "Medicine_Bag",
+                    "StartingSlots": 24
+                },
+                {
+                    "Name": "Seed_Pouch_T2",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "Storage_Plastic_Crate",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "Storage_Burlap_Sack",
+                    "StartingSlots": 20
+                },
+                {
+                    "Name": "Pouch_Generic",
+                    "StartingSlots": 20
+                },
+                {
+                    "Name": "Overflow_Bag",
+                    "StartingSlots": 200
+                },
+                {
+                    "Name": "Player_Grave",
+                    "StartingSlots": 200
+                },
+                {
+                    "Name": "DropShip_Meta",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "Generator_Storage",
+                    "StartingSlots": 20
+                },
+                {
+                    "Name": "Faction_Satellite_Defend",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "IceBox_Ice",
+                    "StartingSlots": 4
+                },
+                {
+                    "Name": "Fuel_Biofuel",
+                    "StartingSlots": 4
+                },
+                {
+                    "Name": "Electric_Dehumidifier",
+                    "StartingSlots": 2
+                },
+                {
+                    "Name": "General10",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "Container_Small",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "Reward_Pod",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "CollectionShip",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "Kitchen_Sink",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "Exotic_Delivery_Ship",
+                    "StartingSlots": 40
+                },
+                {
+                    "Name": "Processor_T5",
+                    "InventoryID": {
+                        "Value": "Processor"
+                    },
+                    "StartingSlots": 60
+                },
+                {
+                    "Name": "Food_Silo",
+                    "StartingSlots": 60
+                },
+                {
+                    "Name": "Storage_Plastic_Crate",
+                    "StartingSlots": 30
+                },
+                {
+                    "Name": "Storage_Burlap_Sack",
+                    "StartingSlots": 20
+                },
+                {
+                    "Name": "Storage_Saddle_Bag",
+                    "StartingSlots": 10
+                },
+                {
+                    "Name": "Pouch_Generic",
+                    "StartingSlots": 20
+                }
+            ]
+        },
+        {
+            "CurrentFile": "EndOfMod"
+        }
+    ]
+}

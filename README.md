@@ -16,7 +16,10 @@ A comprehensive Next.js-based web application for managing Icarus dedicated game
 - **Performance Metrics** - Server uptime and resource usage
 
 ### 🔧 Mod Management
-- **Mod Installation** - Upload and install .pak mod files
+- **Community Mod Browser** - Browse 79+ mods from Jimk72/Icarus_Mods repository
+- **Automatic Conversion** - EXMODZ files automatically converted to PAK format
+- **One-Click Installation** - Download and install mods with progress tracking
+- **Local Mod Upload** - Upload and install .pak, .zip, .EXMODZ mod files
 - **Enable/Disable Mods** - Toggle mods without deletion
 - **Mod Library** - View all installed mods with metadata
 - **Automatic Mod Detection** - Scans existing mod directory
@@ -123,7 +126,9 @@ Through the web interface, you can:
 
 ### Mod Management
 - `GET /api/mods` - List all installed mods
-- `POST /api/mods/install` - Install a new mod
+- `GET /api/mods/browse` - Browse available community mods
+- `POST /api/mods/download` - Download and install community mods (auto-converts EXMODZ to PAK)
+- `POST /api/mods/install` - Install a local mod file
 - `POST /api/mods/[modId]/toggle` - Enable/disable a mod
 
 ## WebSocket Integration

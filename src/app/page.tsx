@@ -5,12 +5,14 @@ import ServerStatus from '@/components/ServerStatus';
 import ServerControls from '@/components/ServerControls';
 import LogViewer from '@/components/LogViewer';
 import ModManager from '@/components/ModManager';
+import ServerConfiguration from '@/components/ServerConfiguration';
 
 export default function Home() {
   const [serverStatus, setServerStatus] = useState<'stopped' | 'running' | 'starting' | 'stopping'>('stopped');
   const [logs, setLogs] = useState<string[]>([]);
   const [wsConnected, setWsConnected] = useState(false);
   const [wsConnection, setWsConnection] = useState<WebSocket | null>(null);
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'config'>('dashboard');
 
   useEffect(() => {
     // Check initial server status
@@ -144,44 +146,79 @@ export default function Home() {
             </span>
           </div>
         </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-semibold mb-4">Server Status</h2>
-            <ServerStatus status={serverStatus} />
-            <ServerControls 
-              status={serverStatus} 
-              onStatusChange={setServerStatus}
-              onStatusRefresh={checkServerStatus}
-            />
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-semibold mb-4">Mod Manager</h2>
-            <ModManager />
-          </div>
+
+        {/* Tab Navigation */}
+        <div className="mb-8">
+          <nav className="flex space-x-8">
+            <button
+              onClick={() => setActiveTab('dashboard')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'dashboard'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Dashboard
+            </button>
+            <button
+              onClick={() => setActiveTab('config')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'config'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Server Configuration
+            </button>
+          </nav>
         </div>
-        
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-semibold">Server Logs</h2>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={clearLogs}
-                className="px-3 py-1 text-sm bg-gray-500 text-white rounded hover:bg-gray-600"
-              >
-                Clear Logs
-              </button>
-              <button
-                onClick={() => window.location.reload()}
-                className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                Refresh Page
-              </button>
+
+        {/* Tab Content */}
+        {activeTab === 'dashboard' && (
+          <>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h2 className="text-2xl font-semibold mb-4">Server Status</h2>
+                <ServerStatus status={serverStatus} />
+                <ServerControls 
+                  status={serverStatus} 
+                  onStatusChange={setServerStatus}
+                  onStatusRefresh={checkServerStatus}
+                />
+              </div>
+              
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h2 className="text-2xl font-semibold mb-4">Mod Manager</h2>
+                <ModManager />
+              </div>
             </div>
-          </div>
-          <LogViewer logs={logs} />
-        </div>
+            
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-semibold">Server Logs</h2>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={clearLogs}
+                    className="px-3 py-1 text-sm bg-gray-500 text-white rounded hover:bg-gray-600"
+                  >
+                    Clear Logs
+                  </button>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    Refresh Page
+                  </button>
+                </div>
+              </div>
+              <LogViewer logs={logs} />
+            </div>
+          </>
+        )}
+
+        {activeTab === 'config' && (
+          <ServerConfiguration />
+        )}
       </div>
     </main>
   );

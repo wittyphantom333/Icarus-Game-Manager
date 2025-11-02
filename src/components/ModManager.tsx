@@ -293,7 +293,14 @@ export default function ModManager() {
                           onClick={() => downloadAndInstallMod(mod)}
                           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                         >
-                          Install Mod
+                          <div className="text-center">
+                            Install Mod
+                            {mod.files.exmodz?.endsWith('.EXMODZ') && (
+                              <div className="text-xs text-blue-200 mt-1">
+                                (Placeholder conversion)
+                              </div>
+                            )}
+                          </div>
                         </button>
                       )}
                     </div>
