@@ -11,6 +11,7 @@ interface Mod {
   version: string;
   enabled: boolean;
   description: string;
+  author?: string;
 }
 
 export async function GET() {
@@ -20,22 +21,37 @@ export async function GET() {
       fs.mkdirSync(MODS_PATH, { recursive: true });
     }
 
-    const modFiles = fs.readdirSync(MODS_PATH);
-    const mods: Mod[] = modFiles
-      .filter(file => file.endsWith('.pak'))
-      .map(file => {
-        const filePath = path.join(MODS_PATH, file);
-        const stats = fs.statSync(filePath);
-        const enabled = !file.startsWith('_disabled_');
-        
-        return {
-          id: file,
-          name: file.replace('.pak', '').replace('_disabled_', ''),
-          version: '1.0.0', // Default version, could be extracted from mod metadata
-          enabled,
-          description: `Mod file: ${file}`
-        };
-      });
+    const allFiles = fs.readdirSync(MODS_PATH);
+    const modFiles = allFiles.filter(file => 
+      file.endsWith('.pak') || file.endsWith('.EXMODZ')
+    );
+    
+    const mods: Mod[] = modFiles.map(file => {
+      const enabled = !file.startsWith('_disabled_');
+      const cleanName = file.replace(/\.(pak|EXMODZ)$/, '').replace('_disabled_', '');
+      
+      // Try to read metadata file if it exists
+      const metadataFile = `${cleanName}.meta.json`;
+      const metadataPath = path.join(MODS_PATH, metadataFile);
+      
+      let metadata = null;
+      if (fs.existsSync(metadataPath)) {
+        try {
+          metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
+        } catch (error) {
+          console.warn(`Failed to read metadata for ${file}:`, error);
+        }
+      }
+      
+      return {
+        id: file,
+        name: metadata?.name || cleanName,
+        version: metadata?.version || '1.0.0',
+        enabled,
+        description: metadata?.description || `Mod file: ${file}`,
+        author: metadata?.author
+      };
+    });
 
     return NextResponse.json({ mods });
   } catch (error) {

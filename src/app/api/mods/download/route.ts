@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Download the mod file
-    console.log(`Downloading mod from: ${downloadUrl}`);
+    console.log(`[Download] Installing mod: ${name}`);
     const response = await fetch(downloadUrl);
     
     if (!response.ok) {
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     
     fs.writeFileSync(metadataPath, JSON.stringify(metadata, null, 2));
     
-    console.log(`Successfully installed mod: ${name} to ${filePath}`);
+    console.log(`[Download] Successfully installed: ${name}`);
     
     return NextResponse.json({
       success: true,

@@ -6,6 +6,7 @@ interface InstalledMod {
   version: string;
   enabled: boolean;
   description: string;
+  author?: string;
 }
 
 interface AvailableMod {
@@ -178,31 +179,20 @@ export default function ModManager() {
       {/* Tab Content */}
       {activeTab === 'installed' ? (
         <div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Install New Mod
-            </label>
-            <input
-              type="file"
-              accept=".pak,.zip"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) installModFromFile(file);
-              }}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-            />
-          </div>
-
           <div className="space-y-2">
             {installedMods.length === 0 ? (
-              <p className="text-gray-500 text-center py-4">No mods installed</p>
+              <p className="text-gray-500 text-center py-8">
+                No mods installed yet. Go to the Browse Mods tab to install some!
+              </p>
             ) : (
               installedMods.map((mod: InstalledMod) => (
-                <div key={mod.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-md">
-                  <div>
-                    <h3 className="font-medium">{mod.name}</h3>
-                    <p className="text-sm text-gray-600">v{mod.version}</p>
-                    <p className="text-xs text-gray-500">{mod.description}</p>
+                <div key={mod.id} className="flex items-center justify-between p-2 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-medium text-gray-900">{mod.name}</h3>
+                      <span className="text-xs text-gray-500">v{mod.version}</span>
+                      <span className="text-xs text-gray-400">by {mod.author || 'Unknown'}</span>
+                    </div>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input
@@ -221,14 +211,34 @@ export default function ModManager() {
       ) : (
         // Browse Tab
         <div>
-          <div className="mb-4">
-            <input
-              type="text"
-              placeholder="Search available mods..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+          <div className="mb-6 space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Install Local Mod File
+              </label>
+              <input
+                type="file"
+                accept=".pak,.zip,.EXMODZ"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) installModFromFile(file);
+                }}
+                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Upload .pak, .zip, or .EXMODZ files directly
+              </p>
+            </div>
+            
+            <div className="border-t pt-4">
+              <input
+                type="text"
+                placeholder="Search community mods..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
           </div>
 
           {loadingAvailable ? (

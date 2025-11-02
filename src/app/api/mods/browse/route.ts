@@ -19,34 +19,50 @@ interface ModInfo {
 }
 
 export async function GET() {
-  console.log('[Browse API] Starting request');
   try {
     // Fetch mod info from the repository
-    console.log('[Browse API] Fetching from:', MODINFO_URL);
     const response = await fetch(MODINFO_URL);
-    console.log('[Browse API] Response status:', response.status);
     if (!response.ok) {
       throw new Error(`Failed to fetch mod info: ${response.statusText}`);
     }
 
     const modInfoData = await response.json();
-    console.log('[Browse API] Received mod data structure:', Object.keys(modInfoData));
     
     // Extract the mods array from the JSON structure
     const modsArray = modInfoData.mods || [];
-    console.log('[Browse API] Found', modsArray.length, 'mods in array');
+    console.log('[Browse API] Found', modsArray.length, 'mods available');
     
     // Check which mods are already installed
     const serverPath = 'C:\\icarusserver';
     const modsPath = path.join(serverPath, 'Icarus', 'Content', 'Paks', 'Mods');
     
-    let installedModNames: string[] = [];
+    let installedMods: Array<{name: string, file: string}> = [];
     try {
       if (fs.existsSync(modsPath)) {
-        const files = fs.readdirSync(modsPath);
-        installedModNames = files
-          .filter(file => file.endsWith('.pak') || file.endsWith('.EXMODZ'))
-          .map(file => path.parse(file).name);
+        const allFiles = fs.readdirSync(modsPath);
+        const modFiles = allFiles.filter(file => 
+          file.endsWith('.pak') || file.endsWith('.EXMODZ')
+        );
+        
+        for (const file of modFiles) {
+          const cleanName = file.replace(/\.(pak|EXMODZ)$/, '').replace('_disabled_', '');
+          
+          // Try to read metadata to get original name
+          const metadataFile = `${cleanName}.meta.json`;
+          const metadataPath = path.join(modsPath, metadataFile);
+          
+          let originalName = cleanName;
+          if (fs.existsSync(metadataPath)) {
+            try {
+              const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
+              originalName = metadata.name || cleanName;
+            } catch (error) {
+              console.warn(`Failed to read metadata for ${file}:`, error);
+            }
+          }
+          
+          installedMods.push({ name: originalName, file: cleanName });
+        }
       }
     } catch (error) {
       console.warn('Could not read mods directory:', error);
@@ -65,12 +81,12 @@ export async function GET() {
         exmodz: mod.files?.exmodz || '',
         png: mod.imageURL || undefined
       },
-      installed: installedModNames.some(installedName => 
-        installedName.toLowerCase().includes(mod.name?.toLowerCase() || '')
+      installed: installedMods.some(installedMod => 
+        installedMod.name.toLowerCase() === mod.name?.toLowerCase() ||
+        installedMod.file.toLowerCase().includes(mod.name?.toLowerCase() || '')
       )
     }));
 
-    console.log('[Browse API] Processed', processedMods.length, 'mods');
     return NextResponse.json(processedMods);
   } catch (error) {
     console.error('[Browse API] Error fetching available mods:', error);
