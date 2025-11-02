@@ -54,6 +54,8 @@ app.prepare().then(() => {
     
     const logFilePath = findLogFile();
     let logInterval;
+    let lastServerReadyCheck = '';
+    let isReadingInitialLogs = true;
     
     // Send connection confirmation
     ws.send(JSON.stringify({ 
@@ -83,6 +85,12 @@ app.prepare().then(() => {
             }
           }, index * 10); // 10ms delay between each log line
         });
+        
+        // Set flag to false after initial logs are sent
+        setTimeout(() => {
+          isReadingInitialLogs = false;
+          console.log('[WebSocket] Finished sending initial logs, now monitoring for new entries');
+        }, logs.length * 10 + 100); // Wait for all initial logs plus a buffer
       } catch (error) {
         console.error('Error reading log file:', error);
         ws.send(JSON.stringify({ 
@@ -110,6 +118,16 @@ app.prepare().then(() => {
               newLines.forEach(line => {
                 if (ws.readyState === ws.OPEN) {
                   ws.send(JSON.stringify({ type: 'log', message: line }));
+                  
+                  // Check for server readiness indicator (only from NEW logs, not initial history)
+                  if (!isReadingInitialLogs && line.includes('OnServerStartedEmpty()') && line !== lastServerReadyCheck) {
+                    lastServerReadyCheck = line;
+                    console.log('[WebSocket] Server readiness detected from new log entry:', line);
+                    ws.send(JSON.stringify({ 
+                      type: 'server-ready', 
+                      message: 'Server is ready and running' 
+                    }));
+                  }
                 }
               });
             }
@@ -119,6 +137,28 @@ app.prepare().then(() => {
         }
       }, 1000); // Check every second
     }
+
+    // Handle incoming messages
+    ws.on('message', (data) => {
+      try {
+        const message = JSON.parse(data.toString());
+        
+        if (message.type === 'clear-logs') {
+          // Reset log tracking
+          lastLogSize = 0;
+          lastServerReadyCheck = '';
+          isReadingInitialLogs = false; // Treat as fresh start after clearing
+          
+          // Send confirmation
+          ws.send(JSON.stringify({ 
+            type: 'logs-cleared', 
+            message: 'Log tracking reset' 
+          }));
+        }
+      } catch (error) {
+        console.error('Error handling WebSocket message:', error);
+      }
+    });
 
     // Handle WebSocket events
     ws.on('close', (code, reason) => {

@@ -48,27 +48,27 @@ export async function POST() {
     // Wait a moment for the process to start
     await new Promise(resolve => setTimeout(resolve, 2000));
     
-    // Verify the server started
+    // Verify the server process started
     try {
       const { stdout: verifyOutput } = await execAsync('tasklist /FI "IMAGENAME eq IcarusServer-Win64-Shipping.exe" /FO CSV');
       if (verifyOutput.includes('IcarusServer-Win64-Shipping.exe') && verifyOutput.includes(',')) {
-        console.log('Server started successfully');
+        console.log('Server process started successfully');
         return NextResponse.json({ 
           success: true, 
-          message: 'Server started successfully' 
+          message: 'Server process started. Check logs for "OnServerStartedEmpty()" to confirm server is ready.' 
         });
       } else {
-        console.log('Server may not have started properly');
+        console.log('Server process may not have started properly');
         return NextResponse.json({ 
           success: false, 
-          error: 'Server start could not be verified' 
+          error: 'Server process start could not be verified' 
         }, { status: 500 });
       }
     } catch (verifyError) {
       console.error('Error verifying server start:', verifyError);
       return NextResponse.json({ 
         success: false, 
-        error: 'Could not verify server started' 
+        error: 'Could not verify server process started' 
       }, { status: 500 });
     }
   } catch (error) {

@@ -10,6 +10,7 @@ export default function Home() {
   const [serverStatus, setServerStatus] = useState<'stopped' | 'running' | 'starting' | 'stopping'>('stopped');
   const [logs, setLogs] = useState<string[]>([]);
   const [wsConnected, setWsConnected] = useState(false);
+  const [wsConnection, setWsConnection] = useState<WebSocket | null>(null);
 
   useEffect(() => {
     // Check initial server status
@@ -29,6 +30,7 @@ export default function Home() {
         ws.onopen = () => {
           console.log('WebSocket connected');
           setWsConnected(true);
+          setWsConnection(ws);
           isConnecting = false;
         };
         
@@ -39,6 +41,12 @@ export default function Home() {
               setLogs(prev => [...prev.slice(-999), data.message]);
             } else if (data.type === 'status') {
               setServerStatus(data.status);
+            } else if (data.type === 'server-ready') {
+              console.log('Server ready detected:', data.message);
+              setServerStatus('running');
+            } else if (data.type === 'logs-cleared') {
+              setLogs([]);
+              console.log('Logs cleared via WebSocket');
             }
           } catch (error) {
             console.error('Error parsing WebSocket message:', error);
@@ -53,6 +61,7 @@ export default function Home() {
         ws.onclose = (event) => {
           console.log('WebSocket disconnected, code:', event.code);
           setWsConnected(false);
+          setWsConnection(null);
           isConnecting = false;
           
           // Reconnect after 3 seconds if not manually closed
@@ -93,6 +102,34 @@ export default function Home() {
     }
   };
 
+  const clearLogs = async () => {
+    try {
+      // Clear logs via API (clears the physical log file)
+      const response = await fetch('/api/logs/clear', { method: 'POST' });
+      const data = await response.json();
+      
+      if (response.ok && data.success) {
+        console.log('Log file cleared:', data.message);
+        
+        // Clear UI logs immediately
+        setLogs([]);
+        
+        // Notify WebSocket server to reset tracking
+        if (wsConnection && wsConnection.readyState === WebSocket.OPEN) {
+          wsConnection.send(JSON.stringify({ type: 'clear-logs' }));
+        }
+        
+        alert('Logs cleared successfully');
+      } else {
+        console.error('Failed to clear logs:', data.error);
+        alert(`Failed to clear logs: ${data.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error clearing logs:', error);
+      alert('Failed to clear logs: Network error');
+    }
+  };
+
   return (
     <main className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-7xl mx-auto">
@@ -130,10 +167,7 @@ export default function Home() {
             <h2 className="text-2xl font-semibold">Server Logs</h2>
             <div className="flex items-center space-x-2">
               <button
-                onClick={() => {
-                  setLogs([]);
-                  console.log('Logs cleared');
-                }}
+                onClick={clearLogs}
                 className="px-3 py-1 text-sm bg-gray-500 text-white rounded hover:bg-gray-600"
               >
                 Clear Logs
