@@ -10,15 +10,108 @@ interface Backup {
   type: 'manual' | 'auto';
 }
 
+interface BackupSettings {
+  autoBackup: boolean;
+  maxBackups: number;
+}
+
 const BackupRestore = () => {
   const [backups, setBackups] = useState<Backup[]>([]);
   const [isCreatingBackup, setIsCreatingBackup] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [serverStatus, setServerStatus] = useState<'running' | 'stopped' | 'unknown'>('unknown');
+  const [settings, setSettings] = useState<BackupSettings>({ autoBackup: true, maxBackups: 10 });
+  const [settingsLoading, setSettingsLoading] = useState(false);
 
   useEffect(() => {
     loadBackups();
+    checkServerStatus();
+    loadSettings();
   }, []);
+
+  const checkServerStatus = async () => {
+    try {
+      const response = await fetch('/api/server/status');
+      const data = await response.json();
+      setServerStatus(data.status || 'unknown');
+    } catch (error) {
+      setServerStatus('unknown');
+    }
+  };
+
+  const loadSettings = async () => {
+    try {
+      const response = await fetch('/api/backups/settings');
+      const data = await response.json();
+      if (data.success) {
+        setSettings(data.settings);
+      }
+    } catch (error) {
+      console.error('Error loading backup settings:', error);
+    }
+  };
+
+  const updateSettings = async (newSettings: BackupSettings) => {
+    setSettingsLoading(true);
+    try {
+      const response = await fetch('/api/backups/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newSettings),
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setSettings(newSettings);
+        // Reload backups to see any cleanup changes
+        await loadBackups();
+        alert('Settings updated successfully!');
+      } else {
+        alert(`Failed to update settings: ${data.error}`);
+      }
+    } catch (error) {
+      alert('Failed to update settings: Network error');
+      console.error('Error updating settings:', error);
+    } finally {
+      setSettingsLoading(false);
+    }
+  };
+
+  const downloadBackup = async (backupId: string, backupName: string) => {
+    try {
+      const response = await fetch(`/api/backups/download?id=${encodeURIComponent(backupId)}`);
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Download failed');
+      }
+      
+      // Create a blob from the response
+      const blob = await response.blob();
+      
+      // Create a temporary URL for the blob
+      const url = window.URL.createObjectURL(blob);
+      
+      // Create a temporary anchor element and trigger download
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `icarus-backup-${backupId}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      
+      // Cleanup
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      
+    } catch (error) {
+      alert(`Failed to download backup: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error('Error downloading backup:', error);
+    }
+  };
 
   const loadBackups = async () => {
     try {
@@ -79,19 +172,32 @@ const BackupRestore = () => {
     const backup = backups.find(b => b.id === backupId);
     if (!backup) return;
     
+    const serverWarning = serverStatus === 'running' 
+      ? `\n⚠️ WARNING: The Icarus server is currently running. For best results, stop the server before restoring.\n\n`
+      : '';
+    
     const confirmed = confirm(
-      `Are you sure you want to restore "${backup.name}"?\n\n` +
+      `Are you sure you want to restore "${backup.name}"?${serverWarning}\n` +
       `This will:\n` +
-      `• Stop the Icarus server if running\n` +
-      `• Backup your current saves\n` +
-      `• Replace all save data with the backup\n\n` +
-      `This action cannot be undone!`
+      `• Create a temporary backup of your current saves\n` +
+      `• Replace all save data with the selected backup\n` +
+      `• If restore fails, automatically restore your original saves\n\n` +
+      `${serverWarning ? 'Consider stopping the server first for best results.' : 'This operation is safe and includes automatic recovery.'}`
     );
     
     if (!confirmed) return;
     
     try {
       setError(null);
+      
+      // Show progress feedback
+      const originalText = document.querySelector(`[data-backup-id="${backupId}"] .restore-btn`)?.textContent;
+      const restoreBtn = document.querySelector(`[data-backup-id="${backupId}"] .restore-btn`) as HTMLButtonElement;
+      if (restoreBtn) {
+        restoreBtn.disabled = true;
+        restoreBtn.textContent = 'Restoring...';
+      }
+      
       const response = await fetch('/api/backups/restore', {
         method: 'POST',
         headers: {
@@ -102,19 +208,45 @@ const BackupRestore = () => {
       
       const data = await response.json();
       
+      if (restoreBtn) {
+        restoreBtn.disabled = false;
+        restoreBtn.textContent = originalText || 'Restore';
+      }
+      
       if (data.success) {
-        alert('Backup restored successfully! You may need to restart the server.');
+        alert(
+          `✅ Backup restored successfully!\n\n` +
+          `${data.message}\n\n` +
+          `Details:\n` +
+          `• Restored at: ${new Date(data.details?.restoreTime || Date.now()).toLocaleString()}\n` +
+          `• From: ${backup.name}`
+        );
       } else {
         if (data.recovered) {
-          alert(`Restore failed but your original saves have been recovered.\n\nError: ${data.error}`);
+          alert(
+            `⚠️ Restore Failed - Original Saves Recovered\n\n` +
+            `The restore operation failed, but your original saves have been automatically restored.\n\n` +
+            `Error: ${data.error}\n\n` +
+            `${data.details?.recoveryTime ? `Recovery completed at: ${new Date(data.details.recoveryTime).toLocaleString()}` : ''}`
+          );
         } else {
-          alert(`Failed to restore backup: ${data.error}`);
+          const errorMsg = data.details?.manualRecoveryInstructions 
+            ? `${data.error}\n\n${data.details.manualRecoveryInstructions}`
+            : data.error;
+          alert(`❌ Failed to restore backup:\n\n${errorMsg}`);
         }
         setError(data.error);
       }
     } catch (error) {
+      // Reset button state
+      const restoreBtn = document.querySelector(`[data-backup-id="${backupId}"] .restore-btn`) as HTMLButtonElement;
+      if (restoreBtn) {
+        restoreBtn.disabled = false;
+        restoreBtn.textContent = 'Restore';
+      }
+      
       setError('Failed to restore backup');
-      alert('Failed to restore backup: Network error');
+      alert('❌ Failed to restore backup: Network error\n\nPlease check your connection and try again.');
       console.error('Error restoring backup:', error);
     }
   };
@@ -203,8 +335,14 @@ const BackupRestore = () => {
               </p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" className="sr-only peer" defaultChecked />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              <input 
+                type="checkbox" 
+                className="sr-only peer" 
+                checked={settings.autoBackup}
+                onChange={(e) => updateSettings({ ...settings, autoBackup: e.target.checked })}
+                disabled={settingsLoading}
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 peer-disabled:opacity-50"></div>
             </label>
           </div>
           <div className="flex items-center justify-between">
@@ -213,17 +351,30 @@ const BackupRestore = () => {
                 Max Backups
               </label>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                Maximum number of backups to keep
+                Maximum number of backups to keep (older backups will be automatically deleted)
               </p>
             </div>
-            <select className="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 text-sm rounded-lg px-3 py-1">
-              <option>5</option>
-              <option>10</option>
-              <option>15</option>
-              <option>20</option>
+            <select 
+              className="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 text-sm rounded-lg px-3 py-1 disabled:opacity-50"
+              value={settings.maxBackups}
+              onChange={(e) => updateSettings({ ...settings, maxBackups: parseInt(e.target.value) })}
+              disabled={settingsLoading}
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={15}>15</option>
+              <option value={20}>20</option>
+              <option value={25}>25</option>
+              <option value={30}>30</option>
             </select>
           </div>
         </div>
+        {settingsLoading && (
+          <div className="mt-4 flex items-center justify-center">
+            <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-600 border-t-transparent"></div>
+            <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">Updating settings...</span>
+          </div>
+        )}
       </div>
 
       {/* Backup List */}
@@ -255,7 +406,7 @@ const BackupRestore = () => {
             </div>
           ) : (
             backups.map((backup) => (
-              <div key={backup.id} className="px-6 py-4 flex items-center justify-between">
+              <div key={backup.id} className="px-6 py-4 flex items-center justify-between" data-backup-id={backup.id}>
                 <div className="flex-1">
                   <div className="flex items-center space-x-3">
                     <div className={`w-3 h-3 rounded-full ${
@@ -273,8 +424,18 @@ const BackupRestore = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                   <button
+                    onClick={() => downloadBackup(backup.id, backup.name)}
+                    className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors flex items-center space-x-1"
+                    title="Download backup file"
+                  >
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>Download</span>
+                  </button>
+                  <button
                     onClick={() => restoreBackup(backup.id)}
-                    className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                    className="restore-btn px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     Restore
                   </button>
@@ -291,6 +452,26 @@ const BackupRestore = () => {
         </div>
       </div>
 
+      {/* Server Status Warning */}
+      {serverStatus === 'running' && (
+        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+          <div className="flex items-start space-x-3">
+            <svg className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            </svg>
+            <div>
+              <h4 className="text-sm font-medium text-amber-800 dark:text-amber-200">
+                Server Running
+              </h4>
+              <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+                The Icarus server is currently running. For best restore results, consider stopping the server first.
+                Restores can still be performed safely with automatic recovery if issues occur.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Info Box */}
       <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
         <div className="flex items-start space-x-3">
@@ -303,8 +484,8 @@ const BackupRestore = () => {
             </h4>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
               Backups include all Icarus save data, world saves, character data, and game configurations. 
-              The system automatically creates temporary backups before restoring to prevent data loss. 
-              <strong>Important:</strong> Stop the server before restoring backups for best results.
+              The system automatically creates temporary backups before restoring and includes automatic recovery if restoration fails.
+              <strong> Enhanced Safety:</strong> Failed restores automatically restore your original saves.
             </p>
           </div>
         </div>

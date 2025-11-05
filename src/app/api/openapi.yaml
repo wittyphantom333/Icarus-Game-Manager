@@ -583,6 +583,117 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /backups/settings:
+    get:
+      tags:
+        - Backups
+      summary: Get backup settings
+      description: Retrieve current backup configuration settings
+      responses:
+        '200':
+          description: Backup settings retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  settings:
+                    $ref: '#/components/schemas/BackupSettings'
+        '500':
+          description: Failed to get backup settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - Backups
+      summary: Update backup settings
+      description: Update backup configuration settings including auto backup and max backups limit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BackupSettings'
+      responses:
+        '200':
+          description: Backup settings updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  settings:
+                    $ref: '#/components/schemas/BackupSettings'
+        '400':
+          description: Invalid settings format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Failed to update backup settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /backups/download:
+    get:
+      tags:
+        - Backups
+      summary: Download a backup file
+      description: Download a specific backup file as a ZIP archive
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: ID of the backup to download
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Backup file download
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+          headers:
+            Content-Disposition:
+              description: Attachment filename
+              schema:
+                type: string
+            Content-Length:
+              description: File size in bytes
+              schema:
+                type: integer
+        '400':
+          description: Backup ID is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Backup file not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Failed to download backup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   schemas:
     Error:
@@ -690,3 +801,18 @@ components:
         - createdAt
         - size
         - type
+
+    BackupSettings:
+      type: object
+      properties:
+        autoBackup:
+          type: boolean
+          description: Whether to automatically create backups before server start
+        maxBackups:
+          type: integer
+          minimum: 1
+          maximum: 100
+          description: Maximum number of backups to keep (older backups will be automatically deleted)
+      required:
+        - autoBackup
+        - maxBackups

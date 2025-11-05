@@ -38,12 +38,8 @@ async function clearDirectory(dirPath: string): Promise<void> {
   try {
     console.log(`Clearing directory: ${dirPath}`);
     
-    // Use PowerShell to clear the directory, excluding locked files
-    await execAsync(`powershell -Command "Get-ChildItem -Path '${dirPath}' -Recurse | Where-Object { -not $_.PSIsContainer } | ForEach-Object { try { Remove-Item $_.FullName -Force } catch { Write-Warning \"Could not delete $($_.FullName): $_\" } }"`);
-    
-    // Remove empty directories
-    await execAsync(`powershell -Command "Get-ChildItem -Path '${dirPath}' -Recurse -Directory | Sort-Object FullName -Descending | ForEach-Object { try { Remove-Item $_.FullName -Force } catch { Write-Warning \"Could not delete directory $($_.FullName): $_\" } }"`);
-    
+    // Simple PowerShell command to clear directory
+    await execAsync(`powershell -Command "Remove-Item -Path '${dirPath}\\*' -Recurse -Force -ErrorAction SilentlyContinue"`);
     console.log('Directory cleared successfully');
   } catch (error) {
     console.error('Error clearing directory:', error);
@@ -100,59 +96,109 @@ export async function POST(request: NextRequest) {
     // Create a temporary backup of current saves before restore
     const tempBackupPath = path.join(BACKUP_DIR, `temp-pre-restore-${Date.now()}.zip`);
     try {
-      await execAsync(`powershell -Command "Compress-Archive -Path '${saveDir}\\*' -DestinationPath '${tempBackupPath}' -Force"`);
+      // Ensure backup directory exists
+      await fs.mkdir(BACKUP_DIR, { recursive: true });
+      await execAsync(`powershell -Command "Compress-Archive -Path '${saveDir}' -DestinationPath '${tempBackupPath}' -Force -ErrorAction SilentlyContinue"`);
       console.log(`Created temporary backup: ${tempBackupPath}`);
     } catch (error) {
       console.warn('Could not create temporary backup:', error);
     }
     
     try {
-      // Extract to a temporary directory first
-      const tempRestoreDir = path.join('C:\\temp', 'icarus-restore-' + Date.now());
-      await fs.mkdir(tempRestoreDir, { recursive: true });
+      // Check if Icarus server is running before restore
+      try {
+        const { stdout } = await execAsync('tasklist /FI "IMAGENAME eq IcarusServer-Win64-Shipping.exe" /FO CSV');
+        if (stdout.includes('IcarusServer-Win64-Shipping.exe')) {
+          console.log('Warning: Icarus server is running during restore');
+        }
+      } catch (error) {
+        // Ignore server check errors
+      }
+
+      // Clear the destination directory before restore to ensure clean state
+      console.log('Clearing destination directory...');
+      await clearDirectory(saveDir);
       
-      console.log(`Extracting backup to temp directory: ${tempRestoreDir}`);
-      await extractZipBackup(backupPath, tempRestoreDir);
+      // Recreate the base directory
+      await fs.mkdir(saveDir, { recursive: true });
       
-      // Now copy the restored files to the save directory, overwriting but not deleting existing
-      console.log('Copying restored files to save directory...');
-      await execAsync(`robocopy "${tempRestoreDir}" "${saveDir}" /E /R:0 /W:0 /MT:8`);
+      // Extract backup directly to save directory
+      console.log(`Extracting backup directly to save directory: ${saveDir}`);
+      await extractZipBackup(backupPath, saveDir);
       
-      // Clean up temporary directory
-      await execAsync(`powershell -Command "Remove-Item -Path '${tempRestoreDir}' -Recurse -Force"`);
+      // Verify restore was successful by checking if any files exist
+      const dirContents = await fs.readdir(saveDir);
+      if (dirContents.length === 0) {
+        throw new Error('Restore verification failed - no files found after restore');
+      }
+      
+      console.log(`Restore successful - ${dirContents.length} items restored`)
       
       // Clean up temporary backup after successful restore
       try {
         await fs.unlink(tempBackupPath);
+        console.log('Cleaned up temporary backup');
       } catch (error) {
         console.warn('Could not clean up temporary backup:', error);
       }
       
       return NextResponse.json({
         success: true,
-        message: 'Backup restored successfully'
+        message: 'Backup restored successfully. You may need to restart the Icarus server.',
+        details: {
+          restoredFrom: backupPath,
+          restoreTime: new Date().toISOString()
+        }
       });
       
     } catch (error) {
+      console.error('Restore operation failed:', error);
+      
       // If restore failed, try to restore from temporary backup
       if (tempBackupPath) {
         try {
           console.log('Restore failed, attempting to restore original saves...');
+          
+          // Clear directory first
           await clearDirectory(saveDir);
+          
+          // Recreate base directory
+          await fs.mkdir(saveDir, { recursive: true });
+          
+          // Extract the temporary backup to restore original state
           await extractZipBackup(tempBackupPath, saveDir);
-          await fs.unlink(tempBackupPath);
+          
+          console.log('Original saves restored successfully');
+          
+          // Clean up temporary backup
+          try {
+            await fs.unlink(tempBackupPath);
+          } catch (cleanupError) {
+            console.warn('Could not clean up temporary backup after recovery:', cleanupError);
+          }
           
           return NextResponse.json({
             success: false,
-            error: 'Restore failed, original saves have been restored',
-            recovered: true
+            error: `Restore failed: ${error instanceof Error ? error.message : 'Unknown error'}. Your original saves have been restored.`,
+            recovered: true,
+            details: {
+              originalError: error instanceof Error ? error.message : 'Unknown error',
+              recoveryTime: new Date().toISOString()
+            }
           }, { status: 500 });
+          
         } catch (recoveryError) {
           console.error('Failed to recover original saves:', recoveryError);
           return NextResponse.json({
             success: false,
-            error: 'Restore failed and could not recover original saves. Check the temp backup manually.',
-            tempBackupPath
+            error: 'Restore failed and could not recover original saves automatically.',
+            recovered: false,
+            tempBackupPath,
+            details: {
+              originalError: error instanceof Error ? error.message : 'Unknown error',
+              recoveryError: recoveryError instanceof Error ? recoveryError.message : 'Unknown recovery error',
+              manualRecoveryInstructions: `A temporary backup of your original saves was created at: ${tempBackupPath}. You can manually extract this to restore your saves.`
+            }
           }, { status: 500 });
         }
       }

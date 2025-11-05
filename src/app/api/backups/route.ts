@@ -128,6 +128,46 @@ async function createZipBackup(sourceDir: string, backupPath: string): Promise<v
   }
 }
 
+async function loadBackupSettings() {
+  try {
+    const settingsPath = path.join(BACKUP_DIR, 'settings.json');
+    const data = await fs.readFile(settingsPath, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    return { autoBackup: true, maxBackups: 10 };
+  }
+}
+
+async function cleanupOldBackups(maxBackups: number): Promise<void> {
+  try {
+    const files = await fs.readdir(BACKUP_DIR);
+    const backupFiles = files
+      .filter(file => file.startsWith('icarus-backup-') && file.endsWith('.zip'))
+      .map(file => ({
+        name: file,
+        path: path.join(BACKUP_DIR, file),
+        timestamp: file.replace('icarus-backup-', '').replace('.zip', '')
+      }))
+      .sort((a, b) => b.timestamp.localeCompare(a.timestamp)); // Newest first
+
+    if (backupFiles.length > maxBackups) {
+      const filesToDelete = backupFiles.slice(maxBackups);
+      console.log(`Cleaning up ${filesToDelete.length} old backups (keeping ${maxBackups})`);
+      
+      for (const file of filesToDelete) {
+        try {
+          await fs.unlink(file.path);
+          console.log(`Deleted old backup: ${file.name}`);
+        } catch (error) {
+          console.error(`Failed to delete backup ${file.name}:`, error);
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error during backup cleanup:', error);
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { type = 'manual', name } = await request.json();
@@ -143,6 +183,9 @@ export async function POST(request: NextRequest) {
 
     // Ensure backup directory exists
     await ensureBackupDirectory();
+    
+    // Load backup settings
+    const settings = await loadBackupSettings();
     
     // Generate backup name and path
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
@@ -171,6 +214,9 @@ export async function POST(request: NextRequest) {
       type,
       path: backupPath
     };
+    
+    // Clean up old backups based on settings
+    await cleanupOldBackups(settings.maxBackups);
     
     return NextResponse.json({
       success: true,
