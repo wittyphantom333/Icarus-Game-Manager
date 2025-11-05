@@ -48,6 +48,8 @@ export async function GET(request: NextRequest) {
   <title>Icarus Game Manager API Documentation</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate icon" href="/favicon.ico">
   <style>
     body { margin: 0; padding: 0; }
   </style>

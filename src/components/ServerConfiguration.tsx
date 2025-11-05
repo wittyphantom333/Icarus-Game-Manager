@@ -97,6 +97,11 @@ export default function ServerConfiguration() {
     );
   }
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    saveConfig();
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
@@ -128,7 +133,7 @@ export default function ServerConfiguration() {
           </div>
         )}
 
-        <div className="grid gap-6">
+        <form onSubmit={handleSubmit} className="grid gap-6">
           {/* Basic Server Settings */}
           <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
             <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Basic Server Settings</h2>
@@ -381,7 +386,7 @@ export default function ServerConfiguration() {
               </div>
             </div>
           </div>
-        </div>
+        </form>
 
         <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
           <p className="text-sm text-yellow-800 dark:text-yellow-300">

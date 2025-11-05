@@ -47,6 +47,15 @@ app.prepare().then(() => {
   const server = createServer(async (req, res) => {
     try {
       const parsedUrl = parse(req.url, true);
+      
+      // Handle WebSocket upgrade requests
+      if (req.headers.upgrade === 'websocket') {
+        if (parsedUrl.pathname === '/ws') {
+          // Let our WebSocket server handle this
+          return;
+        }
+      }
+      
       await handle(req, res, parsedUrl);
     } catch (err) {
       console.error('Error occurred handling', req.url, err);

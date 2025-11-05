@@ -103,7 +103,6 @@ function HomeContent() {
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        console.log('WebSocket message received:', data);
         
         if (data.type === 'log') {
           setLogs(prevLogs => [...prevLogs, data.message]);
