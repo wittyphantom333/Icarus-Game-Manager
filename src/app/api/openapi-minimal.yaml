@@ -1,0 +1,43 @@
+openapi: 3.0.3
+info:
+  title: Icarus Game Manager API
+  description: API for managing Icarus game servers
+  version: 1.0.0
+
+servers:
+  - url: /api
+    description: API base path
+
+paths:
+  /server/status:
+    get:
+      summary: Get server status
+      responses:
+        '200':
+          description: Server status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [running, stopped]
+  
+  /test:
+    get:
+      summary: Test endpoint
+      responses:
+        '200':
+          description: Test response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  timestamp:
+                    type: string
+                  status:
+                    type: string
