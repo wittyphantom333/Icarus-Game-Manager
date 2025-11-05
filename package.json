@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@scalar/api-client-react": "^1.3.48",
     "@stoplight/elements": "^9.0.10",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20",

@@ -23,15 +23,15 @@ function HomeContent() {
   const [wsConnection, setWsConnection] = useState<WebSocket | null>(null);
   
   // Get active tab from URL params, default to 'dashboard'
-  const getActiveTab = (): 'dashboard' | 'config' | 'mods' | 'backup' | 'docs' => {
+  const getActiveTab = (): 'dashboard' | 'config' | 'mods' | 'backup' => {
     const tab = searchParams.get('tab');
-    if (tab && ['dashboard', 'config', 'mods', 'backup', 'docs'].includes(tab)) {
-      return tab as 'dashboard' | 'config' | 'mods' | 'backup' | 'docs';
+    if (tab && ['dashboard', 'config', 'mods', 'backup'].includes(tab)) {
+      return tab as 'dashboard' | 'config' | 'mods' | 'backup';
     }
     return 'dashboard';
   };
   
-  const [activeTab, setActiveTabState] = useState<'dashboard' | 'config' | 'mods' | 'backup' | 'docs'>(getActiveTab());
+  const [activeTab, setActiveTabState] = useState<'dashboard' | 'config' | 'mods' | 'backup'>(getActiveTab());
   
   const modal = useModal();
   
@@ -41,7 +41,7 @@ function HomeContent() {
   }, [searchParams]);
   
   // Function to change tab and update URL
-  const setActiveTab = (tab: 'dashboard' | 'config' | 'mods' | 'backup' | 'docs') => {
+  const setActiveTab = (tab: 'dashboard' | 'config' | 'mods' | 'backup') => {
     setActiveTabState(tab);
     const params = new URLSearchParams(window.location.search);
     if (tab === 'dashboard') {
@@ -170,6 +170,18 @@ function HomeContent() {
             Icarus Game Manager
           </h1>
           <div className="flex items-center space-x-4">
+            <a
+              href="/docs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-3 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              title="Open API Documentation"
+            >
+              <span>API</span>
+              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
             <div className="flex items-center space-x-2">
               <div className={`w-3 h-3 rounded-full ${wsConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
               <span className="text-sm text-gray-600 dark:text-gray-400">
@@ -222,16 +234,6 @@ function HomeContent() {
               }`}
             >
               Backup & Restore
-            </button>
-            <button
-              onClick={() => setActiveTab('docs')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === 'docs'
-                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
-              }`}
-            >
-              API Docs
             </button>
           </nav>
         </div>
@@ -296,61 +298,7 @@ function HomeContent() {
           <BackupRestore />
         )}
 
-        {activeTab === 'docs' && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
-              API Documentation
-            </h2>
-            <div className="space-y-4">
-              <p className="text-gray-600 dark:text-gray-400">
-                Interactive API documentation for the Icarus Game Manager endpoints.
-              </p>
-              
-              {/* Redirect to standalone docs page */}
-              <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-                  Full API Documentation
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                  View the complete interactive API documentation with request/response examples and testing capabilities.
-                </p>
-                <a
-                  href="/api/docs"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                  Open API Documentation
-                </a>
-              </div>
 
-              {/* Quick reference */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Server Control</h4>
-                  <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                    <li>• GET /api/server/status</li>
-                    <li>• POST /api/server/start</li>
-                    <li>• POST /api/server/stop</li>
-                    <li>• POST /api/server/restart</li>
-                  </ul>
-                </div>
-                <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Backup Management</h4>
-                  <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                    <li>• GET /api/backups</li>
-                    <li>• POST /api/backups</li>
-                    <li>• POST /api/backups/restore</li>
-                    <li>• GET /api/backups/download</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </main>
   );
