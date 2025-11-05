@@ -5,60 +5,94 @@ import { useState, useEffect, useCallback } from 'react';
 interface ServerStatsData {
   uptime: string;
   memoryUsage: string;
-  cpuUsage: string;
   playerCount: number;
   maxPlayers: number;
   serverVersion: string;
-  lastRestart: string;
 }
 
 const ServerStats = () => {
   const [stats, setStats] = useState<ServerStatsData>({
-    uptime: '00:00:00',
-    memoryUsage: '0 MB',
-    cpuUsage: '0%',
+    uptime: 'Loading...',
+    memoryUsage: 'Loading...',
     playerCount: 0,
     maxPlayers: 8,
-    serverVersion: '1.0.0',
-    lastRestart: 'Never'
+    serverVersion: 'Loading...'
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Don't start with loading true to prevent flash
+  const [refreshing, setRefreshing] = useState(false); // Separate state for manual refresh
+  const [initialLoad, setInitialLoad] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
-  const fetchStats = useCallback(async () => {
+  const fetchStats = useCallback(async (isManualRefresh = false) => {
     try {
-      setLoading(true);
       setError(null);
-      const response = await fetch('/api/server/stats');
+      if (isManualRefresh) {
+        setRefreshing(true);
+      }
+      
+      // Create a timeout for the fetch request
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
+      
+      const response = await fetch('/api/server/stats', {
+        signal: controller.signal,
+        cache: 'no-cache'
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
       const data = await response.json();
       
       if (data.success && data.stats) {
         setStats(data.stats);
         setLastUpdated(new Date());
+        setInitialLoad(false);
       } else {
         setError(data.error || 'Failed to fetch server stats');
-        console.error('Failed to fetch server stats:', data.error);
+        console.warn('Failed to fetch server stats:', data.error);
       }
     } catch (error) {
-      setError('Network error - could not connect to server');
-      console.error('Failed to fetch server stats:', error);
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          setError('Request timeout - server may be busy');
+        } else if (error.message.includes('fetch')) {
+          setError('Network error - could not connect to server');
+        } else {
+          setError(`Error: ${error.message}`);
+        }
+      } else {
+        setError('Unknown error occurred');
+      }
+      console.warn('Failed to fetch server stats:', error);
     } finally {
       setLoading(false);
+      setRefreshing(false);
+      setInitialLoad(false);
     }
   }, []);
 
   useEffect(() => {
-    // Initial fetch
-    fetchStats();
+    // Initial fetch with a small delay to prevent flash
+    const initialTimeout = setTimeout(() => {
+      fetchStats();
+    }, 100);
     
-    // Refresh stats every 30 seconds
-    const interval = setInterval(fetchStats, 30000);
+    // Refresh stats every 45 seconds (longer interval to reduce load)
+    const interval = setInterval(fetchStats, 45000);
     
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+    };
   }, [fetchStats]);
 
-  if (loading) {
+  // Only show loading skeleton after initial load and when manually refreshing
+  if (loading && !initialLoad) {
     return (
       <div className="space-y-4">
         <div className="animate-pulse">
@@ -82,29 +116,19 @@ const ServerStats = () => {
       icon: '💾'
     },
     {
-      label: 'CPU Usage',
-      value: stats.cpuUsage,
-      icon: '⚡'
-    },
-    {
-      label: 'Players',
-      value: `${stats.playerCount}/${stats.maxPlayers}`,
-      icon: '👥'
+      label: 'Server Status',
+      value: stats.uptime !== '0s' && stats.uptime !== 'Loading...' ? 'Online' : 'Offline',
+      icon: stats.uptime !== '0s' && stats.uptime !== 'Loading...' ? '🟢' : '�'
     },
     {
       label: 'Server Version',
       value: stats.serverVersion,
       icon: '📦'
-    },
-    {
-      label: 'Last Restart',
-      value: stats.lastRestart,
-      icon: '🔄'
     }
   ];
 
   const refreshStats = () => {
-    fetchStats();
+    fetchStats(true); // Pass true to indicate manual refresh
   };
 
   return (
@@ -114,6 +138,7 @@ const ServerStats = () => {
         <div className="flex items-center space-x-2">
           <span className="text-sm text-gray-600 dark:text-gray-400">
             Last updated: {lastUpdated.toLocaleTimeString()}
+            {refreshing && <span className="ml-2 text-blue-500">Refreshing...</span>}
           </span>
           {error && (
             <span className="text-sm text-red-600 dark:text-red-400">
@@ -123,12 +148,12 @@ const ServerStats = () => {
         </div>
         <button
           onClick={refreshStats}
-          disabled={loading}
-          className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 disabled:opacity-50"
+          disabled={refreshing}
+          className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 disabled:opacity-50 transition-colors"
           title="Refresh stats"
         >
           <svg 
-            className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} 
+            className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} 
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24"
@@ -138,7 +163,7 @@ const ServerStats = () => {
         </button>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {statItems.map((item, index) => (
           <div
             key={index}
@@ -157,20 +182,26 @@ const ServerStats = () => {
         ))}
       </div>
       
-      {/* Player Usage Bar */}
+      {/* Server Status Indicator */}
       <div className="mt-4">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Server Load
+            Server Activity
           </span>
           <span className="text-sm text-gray-500 dark:text-gray-400">
-            {Math.round((stats.playerCount / stats.maxPlayers) * 100)}%
+            {stats.uptime !== '0s' && stats.uptime !== 'Loading...' ? 'Running' : 'Stopped'}
           </span>
         </div>
         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
           <div
-            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${(stats.playerCount / stats.maxPlayers) * 100}%` }}
+            className={`h-2 rounded-full transition-all duration-300 ${
+              stats.uptime !== 'Loading...' && stats.uptime !== '0s' 
+                ? 'bg-green-500' 
+                : 'bg-red-500'
+            }`}
+            style={{ 
+              width: stats.uptime !== 'Loading...' && stats.uptime !== '0s' ? '100%' : '0%' 
+            }}
           ></div>
         </div>
       </div>
