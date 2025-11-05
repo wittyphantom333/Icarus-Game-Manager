@@ -92,6 +92,54 @@ export default function ModManager() {
     }
   };
 
+  const uninstallMod = async (modId: string, modName: string) => {
+    // Show confirmation dialog
+    const confirmed = await new Promise<boolean>((resolve) => {
+      modal.showConfirm(
+        'Uninstall Mod',
+        `Are you sure you want to uninstall "${modName}"? This action cannot be undone.`,
+        () => resolve(true), // onConfirm
+        () => resolve(false), // onCancel
+        'Uninstall', // confirmText
+        'Cancel' // cancelText
+      );
+    });
+
+    if (!confirmed) return;
+
+    try {
+      const response = await fetch(`/api/mods/${encodeURIComponent(modId)}/uninstall`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setInstalledMods(installedMods.filter(mod => mod.id !== modId));
+        
+        // Update available mods list to show as not installed
+        setAvailableMods(availableMods.map(mod => 
+          mod.name === modName ? { ...mod, installed: false } : mod
+        ));
+        
+        modal.showSuccess('Mod Uninstalled', data.message);
+      } else {
+        const errorData = await response.json();
+        
+        if (errorData.code === 'SERVER_RUNNING') {
+          modal.showWarning(
+            'Server Must Be Stopped',
+            `Cannot uninstall "${modName}" while the Icarus server is running.\n\nPlease stop the server first, then try uninstalling the mod.`
+          );
+        } else {
+          modal.showError('Uninstall Failed', `Failed to uninstall ${modName}: ${errorData.error || errorData.details || 'Unknown error'}`);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to uninstall mod:', error);
+      modal.showError('Uninstall Failed', `Failed to uninstall ${modName}: Network error`);
+    }
+  };
+
   const installModFromFile = async (file: File) => {
     const formData = new FormData();
     formData.append('mod', file);
@@ -192,23 +240,36 @@ export default function ModManager() {
               </p>
             ) : (
               installedMods.map((mod: InstalledMod) => (
-                <div key={mod.id} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                <div key={mod.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <h3 className="font-medium text-gray-900 dark:text-gray-100">{mod.name}</h3>
                       <span className="text-xs text-gray-500 dark:text-gray-400">v{mod.version}</span>
                       <span className="text-xs text-gray-400 dark:text-gray-500">by {mod.author || 'Unknown'}</span>
                     </div>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{mod.description}</p>
                   </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={mod.enabled}
-                      onChange={(e) => toggleMod(mod.id, e.target.checked)}
-                      className="sr-only peer"
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                  </label>
+                  <div className="flex items-center gap-2">
+                    <label className="relative inline-flex items-center cursor-pointer" title={mod.enabled ? 'Disable mod' : 'Enable mod'}>
+                      <input
+                        type="checkbox"
+                        checked={mod.enabled}
+                        onChange={(e) => toggleMod(mod.id, e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                    <button
+                      onClick={() => uninstallMod(mod.id, mod.name)}
+                      className="px-3 py-1 text-xs bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors flex items-center gap-1"
+                      title="Uninstall mod"
+                    >
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                      Uninstall
+                    </button>
+                  </div>
                 </div>
               ))
             )}
@@ -278,14 +339,25 @@ export default function ModManager() {
                         />
                       )}
                     </div>
-                    <div className="ml-4">
+                    <div className="ml-4 flex flex-col gap-2">
                       {mod.installed ? (
-                        <button 
-                          disabled
-                          className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-md cursor-not-allowed"
-                        >
-                          Already Installed
-                        </button>
+                        <div className="flex flex-col gap-2">
+                          <div className="px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-md text-center">
+                            ✓ Installed
+                          </div>
+                          <button 
+                            onClick={() => {
+                              // Find the installed mod by name to get the correct modId
+                              const installedMod = installedMods.find(m => m.name === mod.name);
+                              if (installedMod) {
+                                uninstallMod(installedMod.id, mod.name);
+                              }
+                            }}
+                            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors text-sm"
+                          >
+                            Uninstall
+                          </button>
+                        </div>
                       ) : downloading.includes(mod.name) ? (
                         <button 
                           disabled
