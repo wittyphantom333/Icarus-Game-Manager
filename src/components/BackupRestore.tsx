@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Modal from './Modal';
+import { useModal } from '@/hooks/useModal';
 
 interface Backup {
   id: string;
@@ -23,6 +25,8 @@ const BackupRestore = () => {
   const [serverStatus, setServerStatus] = useState<'running' | 'stopped' | 'unknown'>('unknown');
   const [settings, setSettings] = useState<BackupSettings>({ autoBackup: true, maxBackups: 10 });
   const [settingsLoading, setSettingsLoading] = useState(false);
+  
+  const modal = useModal();
 
   useEffect(() => {
     loadBackups();
@@ -69,12 +73,12 @@ const BackupRestore = () => {
         setSettings(newSettings);
         // Reload backups to see any cleanup changes
         await loadBackups();
-        alert('Settings updated successfully!');
+        modal.showSuccess('Settings Updated', 'Backup settings have been updated successfully!');
       } else {
-        alert(`Failed to update settings: ${data.error}`);
+        modal.showError('Settings Update Failed', `Failed to update settings: ${data.error}`);
       }
     } catch (error) {
-      alert('Failed to update settings: Network error');
+      modal.showError('Settings Update Failed', 'Failed to update settings: Network error');
       console.error('Error updating settings:', error);
     } finally {
       setSettingsLoading(false);
@@ -108,7 +112,7 @@ const BackupRestore = () => {
       document.body.removeChild(a);
       
     } catch (error) {
-      alert(`Failed to download backup: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      modal.showError('Download Failed', `Failed to download backup: ${error instanceof Error ? error.message : 'Unknown error'}`);
       console.error('Error downloading backup:', error);
     }
   };
@@ -154,14 +158,14 @@ const BackupRestore = () => {
       if (data.success) {
         // Reload backups to get the updated list
         await loadBackups();
-        alert('Backup created successfully!');
+        modal.showSuccess('Backup Created', 'Backup has been created successfully!');
       } else {
         setError(data.error || 'Failed to create backup');
-        alert(`Failed to create backup: ${data.error}`);
+        modal.showError('Backup Creation Failed', `Failed to create backup: ${data.error}`);
       }
     } catch (error) {
       setError('Failed to create backup');
-      alert('Failed to create backup: Network error');
+      modal.showError('Backup Creation Failed', 'Failed to create backup: Network error');
       console.error('Error creating backup:', error);
     } finally {
       setIsCreatingBackup(false);
@@ -173,19 +177,29 @@ const BackupRestore = () => {
     if (!backup) return;
     
     const serverWarning = serverStatus === 'running' 
-      ? `\n⚠️ WARNING: The Icarus server is currently running. For best results, stop the server before restoring.\n\n`
+      ? `⚠️ WARNING: The Icarus server is currently running. For best results, stop the server before restoring.\n\n`
       : '';
     
-    const confirmed = confirm(
-      `Are you sure you want to restore "${backup.name}"?${serverWarning}\n` +
-      `This will:\n` +
+    const confirmMessage = 
+      `${serverWarning}This will:\n` +
       `• Create a temporary backup of your current saves\n` +
       `• Replace all save data with the selected backup\n` +
       `• If restore fails, automatically restore your original saves\n\n` +
-      `${serverWarning ? 'Consider stopping the server first for best results.' : 'This operation is safe and includes automatic recovery.'}`
-    );
+      `${serverWarning ? 'Consider stopping the server first for best results.' : 'This operation is safe and includes automatic recovery.'}`;
     
-    if (!confirmed) return;
+    modal.showConfirm(
+      `Restore "${backup.name}"?`,
+      confirmMessage,
+      () => performRestore(backupId),
+      undefined,
+      'Restore Backup',
+      'Cancel'
+    );
+  };
+
+  const performRestore = async (backupId: string) => {
+    const backup = backups.find(b => b.id === backupId);
+    if (!backup) return;
     
     try {
       setError(null);
@@ -214,26 +228,21 @@ const BackupRestore = () => {
       }
       
       if (data.success) {
-        alert(
-          `✅ Backup restored successfully!\n\n` +
-          `${data.message}\n\n` +
-          `Details:\n` +
-          `• Restored at: ${new Date(data.details?.restoreTime || Date.now()).toLocaleString()}\n` +
-          `• From: ${backup.name}`
+        modal.showSuccess(
+          'Backup Restored Successfully!',
+          `${data.message}\n\nDetails:\n• Restored at: ${new Date(data.details?.restoreTime || Date.now()).toLocaleString()}\n• From: ${backup.name}`
         );
       } else {
         if (data.recovered) {
-          alert(
-            `⚠️ Restore Failed - Original Saves Recovered\n\n` +
-            `The restore operation failed, but your original saves have been automatically restored.\n\n` +
-            `Error: ${data.error}\n\n` +
-            `${data.details?.recoveryTime ? `Recovery completed at: ${new Date(data.details.recoveryTime).toLocaleString()}` : ''}`
+          modal.showWarning(
+            'Restore Failed - Original Saves Recovered',
+            `The restore operation failed, but your original saves have been automatically restored.\n\nError: ${data.error}\n\n${data.details?.recoveryTime ? `Recovery completed at: ${new Date(data.details.recoveryTime).toLocaleString()}` : ''}`
           );
         } else {
           const errorMsg = data.details?.manualRecoveryInstructions 
             ? `${data.error}\n\n${data.details.manualRecoveryInstructions}`
             : data.error;
-          alert(`❌ Failed to restore backup:\n\n${errorMsg}`);
+          modal.showError('Restore Failed', errorMsg);
         }
         setError(data.error);
       }
@@ -246,7 +255,7 @@ const BackupRestore = () => {
       }
       
       setError('Failed to restore backup');
-      alert('❌ Failed to restore backup: Network error\n\nPlease check your connection and try again.');
+      modal.showError('Restore Failed', 'Failed to restore backup: Network error\n\nPlease check your connection and try again.');
       console.error('Error restoring backup:', error);
     }
   };
@@ -255,10 +264,17 @@ const BackupRestore = () => {
     const backup = backups.find(b => b.id === backupId);
     if (!backup) return;
     
-    if (!confirm(`Are you sure you want to delete "${backup.name}"? This action cannot be undone.`)) {
-      return;
-    }
-    
+    modal.showConfirm(
+      'Delete Backup',
+      `Are you sure you want to delete "${backup.name}"? This action cannot be undone.`,
+      () => performDelete(backupId),
+      undefined,
+      'Delete',
+      'Cancel'
+    );
+  };
+
+  const performDelete = async (backupId: string) => {
     try {
       setError(null);
       const response = await fetch('/api/backups/delete', {
@@ -274,20 +290,22 @@ const BackupRestore = () => {
       if (data.success) {
         // Remove the backup from the local state
         setBackups(prev => prev.filter(b => b.id !== backupId));
-        alert('Backup deleted successfully');
+        modal.showSuccess('Backup Deleted', 'Backup has been deleted successfully.');
       } else {
         setError(data.error || 'Failed to delete backup');
-        alert(`Failed to delete backup: ${data.error}`);
+        modal.showError('Delete Failed', `Failed to delete backup: ${data.error}`);
       }
     } catch (error) {
       setError('Failed to delete backup');
-      alert('Failed to delete backup: Network error');
+      modal.showError('Delete Failed', 'Failed to delete backup: Network error');
       console.error('Error deleting backup:', error);
     }
   };
 
   return (
     <div className="space-y-6">
+      <Modal isOpen={modal.isOpen} options={modal.options} onClose={modal.hideModal} />
+      
       {/* Header with Create Backup Button */}
       <div className="flex items-center justify-between">
         <div>

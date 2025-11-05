@@ -9,6 +9,8 @@ import ServerConfiguration from '@/components/ServerConfiguration';
 import ServerStats from '@/components/ServerStats';
 import BackupRestore from '@/components/BackupRestore';
 import ThemeToggle from '@/components/ThemeToggle';
+import Modal from '@/components/Modal';
+import { useModal } from '@/hooks/useModal';
 
 export default function Home() {
   const [serverStatus, setServerStatus] = useState<'stopped' | 'running' | 'starting' | 'stopping'>('stopped');
@@ -16,6 +18,8 @@ export default function Home() {
   const [wsConnected, setWsConnected] = useState(false);
   const [wsConnection, setWsConnection] = useState<WebSocket | null>(null);
   const [activeTab, setActiveTab] = useState<'dashboard' | 'config' | 'mods' | 'backup' | 'docs'>('dashboard');
+  
+  const modal = useModal();
 
   useEffect(() => {
     // Check initial server status
@@ -124,19 +128,21 @@ export default function Home() {
           wsConnection.send(JSON.stringify({ type: 'clear-logs' }));
         }
         
-        alert('Logs cleared successfully');
+        modal.showSuccess('Logs Cleared', 'Server logs have been cleared successfully.');
       } else {
         console.error('Failed to clear logs:', data.error);
-        alert(`Failed to clear logs: ${data.error || 'Unknown error'}`);
+        modal.showError('Clear Logs Failed', `Failed to clear logs: ${data.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error clearing logs:', error);
-      alert('Failed to clear logs: Network error');
+      modal.showError('Clear Logs Failed', 'Failed to clear logs: Network error');
     }
   };
 
   return (
     <main className="min-h-screen bg-gray-100 dark:bg-gray-900 p-8 transition-colors">
+      <Modal isOpen={modal.isOpen} options={modal.options} onClose={modal.hideModal} />
+      
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">

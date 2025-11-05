@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import Modal from './Modal';
+import { useModal } from '@/hooks/useModal';
 
 interface InstalledMod {
   id: string;
@@ -32,6 +34,8 @@ export default function ModManager() {
   const [activeTab, setActiveTab] = useState<'installed' | 'browse'>('installed');
   const [searchTerm, setSearchTerm] = useState('');
   const [downloading, setDownloading] = useState<string[]>([]);
+  
+  const modal = useModal();
 
   useEffect(() => {
     loadInstalledMods();
@@ -127,14 +131,14 @@ export default function ModManager() {
         setAvailableMods(availableMods.map(m => 
           m.name === mod.name ? { ...m, installed: true } : m
         ));
-        alert(`Successfully installed ${mod.name}!`);
+        modal.showSuccess('Mod Installed', `Successfully installed ${mod.name}!`);
       } else {
         const data = await response.json();
-        alert(`Failed to install ${mod.name}: ${data.error}`);
+        modal.showError('Installation Failed', `Failed to install ${mod.name}: ${data.error}`);
       }
     } catch (error) {
       console.error('Failed to download mod:', error);
-      alert(`Failed to install ${mod.name}: Network error`);
+      modal.showError('Installation Failed', `Failed to install ${mod.name}: Network error`);
     } finally {
       setDownloading(downloading.filter(name => name !== mod.name));
     }
@@ -152,6 +156,8 @@ export default function ModManager() {
 
   return (
     <div className="space-y-4">
+      <Modal isOpen={modal.isOpen} options={modal.options} onClose={modal.hideModal} />
+      
       {/* Tab Navigation */}
       <div className="flex space-x-1 border-b border-gray-200 dark:border-gray-600">
         <button
