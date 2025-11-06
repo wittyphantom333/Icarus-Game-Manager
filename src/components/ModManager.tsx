@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Modal from './Modal';
+import ModDetailsModal from './ModDetailsModal';
 import { useModal } from '@/hooks/useModal';
 
 interface InstalledMod {
@@ -40,6 +41,8 @@ export default function ModManager() {
   const [uploadUrl, setUploadUrl] = useState('');
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [selectedMod, setSelectedMod] = useState<AvailableMod | InstalledMod | null>(null);
+  const [showModDetails, setShowModDetails] = useState(false);
   
   const modal = useModal();
 
@@ -73,7 +76,24 @@ export default function ModManager() {
       const response = await fetch('/api/mods/browse');
       if (response.ok) {
         const data = await response.json();
-        setAvailableMods(data.mods || []);
+        const availableMods = data.mods || [];
+        
+        // Cross-reference with installed mods to set installed status
+        const installedResponse = await fetch('/api/mods');
+        if (installedResponse.ok) {
+          const installedData = await installedResponse.json();
+          const installedModNames = (installedData.mods || []).map((mod: any) => mod.name);
+          
+          // Mark mods as installed if they exist in installed mods
+          const modsWithStatus = availableMods.map((mod: any) => ({
+            ...mod,
+            installed: installedModNames.includes(mod.name)
+          }));
+          
+          setAvailableMods(modsWithStatus);
+        } else {
+          setAvailableMods(availableMods);
+        }
       }
     } catch (error) {
       console.error('Failed to load available mods:', error);
@@ -113,9 +133,8 @@ export default function ModManager() {
 
           if (response.ok) {
             loadInstalledMods();
-            setAvailableMods(availableMods.map(mod => 
-              mod.name === modName ? { ...mod, installed: false } : mod
-            ));
+            // Refresh available mods to update installed status
+            loadAvailableMods();
             modal.showSuccess('Mod Uninstalled', `Successfully uninstalled ${modName}!`);
           } else {
             modal.showError('Uninstall Failed', `Failed to uninstall ${modName}`);
@@ -125,6 +144,53 @@ export default function ModManager() {
         }
       }
     );
+  };
+
+  const downloadPakFile = async (modId: string, modName: string) => {
+    try {
+      const response = await fetch(`/api/mods/${modId}/download-pak`);
+      
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${modName}.pak`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        modal.showSuccess('Download Started', `Downloading ${modName}.pak`);
+      } else {
+        const data = await response.json();
+        modal.showError('Download Failed', data.error || 'Failed to download .pak file');
+      }
+    } catch (error) {
+      modal.showError('Download Failed', 'Network error occurred');
+    }
+  };
+
+  const showModDetailsModal = (mod: AvailableMod | InstalledMod) => {
+    // Normalize the mod data to ensure consistent structure for the modal
+    let normalizedMod: any;
+    
+    if ('files' in mod) {
+      // This is an AvailableMod
+      normalizedMod = mod;
+    } else {
+      // This is an InstalledMod, convert to modal-compatible format
+      normalizedMod = {
+        ...mod,
+        compatibility: 'Icarus',
+        imageURL: '/default-mod-image.svg',
+        readmeURL: undefined,
+        files: {},
+        source: 'local'
+      };
+    }
+    
+    setSelectedMod(normalizedMod);
+    setShowModDetails(true);
   };
 
   const downloadAndInstallMod = async (mod: AvailableMod) => {
@@ -151,10 +217,9 @@ export default function ModManager() {
 
       if (response.ok) {
         loadInstalledMods();
-        setAvailableMods(availableMods.map(m => 
-          m.name === mod.name ? { ...m, installed: true } : m
-        ));
-        modal.showSuccess('Mod Installed', `Successfully installed ${mod.name}!`);
+        // Refresh available mods to update installed status
+        loadAvailableMods();
+        // Success feedback is provided by the visual state change (installed badge)
       } else {
         const data = await response.json();
         modal.showError('Installation Failed', `Failed to install ${mod.name}: ${data.error}`);
@@ -240,7 +305,7 @@ export default function ModManager() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Mod Manager</h2>
@@ -277,44 +342,70 @@ export default function ModManager() {
               <p>Install mods from the Browse tab or upload your own files</p>
             </div>
           ) : (
-            <div className="grid gap-4">
+            <div className="grid gap-3">
               {installedMods.map((mod) => (
                 <div
                   key={mod.id}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700"
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow"
                 >
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                        {mod.name}
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Version {mod.version} {mod.author && `by ${mod.author}`}
-                      </p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3 flex-1">
+                      <div 
+                        className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center cursor-pointer hover:from-blue-600 hover:to-purple-700 transition-colors"
+                        onClick={() => showModDetailsModal(mod)}
+                      >
+                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                      </div>
+                      
+                      <div className="flex-1 min-w-0">
+                        <h3 
+                          className="text-base font-semibold text-gray-900 dark:text-white truncate cursor-pointer hover:text-blue-600 dark:hover:text-blue-400"
+                          onClick={() => showModDetailsModal(mod)}
+                        >
+                          {mod.name}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                          v{mod.version} {mod.author && `• ${mod.author}`}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-3">
+                    
+                    <div className="flex items-center space-x-2">
                       <label className="flex items-center">
                         <input
                           type="checkbox"
                           checked={mod.enabled}
                           onChange={(e) => toggleMod(mod.id, e.target.checked)}
-                          className="mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                         />
-                        <span className="text-sm text-gray-700 dark:text-gray-300">
-                          {mod.enabled ? 'Enabled' : 'Disabled'}
+                        <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                          {mod.enabled ? 'On' : 'Off'}
                         </span>
                       </label>
+                      
+                      <button
+                        onClick={() => downloadPakFile(mod.id, mod.name)}
+                        className="p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-md transition-colors"
+                        title="Download .pak file"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                      </button>
+                      
                       <button
                         onClick={() => uninstallMod(mod.id, mod.name)}
-                        className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm transition-colors"
+                        className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
+                        title="Uninstall mod"
                       >
-                        Uninstall
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
                       </button>
                     </div>
                   </div>
-                  {mod.description && (
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">{mod.description}</p>
-                  )}
                 </div>
               ))}
             </div>
@@ -379,14 +470,14 @@ export default function ModManager() {
                     key={index}
                     className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700"
                   >
-                    <div className="aspect-video bg-gray-200 dark:bg-gray-700">
+                    <div className="aspect-video bg-gray-200 dark:bg-gray-700 relative">
                       <img
                         src={mod.imageURL}
                         alt={mod.name}
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
-                          target.src = 'https://via.placeholder.com/300x200/6B7280/FFFFFF?text=Mod+Image';
+                          target.src = '/default-mod-image.svg';
                         }}
                       />
                     </div>
@@ -410,14 +501,12 @@ export default function ModManager() {
                       </p>
                       
                       <div className="flex items-center justify-between">
-                        <a
-                          href={mod.readmeURL}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm"
+                        <button
+                          onClick={() => showModDetailsModal(mod)}
+                          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm hover:underline"
                         >
                           View Details
-                        </a>
+                        </button>
                         
                         {mod.installed ? (
                           <span className="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-md text-sm">
@@ -526,6 +615,32 @@ export default function ModManager() {
         options={modal.options} 
         onClose={modal.hideModal} 
       />
+
+      {/* Mod Details Modal */}
+      {selectedMod && (
+        <ModDetailsModal
+          isOpen={showModDetails}
+          onClose={() => {
+            setShowModDetails(false);
+            setSelectedMod(null);
+          }}
+          mod={selectedMod as AvailableMod}
+          onInstall={() => {
+            if ('files' in selectedMod) {
+              downloadAndInstallMod(selectedMod as AvailableMod);
+            }
+            setShowModDetails(false);
+            setSelectedMod(null);
+          }}
+          onDownloadPak={() => {
+            if ('id' in selectedMod) {
+              downloadPakFile(selectedMod.id, selectedMod.name);
+            }
+          }}
+          isInstalling={downloading.includes(selectedMod.name)}
+          isInstalled={'id' in selectedMod || (selectedMod as AvailableMod).installed}
+        />
+      )}
     </div>
   );
 }

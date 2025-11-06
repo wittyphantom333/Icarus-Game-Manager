@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7C3AED;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="300" fill="url(#bg)"/>
+  
+  <!-- Mod icon -->
+  <g transform="translate(200,150)">
+    <!-- Cube base -->
+    <path d="M-40,-30 L40,-30 L60,-10 L-20,-10 Z" fill="#ffffff" opacity="0.9"/>
+    <path d="M40,-30 L40,30 L60,50 L60,-10 Z" fill="#ffffff" opacity="0.7"/>
+    <path d="M-40,-30 L-40,30 L40,30 L40,-30 Z" fill="#ffffff" opacity="0.8"/>
+    
+    <!-- Plus sign overlay -->
+    <rect x="-20" y="-5" width="40" height="10" fill="#4F46E5"/>
+    <rect x="-5" y="-20" width="10" height="40" fill="#4F46E5"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="200" y="220" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">MOD</text>
+  <text x="200" y="240" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12" opacity="0.8">No Image Available</text>
+</svg>

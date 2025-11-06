@@ -285,12 +285,7 @@ function HomeContent() {
         )}
 
         {activeTab === 'mods' && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
-              Mod Manager
-            </h2>
-            <ModManager />
-          </div>
+          <ModManager />
         )}
 
         {activeTab === 'backup' && (

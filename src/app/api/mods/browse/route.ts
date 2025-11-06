@@ -33,18 +33,12 @@ async function fetchGitHubMods(): Promise<any[]> {
     return modsArray.map((mod: any) => {
       let imageURL = mod.imageURL;
       
-      // If no image URL, try to generate one based on mod name
-      if (!imageURL || imageURL.trim() === '') {
-        const modName = mod.name || '';
-        // Try to construct GitHub image URL based on naming patterns
-        const sanitizedName = modName.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
-        imageURL = `https://github.com/Jimk72/Icarus_Mods/raw/main/${sanitizedName}.png`;
-        
-        // Fallback to a generic Icarus mod image if we can't construct one
-        if (!sanitizedName) {
-          imageURL = 'https://github.com/Jimk72/Icarus_Mods/raw/main/Icarus_Mod_Generic.png';
-        }
+      // If no image URL or it's empty/invalid, use default mod image
+      if (!imageURL || imageURL.trim() === '' || imageURL === 'null' || imageURL === 'undefined') {
+        imageURL = '/default-mod-image.svg';
       }
+      
+      // If we have an imageURL but it might be broken, we'll let the frontend handle fallback
       
       return {
         ...mod,

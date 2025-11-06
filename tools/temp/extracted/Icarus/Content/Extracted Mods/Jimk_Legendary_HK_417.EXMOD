@@ -1,0 +1,977 @@
+{
+    "name": "Jimk Legendary HK 417",
+    "author": "Jimk72",
+    "version": "1.2",
+    "week": "",
+    "fileName": "Jimk_Legendary_HK_417",
+    "imageURL": "",
+    "readmeURL": "",
+    "description": "Legendary HK 417 that allows Custom versions to focus on Damage, Stealth, Distance, Quickness, or any combination in between. Upgradable Sights, Barrels, Attachments, and Magazines.",
+    "Level2": "True",
+    "Rows": [
+        {
+            "CurrentFile": "LivingItems-D_LivingItemShopItems.json",
+            "File_Items": [
+                {
+                    "Name": "Legendary_Jimk_HK_417",
+                    "ItemTemplate": {
+                        "RowName": "LegendaryWeapon_Jimk_HK_417"
+                    },
+                    "Cost": [
+                        {
+                            "Meta": {
+                                "RowName": "Credits",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 800
+                        }
+                    ],
+                    "ItemImage": "/Game/HK_417/T_BIOLAB_UI_WPN_Jimk_HK_417.T_BIOLAB_UI_WPN_Jimk_HK_417",
+                    "ItemBackground": "/Game/Assets/2DArt/UI/Biolab/T_NorexBasic.T_NorexBasic",
+                    "ShopBackground": "/Game/Assets/2DArt/UI/Biolab/T_NorexBasic.T_NorexBasic",
+                    "BossIcon": "/Game/Assets/2DArt/UI/Icons/Currency/T_ICON_CURRENCY_NOREX.T_ICON_CURRENCY_NOREX"
+                }
+            ]
+        },
+        {
+            "CurrentFile": "LivingItems-D_LivingItemUpgrades.json",
+            "File_Items": [
+                {
+                    "Name": "Jimk_HK_417_Addon_Light",
+                    "AlterationToApply": {
+                        "RowName": "Legendary_Jimk_HK_417_Addon_Light"
+                    },
+                    "UpgradeCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 10
+                        }
+                    ],
+                    "MeshCustomisations": [
+                        {
+                            "SocketName": "None",
+                            "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_FlashLight.SM_HK_417_FlashLight"
+                        }
+                    ]
+                },
+                {
+                    "Name": "Jimk_HK_417_Addon_Laser",
+                    "AlterationToApply": {
+                        "RowName": "Legendary_Jimk_HK_417_Addon_Laser"
+                    },
+                    "UpgradeCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 10
+                        }
+                    ],
+                    "MeshCustomisations": [
+                        {
+                            "SocketName": "None",
+                            "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_Laser.SM_HK_417_Laser"
+                        }
+                    ]
+                },
+                {
+                    "Name": "Jimk_HK_417_Addon_ForGrip",
+                    "AlterationToApply": {
+                        "RowName": "Legendary_Jimk_HK_417_Addon_ForGrip"
+                    },
+                    "UpgradeCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 10
+                        }
+                    ],
+                    "MeshCustomisations": [
+                        {
+                            "SocketName": "None",
+                            "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_ForGrip.SM_HK_417_ForGrip"
+                        }
+                    ]
+                },
+                {
+                    "Name": "Jimk_HK_417_Barrel_A",
+                    "AlterationToApply": {
+                        "RowName": "Legendary_Jimk_HK_417_Barrel_A"
+                    },
+                    "UpgradeCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 10
+                        }
+                    ],
+                    "MeshCustomisations": [
+                        {
+                            "SocketName": "None",
+                            "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_Barrel_Silenced.SM_HK_417_Barrel_Silenced"
+                        },
+                        {
+                            "SocketName": "None",
+                            "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_Stock_Standard.SM_HK_417_Stock_Standard"
+                        }
+                    ]
+                },
+                {
+                    "Name": "Jimk_HK_417_Barrel_B",
+                    "AlterationToApply": {
+                        "RowName": "Legendary_Jimk_HK_417_Barrel_B"
+                    },
+                    "UpgradeCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 10
+                        }
+                    ],
+                    "MeshCustomisations": [
+                        {
+                            "SocketName": "None",
+                            "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_Barrel_Long.SM_HK_417_Barrel_Long"
+                        },
+                        {
+                            "SocketName": "None",
+                            "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_Stock_Extended.SM_HK_417_Stock_Extended"
+                        }
+                    ]
+                },
+                {
+                    "Name": "Jimk_HK_417_Barrel_C",
+                    "AlterationToApply": {
+                        "RowName": "Legendary_Jimk_HK_417_Barrel_C"
+                    },
+                    "UpgradeCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 10
+                        }
+                    ],
+                    "MeshCustomisations": [
+                        {
+                            "SocketName": "None",
+                            "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_Barrel_Short.SM_HK_417_Barrel_Short"
+                        },
+                        {
+                            "SocketName": "None",
+                            "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_Stock_Short.SM_HK_417_Stock_Short"
+                        }
+                    ]
+                },
+                {
+                    "Name": "Jimk_HK_417_Scope_A",
+                    "AlterationToApply": {
+                        "RowName": "Legendary_Jimk_HK_417_Scope_A"
+                    },
+                    "UpgradeCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 10
+                        }
+                    ],
+                    "MeshCustomisations": [
+                        {
+                            "SocketName": "None",
+                            "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_Scope_Reflex.SM_HK_417_Scope_Reflex"
+                        }
+                    ]
+                },
+                {
+                    "Name": "Jimk_HK_417_Scope_B",
+                    "AlterationToApply": {
+                        "RowName": "Legendary_Jimk_HK_417_Scope_B"
+                    },
+                    "UpgradeCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 10
+                        }
+                    ],
+                    "MeshCustomisations": [
+                        {
+                            "SocketName": "None",
+                            "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_Scope_25x.SM_HK_417_Scope_25x"
+                        }
+                    ]
+                },
+                {
+                    "Name": "Jimk_HK_417_Scope_C",
+                    "AlterationToApply": {
+                        "RowName": "Legendary_Jimk_HK_417_Scope_C"
+                    },
+                    "UpgradeCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 10
+                        }
+                    ],
+                    "MeshCustomisations": [
+                        {
+                            "SocketName": "None",
+                            "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_Scope_10x.SM_HK_417_Scope_10x"
+                        }
+                    ]
+                },
+                {
+                    "Name": "Jimk_HK_417_Module_A",
+                    "AlterationToApply": {
+                        "RowName": "Legendary_Jimk_HK_417_Module_A"
+                    },
+                    "UpgradeCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 10
+                        }
+                    ],
+                    "MeshCustomisations": [
+                        {
+                            "SocketName": "None",
+                            "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_Mag_Short.SM_HK_417_Mag_Short"
+                        }
+                    ]
+                },
+                {
+                    "Name": "Jimk_HK_417_Module_B",
+                    "AlterationToApply": {
+                        "RowName": "Legendary_Jimk_HK_417_Module_B"
+                    },
+                    "UpgradeCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 10
+                        }
+                    ],
+                    "MeshCustomisations": [
+                        {
+                            "SocketName": "None",
+                            "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_Mag_Standard.SM_HK_417_Mag_Standard"
+                        }
+                    ]
+                },
+                {
+                    "Name": "Jimk_HK_417_Module_C",
+                    "AlterationToApply": {
+                        "RowName": "Legendary_Jimk_HK_417_Module_C"
+                    },
+                    "UpgradeCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 10
+                        }
+                    ],
+                    "MeshCustomisations": [
+                        {
+                            "SocketName": "None",
+                            "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_Mag_Extended.SM_HK_417_Mag_Extended"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Alterations-D_Alterations.json",
+            "File_Items": [
+                {
+                    "Name": "Legendary_Jimk_HK_417_Addon_Light",
+                    "DisplayName": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Addon_A-DisplayName\", \"Flash Light\")",
+                    "Icon": "/Game/HK_417/Icon/Item_HK_417_Light.Item_HK_417_Light",
+                    "Description": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Addon_A-Description\", \"Lights up the Darkness\")",
+                    "RankIcon": "/Game/Assets/2DArt/UI/Alterations/Icon_Alteration_1.Icon_Alteration_1",
+                    "Stats": {
+                        "(Value=\"BaseAimingMovementSpeed_+%\")": 10,
+                        "(Value=\"BaseNightMovementSpeed_+%\")": 10
+                    }
+                },
+                {
+                    "Name": "Legendary_Jimk_HK_417_Addon_Laser",
+                    "DisplayName": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Addon_B-DisplayName\", \"Laser Highlighter\")",
+                    "Icon": "/Game/HK_417/Icon/Item_HK_417_Laser.Item_HK_417_Laser",
+                    "Description": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Addon_B-Description\", \"Highlights Creatures at further Distances\")",
+                    "RankIcon": "/Game/Assets/2DArt/UI/Alterations/Icon_Alteration_1.Icon_Alteration_1",
+                    "Stats": {
+                        "(Value=\"HighlightSmallAnimalsWhenADS_?\")": 1,
+                        "(Value=\"HighlightMediumAnimalsWhenADS_?\")": 1,
+                        "(Value=\"HighlightLargeAnimalsWhenADS_?\")": 1,
+                        "(Value=\"BaseProjectileDamage_+%\")": 15,
+                        "(Value=\"BaseAnimalHighlightDistance_+\")": 17500
+                    }
+                },
+                {
+                    "Name": "Legendary_Jimk_HK_417_Addon_ForGrip",
+                    "DisplayName": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Addon_C-DisplayName\", \"Forhand Grip\")",
+                    "Icon": "/Game/HK_417/Icon/Item_HK_417_ForGrip.Item_HK_417_ForGrip",
+                    "Description": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Addon_C-Description\", \"Increases Accuracy.\")",
+                    "RankIcon": "/Game/Assets/2DArt/UI/Alterations/Icon_Alteration_1.Icon_Alteration_1",
+                    "Stats": {
+                        "(Value=\"BaseAimDownSightsSpeed_+%\")": 15,
+                        "(Value=\"BaseProjectileAccuracy_+%\")": 50,
+                        "(Value=\"BaseMovementSpeed_+%\")": 5,
+                        "(Value=\"BaseAimingMovementSpeed_+%\")": 10
+                    }
+                },
+                {
+                    "Name": "Legendary_Jimk_HK_417_Barrel_A",
+                    "DisplayName": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Barrel_A-DisplayName\", \"Silenced Barrel\")",
+                    "Icon": "/Game/HK_417/Icon/Item_HK_417_Barrel_Silenced.Item_HK_417_Barrel_Silenced",
+                    "Description": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Barrel_A-Description\", \"Draws Far Less Animal Threat when Firing and Deals additional Stealth Damage.\")",
+                    "RankIcon": "/Game/Assets/2DArt/UI/Alterations/Icon_Alteration_1.Icon_Alteration_1",
+                    "Stats": {
+                        "(Value=\"BaseFirearmLoudness_+%\")": -90,
+                        "(Value=\"BaseStealthDamage_+%\")": 25,
+                        "(Value=\"BaseProjectileAccuracy_+%\")": -20,
+                        "(Value=\"IsAudioSilenced_?\")": 1
+                    }
+                },
+                {
+                    "Name": "Legendary_Jimk_HK_417_Barrel_B",
+                    "DisplayName": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Barrel_B-DisplayName\", \"Extended Barrel\")",
+                    "Icon": "/Game/HK_417/Icon/Item_HK_417_Barrel_Extended.Item_HK_417_Barrel_Extended",
+                    "Description": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Barrel_B-Description\", \"Raw Damage Increase And Increased Accuracy\")",
+                    "RankIcon": "/Game/Assets/2DArt/UI/Alterations/Icon_Alteration_1.Icon_Alteration_1",
+                    "Stats": {
+                        "(Value=\"BaseMovementSpeed_+%\")": -5,
+                        "(Value=\"BaseProjectileDamage_+%\")": 50,
+                        "(Value=\"BaseProjectileSpeed_+%\")": 50,
+                        "(Value=\"BaseProjectileAccuracy_+%\")": 200
+                    },
+                    "Metadata": {
+                        "RequiredFeatureLevel": {
+                            "RowName": "GreatHunts"
+                        }
+                    }
+                },
+                {
+                    "Name": "Legendary_Jimk_HK_417_Barrel_C",
+                    "DisplayName": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Barrel_C-DisplayName\", \"Short Barrel\")",
+                    "Icon": "/Game/HK_417/Icon/Item_HK_417_Barrel_Short.Item_HK_417_Barrel_Short",
+                    "Description": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Barrel_C-Description\", \"Faster Aim and Movement for Close Combat.\")",
+                    "RankIcon": "/Game/Assets/2DArt/UI/Alterations/Icon_Alteration_1.Icon_Alteration_1",
+                    "Stats": {
+                        "(Value=\"BaseMovementSpeed_+%\")": 10,
+                        "(Value=\"BaseAimingMovementSpeed_+%\")": 5,
+                        "(Value=\"BaseAttacksCauseImmobilise_%\")": 30,
+                        "(Value=\"BaseProjectileAccuracy_+%\")": -20,
+                        "(Value=\"BaseAimDownSightsSpeed_+%\")": 50
+                    }
+                },
+                {
+                    "Name": "Legendary_Jimk_HK_417_Scope_A",
+                    "DisplayName": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Scope_A-DisplayName\", \"Reflex Sights\")",
+                    "Icon": "/Game/HK_417/Icon/Item_HK_417_Reflex_Sight.Item_HK_417_Reflex_Sight",
+                    "Description": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Scope_A-Description\", \"Faster Aim and Movement\")",
+                    "RankIcon": "/Game/Assets/2DArt/UI/Alterations/Icon_Alteration_1.Icon_Alteration_1",
+                    "Stats": {
+                        "(Value=\"BaseReloadSpeed_+%\")": 10,
+                        "(Value=\"BaseMovementSpeed_+%\")": 10,
+                        "(Value=\"BaseAimDownSightsSpeed_+%\")": 100
+                    }
+                },
+                {
+                    "Name": "Legendary_Jimk_HK_417_Scope_B",
+                    "DisplayName": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Scope_B-DisplayName\", \"25x Hunting Scope\")",
+                    "Icon": "/Game/HK_417/Icon/Item_HK_417_Reflex_Scope.Item_HK_417_Reflex_Scope",
+                    "Description": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Scope_B-Description\", \"Deals more Raw Critical Damage\")",
+                    "RankIcon": "/Game/Assets/2DArt/UI/Alterations/Icon_Alteration_1.Icon_Alteration_1",
+                    "Stats": {
+                        "(Value=\"BaseCriticalDamage_+%\")": 50,
+                        "(Value=\"BaseProjectileAccuracy_+%\")": 100,
+                        "(Value=\"FirearmScopeType_Enum\")": 6
+                    }
+                },
+                {
+                    "Name": "Legendary_Jimk_HK_417_Scope_C",
+                    "DisplayName": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Scope_C-DisplayName\", \"10x Quick Scope\")",
+                    "Icon": "/Game/HK_417/Icon/Item_HK_417_Reflex_Scope_10X.Item_HK_417_Reflex_Scope_10X",
+                    "Description": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Scope_C-Description\", \"Compact Scope used for quick target Acquisition.\")",
+                    "RankIcon": "/Game/Assets/2DArt/UI/Alterations/Icon_Alteration_1.Icon_Alteration_1",
+                    "Stats": {
+                        "(Value=\"BaseCriticalDamage_+%\")": 20,
+                        "(Value=\"BaseProjectileAccuracy_+%\")": 20,
+                        "(Value=\"BaseAimDownSightsSpeed_+%\")": 50,
+                        "(Value=\"FirearmScopeType_Enum\")": 11
+                    }
+                },
+                {
+                    "Name": "Legendary_Jimk_HK_417_Module_A",
+                    "DisplayName": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Module_B-DisplayName\", \"Short Magazine\")",
+                    "Icon": "/Game/HK_417/Icon/Item_HK_417_Mag_Short.Item_HK_417_Mag_Short",
+                    "Description": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Module_B-Description\", \"Less Ammo But faster Reload Speed and Movement Speed\")",
+                    "RankIcon": "/Game/Assets/2DArt/UI/Alterations/Icon_Alteration_1.Icon_Alteration_1",
+                    "Stats": {
+                        "(Value=\"BaseAmmoCapacity_+\")": -10,
+                        "(Value=\"BaseReloadSpeed_+%\")": 20,
+                        "(Value=\"BaseMovementSpeed_+%\")": 5
+                    }
+                },
+                {
+                    "Name": "Legendary_Jimk_HK_417_Module_B",
+                    "DisplayName": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Module_A-DisplayName\", \"Enhanced Magazine\")",
+                    "Icon": "/Game/HK_417/Icon/Item_HK_417_Mag_Standard.Item_HK_417_Mag_Standard",
+                    "Description": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Module_A-Description\", \"Sometimes Prevents Consumption of Ammo.\")",
+                    "RankIcon": "/Game/Assets/2DArt/UI/Alterations/Icon_Alteration_1.Icon_Alteration_1",
+                    "Stats": {
+                        "(Value=\"BaseChanceToNotConsumeAmmo_%\")": 30
+                    }
+                },
+                {
+                    "Name": "Legendary_Jimk_HK_417_Module_C",
+                    "DisplayName": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Module_C-DisplayName\", \"Extended Magazine\")",
+                    "Icon": "/Game/HK_417/Icon/Item_HK_417_Mag_Extended.Item_HK_417_Mag_Extended",
+                    "Description": "NSLOCTEXT(\"D_Alterations\", \"Legendary_Jimk_HK_417_Module_C-Description\", \"More Ammo with reduced reload Speed and Movement Speed.\")",
+                    "RankIcon": "/Game/Assets/2DArt/UI/Alterations/Icon_Alteration_1.Icon_Alteration_1",
+                    "Stats": {
+                        "(Value=\"BaseAmmoCapacity_+\")": 10,
+                        "(Value=\"BaseReloadSpeed_+%\")": -10,
+                        "(Value=\"BaseMovementSpeed_+%\")": -5
+                    }
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Input-D_Keybindings.json",
+            "File_Items": [
+                {
+                    "Name": "ChangeFireMode",
+                    "DisplayName": "NSLOCTEXT(\"D_Keybindings\", \"ChangeFireMode-DisplayName\", \"Change Fire Mode\")",
+                    "BindContext": {
+                        "RowName": "Weapons"
+                    },
+                    "Visibility": "VisibleRemap",
+                    "KeyboardActionMapping": {
+                        "ActionName": "ChangeFireMode",
+                        "Key": {
+                            "KeyName": "Comma"
+                        }
+                    },
+                    "KeyboardAxisMapping": {
+                        "Key": {
+                            "KeyName": "None"
+                        }
+                    },
+                    "GamepadActionMapping": {
+                        "ActionName": "ChangeFireMode",
+                        "Key": {
+                            "KeyName": "None"
+                        }
+                    },
+                    "GamepadAxisMapping": {
+                        "Key": {
+                            "KeyName": "None"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Items-D_ItemsStatic.json",
+            "File_Items": [
+                {
+                    "Name": "LegendaryWeapon_Jimk_HK_417",
+                    "Meshable": {
+                        "RowName": "Mesh_LegendaryWeapon_Jimk_HK_417"
+                    },
+                    "Itemable": {
+                        "RowName": "Item_LegendaryWeapon_Jimk_HK_417"
+                    },
+                    "Interactable": {
+                        "RowName": "Item"
+                    },
+                    "Focusable": {
+                        "RowName": "Focusable_Gun_2H"
+                    },
+                    "Highlightable": {
+                        "RowName": "Generic"
+                    },
+                    "Actionable": {
+                        "RowName": "Legendary_HK_417"
+                    },
+                    "Usable": {
+                        "RowName": "Repair"
+                    },
+                    "Durable": {
+                        "RowName": "LegendaryWeapon_Jimk_HK_417"
+                    },
+                    "Floatable": {
+                        "RowName": "Items"
+                    },
+                    "Decayable": {
+                        "RowName": "Decay_General"
+                    },
+                    "InventoryContainer": {
+                        "RowName": "StandardAmmoInventory"
+                    },
+                    "LivingItem": {
+                        "RowName": "Legendary_Jimk_HK_417"
+                    },
+                    "Audio": {
+                        "RowName": "Rifle"
+                    },
+                    "FirearmData": {
+                        "RowName": "LegendaryWeapon_Jimk_HK_417"
+                    },
+                    "Manual_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Item.Weapon.Firearm.Rifle"
+                            },
+                            {
+                                "TagName": "Item.Meta"
+                            },
+                            {
+                                "TagName": "Item.LivingWeapon"
+                            }
+                        ]
+                    },
+                    "Generated_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Item.Weapon.Firearm.Rifle"
+                            },
+                            {
+                                "TagName": "Item.Meta"
+                            },
+                            {
+                                "TagName": "Item.LivingWeapon"
+                            },
+                            {
+                                "TagName": "Traits.Meshable"
+                            },
+                            {
+                                "TagName": "Traits.Itemable"
+                            },
+                            {
+                                "TagName": "Traits.Interactable"
+                            },
+                            {
+                                "TagName": "Traits.Highlightable"
+                            },
+                            {
+                                "TagName": "Traits.Actionable"
+                            },
+                            {
+                                "TagName": "Traits.Usable"
+                            },
+                            {
+                                "TagName": "Traits.Durable"
+                            },
+                            {
+                                "TagName": "Traits.Floatable"
+                            }
+                        ],
+                        "ParentTags": []
+                    }
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Items-D_ItemTemplate.json",
+            "File_Items": [
+                {
+                    "Name": "LegendaryWeapon_Jimk_HK_417",
+                    "ItemStaticData": {
+                        "RowName": "LegendaryWeapon_Jimk_HK_417"
+                    }
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Tools-D_FirearmData.json",
+            "File_Items": [
+                {
+                    "Name": "LegendaryWeapon_Jimk_HK_417",
+                    "HipAccuracy": {
+                        "X": 0.3000000059604645,
+                        "Y": 0.2000000059604645
+                    },
+                    "AimAccuracy": {
+                        "X": 0.10000000149011612,
+                        "Y": 0.10000000149011612
+                    },
+                    "LaunchForce": 700,
+                    "ChargeData": {
+                        "ChargeSpeed": 0
+                    },
+                    "VisualData": {
+                        "PreviewItemAttachSocket3P": "R_prop_00",
+                        "FireShake": "BlueprintGeneratedClass'/Game/BP/CS_Jimk_AssaultRifle_Fire.CS_Jimk_AssaultRifle_Fire_C'",
+                        "FireShakeAimScale": 0.40000000298023224,
+                        "FireShakeCrouchScale": 0.2000000059604645,
+                        "FireParticle": "/Game/ASS/VFX/WEP/NS_AssaultRifleMuzzle_2.NS_AssaultRifleMuzzle_2",
+                        "VisualRecoil": 0,
+                        "AimFOVMultiplier": 0.6999999761581421,
+                        "SkeletalItemAnimData": {
+                            "Fire": "/Game/ASS/WEP/SK_GUN_Assault_Rifle_T4/ANI_GUN_Assault_Rifle_T4_Fire_Montage.ANI_GUN_Assault_Rifle_T4_Fire_Montage",
+                            "AimFire": "/Game/ASS/WEP/SK_GUN_Assault_Rifle_T4/ANI_GUN_Assault_Rifle_T4_Fire_Montage.ANI_GUN_Assault_Rifle_T4_Fire_Montage",
+                            "Reload": "/Game/ASS/WEP/SK_GUN_Assault_Rifle_T4/ANI_GUN_Assault_Rifle_T4_Reload_Montage.ANI_GUN_Assault_Rifle_T4_Reload_Montage"
+                        },
+                        "FirstPersonAnimData": {
+                            "Idle": "/Game/ASS/CHA/1ST/1ST_NewRig/1ST_CHA_WEP_Jimk_HK417_Idle.1ST_CHA_WEP_Jimk_HK417_Idle",
+                            "Aim": "/Game/ASS/CHA/1ST/1ST_NewRig/1ST_CHA_WEP_Jimk_AssaultRifle_AimIdle.1ST_CHA_WEP_Jimk_AssaultRifle_AimIdle",
+                            "Fire": "/Game/ASS/CHA/1ST/1ST_NewRig/1ST_CHA_WEP_Jimk_HK417_IdleShoot_Montage.1ST_CHA_WEP_Jimk_HK417_IdleShoot_Montage",
+                            "AimFire": "/Game/ASS/CHA/1ST/1ST_NewRig/1ST_CHA_Jimk_HK417_AimShoot_Montage.1ST_CHA_Jimk_HK417_AimShoot_Montage",
+                            "Reload": "/Game/ASS/CHA/1ST/1ST_NewRig/1ST_CHA_AssaultRifle_Reload.1ST_CHA_AssaultRifle_Reload"
+                        },
+                        "ThirdPersonAnimData": {
+                            "Idle": "/Game/ASS/CHA/Human/3RD/Animations/3RD_CHA_MAL_RifleUpToDwn.3RD_CHA_MAL_RifleUpToDwn",
+                            "Aim": "/Game/ASS/CHA/Human/3RD/Animations/3RD_CHA_MAL_RifleAimUpToDwn.3RD_CHA_MAL_RifleAimUpToDwn",
+                            "Fire": "/Game/ASS/CHA/Human/3RD/Animations/3RD_CHA_RifleBoltActionShoot_BS.3RD_CHA_RifleBoltActionShoot_BS",
+                            "AimFire": "/Game/ASS/CHA/Human/3RD/Animations/3RD_CHA_AssaultRifleBoltAimShoot_BS.3RD_CHA_AssaultRifleBoltAimShoot_BS",
+                            "ReloadMontage": "/Game/ASS/CHA/Human/3RD/Animations/3RD_CHA_AssaultRifle_Reload_Montage.3RD_CHA_AssaultRifle_Reload_Montage"
+                        }
+                    },
+                    "RecoilAmount": {
+                        "X": 0.5,
+                        "Y": 0.5
+                    },
+                    "ValidAmmoTypes": {
+                        "RowName": "AllRifle"
+                    },
+                    "AmmoCapacity": 30,
+                    "RoundsPerMinute": 600,
+                    "bUnlimitedAmmo": false,
+                    "ReloadTime": 3,
+                    "FireModes": [
+                        "Semiauto",
+                        "Auto"
+                    ],
+                    "AudioData": {
+                        "RowName": "Assault_Rifle"
+                    },
+                    "WeaponLoudness": 4
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Tools-D_Actions.json",
+            "File_Items": [
+                {
+                    "Name": "Legendary_HK_417",
+                    "Behaviour": "BlueprintGeneratedClass'/Game/BP/Behaviours/Actionable/Firearm/BP_ActionableBehaviour_FireArm_FireController_HK_417.BP_ActionableBehaviour_FireArm_FireController_HK_417_C'"
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Traits-D_Actionable.json",
+            "File_Items": [
+                {
+                    "Name": "Legendary_HK_417",
+                    "ActionMapping": {
+                        "(RowName=\"Legendary_HK_417\",DataTableName=\"D_Actions\")": {
+                            "InputTypes": {
+                                "Primary": {
+                                    "RowName": "None",
+                                    "DataTableName": "D_StaminaActionCosts"
+                                }
+                            },
+                            "ModifierState": {
+                                "RowName": "None",
+                                "DataTableName": "D_ModifierStates"
+                            }
+                        },
+                        "(RowName=\"Weapon_Generic_Aim\",DataTableName=\"D_Actions\")": {
+                            "InputTypes": {
+                                "Secondary": {
+                                    "RowName": "None",
+                                    "DataTableName": "D_StaminaActionCosts"
+                                }
+                            },
+                            "ModifierState": {
+                                "RowName": "None",
+                                "DataTableName": "D_ModifierStates"
+                            }
+                        },
+                        "(RowName=\"Weapon_Magazine\",DataTableName=\"D_Actions\")": {
+                            "InputTypes": {
+                                "Reload": {
+                                    "RowName": "None",
+                                    "DataTableName": "D_StaminaActionCosts"
+                                }
+                            },
+                            "ModifierState": {
+                                "RowName": "None",
+                                "DataTableName": "D_ModifierStates"
+                            }
+                        }
+                    },
+                    "bUseClientPrediction": true
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Traits-D_Durable.json",
+            "File_Items": [
+                {
+                    "Name": "LegendaryWeapon_Jimk_HK_417",
+                    "Max_Durability": 250000,
+                    "ItemsForRepair": [
+                        {
+                            "Item": {
+                                "RowName": "Meta_Repair_Item",
+                                "DataTableName": "D_ItemsStatic"
+                            },
+                            "Amount": 1
+                        }
+                    ],
+                    "NoRecipe_RequiredRecipeSet": [
+                        {
+                            "RowName": "Repair_Bench",
+                            "DataTableName": "D_RecipeSets"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Traits-D_Itemable.json",
+            "File_Items": [
+                {
+                    "Name": "Item_LegendaryWeapon_Jimk_HK_417",
+                    "DisplayName": "NSLOCTEXT(\"D_Itemable\", \"Item_LegendaryWeapon_Jimk_HK_417-DisplayName\", \"Legendary HK 417 Rifle\")",
+                    "Icon": "/Game/HK_417/Icon/Item_Jimk_HK_417_Sienna_ReflexV3.Item_Jimk_HK_417_Sienna_ReflexV3",
+                    "Description": "NSLOCTEXT(\"D_Itemable\", \"Item_LegendaryWeapon_Jimk_HK_417-Description\", \"A Prototype Upgradeable HK 417 created via Jimk Innovations.\")",
+                    "FlavorText": "NSLOCTEXT(\"D_Itemable\", \"Item_LegendaryWeapon_Jimk_HK_417-FlavorText\", \"Model Funded by forkbomb. \")",
+                    "Weight": 5000
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Traits-D_LivingItem.json",
+            "File_Items": [
+                {
+                    "Name": "Legendary_Jimk_HK_417",
+                    "UpgradeSlots": [
+                        {
+                            "SlotPosition2D": {
+                                "X": 600,
+                                "Y": 0
+                            },
+                            "PinPosition2D": {
+                                "X": 200,
+                                "Y": -290
+                            },
+                            "PinBendPosition2D": {
+                                "X": 200,
+                                "Y": 0
+                            },
+                            "AvailableUpgrades": [
+                                {
+                                    "RowName": "Jimk_HK_417_Barrel_A",
+                                    "DataTableName": "D_LivingItemUpgrades"
+                                },
+                                {
+                                    "RowName": "Jimk_HK_417_Barrel_B",
+                                    "DataTableName": "D_LivingItemUpgrades"
+                                },
+                                {
+                                    "RowName": "Jimk_HK_417_Barrel_C",
+                                    "DataTableName": "D_LivingItemUpgrades"
+                                }
+                            ],
+                            "ChallengeToUnlock": {
+                                "RowName": "None",
+                                "DataTableName": "D_Challenges"
+                            },
+                            "DefaultSlotMeshes": [
+                                {
+                                    "SocketName": "None",
+                                    "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_Barrel_Standard.SM_HK_417_Barrel_Standard"
+                                },
+                                {
+                                    "SocketName": "None",
+                                    "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_Stock_Standard.SM_HK_417_Stock_Standard"
+                                }
+                            ]
+                        },
+                        {
+                            "SlotPosition2D": {
+                                "X": 0,
+                                "Y": -400
+                            },
+                            "PinPosition2D": {
+                                "X": -100,
+                                "Y": -200
+                            },
+                            "PinBendPosition2D": {
+                                "X": -100,
+                                "Y": -400
+                            },
+                            "AvailableUpgrades": [
+                                {
+                                    "RowName": "Jimk_HK_417_Addon_Light",
+                                    "DataTableName": "D_LivingItemUpgrades"
+                                },
+                                {
+                                    "RowName": "Jimk_HK_417_Addon_Laser",
+                                    "DataTableName": "D_LivingItemUpgrades"
+                                },
+                                {
+                                    "RowName": "Jimk_HK_417_Addon_ForGrip",
+                                    "DataTableName": "D_LivingItemUpgrades"
+                                }
+                            ],
+                            "ChallengeToUnlock": {
+                                "RowName": "None",
+                                "DataTableName": "D_Challenges"
+                            },
+                            "DefaultSlotMeshes": []
+                        },
+                        {
+                            "SlotPosition2D": {
+                                "X": 0,
+                                "Y": -600
+                            },
+                            "PinPosition2D": {
+                                "X": -357,
+                                "Y": -158
+                            },
+                            "PinBendPosition2D": {
+                                "X": -357,
+                                "Y": -600
+                            },
+                            "AvailableUpgrades": [
+                                {
+                                    "RowName": "Jimk_HK_417_Scope_A",
+                                    "DataTableName": "D_LivingItemUpgrades"
+                                },
+                                {
+                                    "RowName": "Jimk_HK_417_Scope_B",
+                                    "DataTableName": "D_LivingItemUpgrades"
+                                },
+                                {
+                                    "RowName": "Jimk_HK_417_Scope_C",
+                                    "DataTableName": "D_LivingItemUpgrades"
+                                }
+                            ],
+                            "ChallengeToUnlock": {
+                                "RowName": "None",
+                                "DataTableName": "D_Challenges"
+                            },
+                            "DefaultSlotMeshes": [
+                                {
+                                    "SocketName": "None",
+                                    "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_Scope_IronSights.SM_HK_417_Scope_IronSights"
+                                }
+                            ]
+                        },
+                        {
+                            "SlotPosition2D": {
+                                "X": 0,
+                                "Y": 300
+                            },
+                            "PinPosition2D": {
+                                "X": -300,
+                                "Y": 0
+                            },
+                            "PinBendPosition2D": {
+                                "X": 0,
+                                "Y": 0
+                            },
+                            "AvailableUpgrades": [
+                                {
+                                    "RowName": "Jimk_HK_417_Module_A",
+                                    "DataTableName": "D_LivingItemUpgrades"
+                                },
+                                {
+                                    "RowName": "Jimk_HK_417_Module_B",
+                                    "DataTableName": "D_LivingItemUpgrades"
+                                },
+                                {
+                                    "RowName": "Jimk_HK_417_Module_C",
+                                    "DataTableName": "D_LivingItemUpgrades"
+                                }
+                            ],
+                            "ChallengeToUnlock": {
+                                "RowName": "None",
+                                "DataTableName": "D_Challenges"
+                            },
+                            "DefaultSlotMeshes": [
+                                {
+                                    "SocketName": "None",
+                                    "StaticMeshToSocket": "/Game/HK_417/SM_HK_417_Mag_Standard.SM_HK_417_Mag_Standard"
+                                }
+                            ]
+                        }
+                    ],
+                    "ItemPreviewOffset": {
+                        "X": -30,
+                        "Z": 50
+                    },
+                    "ItemPreviewRotation": {
+                        "Pitch": 30
+                    }
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Traits-D_Meshable.json",
+            "File_Items": [
+                {
+                    "Name": "Mesh_LegendaryWeapon_Jimk_HK_417",
+                    "ItemMesh": "/Game/ASS/ITM/WeaponCrate_Norex/SM_ITM_WeaponCrate_Norex.SM_ITM_WeaponCrate_Norex",
+                    "EquipHandMesh": "/Game/HK_417/Legendary_HK_417_Reflex.Legendary_HK_417_Reflex",
+                    "EquipHandActor": "/Game/BP/BP_SkeletalItem_HK_417_Reflex_Legendary.BP_SkeletalItem_HK_417_Reflex_Legendary_C"
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Tools-D_FirearmScopeData.json",
+            "File_Items": [
+                {
+                    "Name": "Scope_03",
+                    "ScopeTexture": "/Game/Assets/2DArt/UI/Textures/ScopeOverlays/T_Scope_3B.T_Scope_3B",
+                    "TargetFOV": 15,
+                    "ScopeTime": 0.10000000149011612,
+                    "FirstPersonADSOffset": {
+                        "Z": -5
+                    }
+                },
+                {
+                    "Name": "Scope_08",
+                    "ScopeTexture": "/Game/Assets/2DArt/UI/Textures/ScopeOverlays/T_Scope_8.T_Scope_8",
+                    "TargetFOV": 40,
+                    "ScopeTime": 0.10000000149011612,
+                    "FirstPersonADSOffset": {
+                        "Z": -5
+                    }
+                }
+            ]
+        },
+        {
+            "CurrentFile": "EndOfMod"
+        }
+    ]
+}
