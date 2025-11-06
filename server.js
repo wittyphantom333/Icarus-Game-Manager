@@ -22,6 +22,65 @@ const POSSIBLE_LOG_PATHS = [
   path.join(ICARUS_SERVER_PATH, 'Logs', 'Icarus.log')
 ];
 
+// Log rotation function - keeps only the last 14 log files
+function rotateLogFiles() {
+  console.log('[Log Rotation] Starting log rotation to keep last 14 files...');
+  
+  const logDir = path.join(ICARUS_SERVER_PATH, 'Icarus', 'Saved', 'Logs');
+  if (!fs.existsSync(logDir)) {
+    console.log('[Log Rotation] Log directory does not exist, skipping rotation');
+    return;
+  }
+
+  try {
+    // Find all log files (including rotated ones)
+    const files = fs.readdirSync(logDir)
+      .filter(file => file.includes('.log') || file.includes('Icarus-backup-'))
+      .map(file => ({
+        name: file,
+        path: path.join(logDir, file),
+        stat: fs.statSync(path.join(logDir, file))
+      }))
+      .sort((a, b) => b.stat.mtime - a.stat.mtime); // Sort by modification time, newest first
+
+    console.log(`[Log Rotation] Found ${files.length} log files`);
+
+    // Keep current log and last 13 backups (14 total)
+    const filesToDelete = files.slice(14);
+    
+    filesToDelete.forEach(file => {
+      try {
+        fs.unlinkSync(file.path);
+        console.log(`[Log Rotation] Deleted old log file: ${file.name}`);
+      } catch (error) {
+        console.error(`[Log Rotation] Failed to delete ${file.name}:`, error.message);
+      }
+    });
+
+    // Rotate current log file if it exists and has content
+    const currentLogPath = path.join(logDir, 'Icarus.log');
+    if (fs.existsSync(currentLogPath)) {
+      const stats = fs.statSync(currentLogPath);
+      if (stats.size > 0) {
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+        const backupPath = path.join(logDir, `Icarus-backup-${timestamp}.log`);
+        
+        try {
+          fs.copyFileSync(currentLogPath, backupPath);
+          fs.writeFileSync(currentLogPath, ''); // Clear current log
+          console.log(`[Log Rotation] Created backup: Icarus-backup-${timestamp}.log`);
+        } catch (error) {
+          console.error('[Log Rotation] Failed to create backup:', error.message);
+        }
+      }
+    }
+
+    console.log('[Log Rotation] Log rotation completed successfully');
+  } catch (error) {
+    console.error('[Log Rotation] Error during log rotation:', error.message);
+  }
+}
+
 // Find the actual log file that exists
 function findLogFile() {
   for (const logPath of POSSIBLE_LOG_PATHS) {
@@ -44,6 +103,9 @@ function resetServerStartupDetection() {
 }
 
 app.prepare().then(async () => {
+  // Rotate logs on startup to keep only last 14 files
+  rotateLogFiles();
+  
   // Initialize backup scheduler
   console.log('Initializing backup scheduler...');
   try {

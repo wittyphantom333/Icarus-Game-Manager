@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 
 interface LogViewerProps {
   logs: string[];
@@ -8,12 +8,23 @@ export default function LogViewer({ logs }: LogViewerProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [autoScroll, setAutoScroll] = useState(true);
   const [showScrollButton, setShowScrollButton] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Filter logs based on search term
+  const filteredLogs = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return logs;
+    }
+    return logs.filter(log => 
+      log.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [logs, searchTerm]);
 
   useEffect(() => {
     if (autoScroll && scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [logs, autoScroll]);
+  }, [filteredLogs, autoScroll]);
 
   const handleScroll = () => {
     if (!scrollRef.current) return;
@@ -35,6 +46,34 @@ export default function LogViewer({ logs }: LogViewerProps) {
 
   return (
     <div className="relative">
+      {/* Search Box */}
+      <div className="mb-3">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search logs..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-4 py-2 pl-10 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm('')}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
+        </div>
+      </div>
+
       <div 
         ref={scrollRef}
         onScroll={handleScroll}
@@ -42,12 +81,26 @@ export default function LogViewer({ logs }: LogViewerProps) {
       >
         {logs.length === 0 ? (
           <p className="text-gray-500 dark:text-gray-400">No logs available. Start the server to see logs.</p>
+        ) : filteredLogs.length === 0 ? (
+          <p className="text-yellow-500 dark:text-yellow-400">No logs match your search criteria.</p>
         ) : (
-          logs.map((log, index) => (
-            <div key={index} className="mb-1 whitespace-pre-wrap">
-              {log}
-            </div>
-          ))
+          filteredLogs.map((log, index) => {
+            // Highlight search terms in the log
+            const highlightedLog = searchTerm.trim() 
+              ? log.replace(
+                  new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'),
+                  '<mark class="bg-yellow-300 dark:bg-yellow-600 text-black dark:text-white">$1</mark>'
+                )
+              : log;
+            
+            return (
+              <div 
+                key={index} 
+                className="mb-1 whitespace-pre-wrap"
+                dangerouslySetInnerHTML={{ __html: highlightedLog }}
+              />
+            );
+          })
         )}
       </div>
       
@@ -61,7 +114,17 @@ export default function LogViewer({ logs }: LogViewerProps) {
       )}
       
       <div className="mt-2 flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
-        <span>{logs.length} log entries</span>
+        <span>
+          {searchTerm 
+            ? `${filteredLogs.length} of ${logs.length} log entries` 
+            : `${logs.length} log entries`
+          }
+          {searchTerm && (
+            <span className="ml-2 text-blue-600 dark:text-blue-400">
+              (filtered by "{searchTerm}")
+            </span>
+          )}
+        </span>
         <div className="flex items-center space-x-2">
           <label className="flex items-center">
             <input
