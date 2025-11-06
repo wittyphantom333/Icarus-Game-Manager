@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Modal from './Modal';
+import BackupScheduler from './BackupScheduler';
 import { useModal } from '@/hooks/useModal';
 
 interface Backup {
@@ -9,12 +10,23 @@ interface Backup {
   name: string;
   date: string;
   size: string;
-  type: 'manual' | 'auto';
+  type: 'manual' | 'auto' | 'scheduled';
+}
+
+interface BackupSchedule {
+  enabled: boolean;
+  frequency: 'daily' | 'weekly' | 'monthly';
+  time: string; // HH:MM format
+  dayOfWeek?: number; // 0-6 (0 = Sunday) for weekly
+  dayOfMonth?: number; // 1-31 for monthly
+  lastRun?: string; // ISO string
+  nextRun?: string; // ISO string
 }
 
 interface BackupSettings {
-  autoBackup: boolean;
+  autoBackup: boolean; // Legacy - will be replaced by schedule
   maxBackups: number;
+  schedule: BackupSchedule;
 }
 
 const BackupRestore = () => {
@@ -23,7 +35,15 @@ const BackupRestore = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [serverStatus, setServerStatus] = useState<'running' | 'stopped' | 'unknown'>('unknown');
-  const [settings, setSettings] = useState<BackupSettings>({ autoBackup: true, maxBackups: 10 });
+  const [settings, setSettings] = useState<BackupSettings>({ 
+    autoBackup: false, 
+    maxBackups: 10,
+    schedule: {
+      enabled: false,
+      frequency: 'daily',
+      time: '02:00'
+    }
+  });
   const [settingsLoading, setSettingsLoading] = useState(false);
   
   const modal = useModal();
@@ -56,7 +76,7 @@ const BackupRestore = () => {
     }
   };
 
-  const updateSettings = async (newSettings: BackupSettings) => {
+  const updateSettings = async (newSettings: Partial<BackupSettings>) => {
     setSettingsLoading(true);
     try {
       const response = await fetch('/api/backups/settings', {
@@ -70,7 +90,7 @@ const BackupRestore = () => {
       const data = await response.json();
       
       if (data.success) {
-        setSettings(newSettings);
+        setSettings(data.settings);
         // Reload backups to see any cleanup changes
         await loadBackups();
         modal.showSuccess('Settings Updated', 'Backup settings have been updated successfully!');
@@ -83,6 +103,10 @@ const BackupRestore = () => {
     } finally {
       setSettingsLoading(false);
     }
+  };
+
+  const handleScheduleChange = async (schedule: BackupSchedule) => {
+    await updateSettings({ schedule });
   };
 
   const downloadBackup = async (backupId: string, backupName: string) => {
@@ -342,28 +366,16 @@ const BackupRestore = () => {
         <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
           Backup Settings
         </h3>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Auto Backup
-              </label>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                Automatically create backups before server start
-              </p>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input 
-                type="checkbox" 
-                className="sr-only peer" 
-                checked={settings.autoBackup}
-                onChange={(e) => updateSettings({ ...settings, autoBackup: e.target.checked })}
-                disabled={settingsLoading}
-              />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 peer-disabled:opacity-50"></div>
-            </label>
-          </div>
-          <div className="flex items-center justify-between">
+        <div className="space-y-6">
+          {/* Backup Scheduler */}
+          <BackupScheduler 
+            schedule={settings.schedule}
+            onScheduleChange={handleScheduleChange}
+            isLoading={settingsLoading}
+          />
+          
+          {/* Max Backups Setting */}
+          <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
             <div>
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Max Backups
@@ -375,7 +387,7 @@ const BackupRestore = () => {
             <select 
               className="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 text-sm rounded-lg px-3 py-1 disabled:opacity-50"
               value={settings.maxBackups}
-              onChange={(e) => updateSettings({ ...settings, maxBackups: parseInt(e.target.value) })}
+              onChange={(e) => updateSettings({ maxBackups: parseInt(e.target.value) })}
               disabled={settingsLoading}
             >
               <option value={5}>5</option>
@@ -428,6 +440,7 @@ const BackupRestore = () => {
                 <div className="flex-1">
                   <div className="flex items-center space-x-3">
                     <div className={`w-3 h-3 rounded-full ${
+                      backup.type === 'scheduled' ? 'bg-purple-500' :
                       backup.type === 'auto' ? 'bg-green-500' : 'bg-blue-500'
                     }`}></div>
                     <div>
@@ -505,6 +518,20 @@ const BackupRestore = () => {
               The system automatically creates temporary backups before restoring and includes automatic recovery if restoration fails.
               <strong> Enhanced Safety:</strong> Failed restores automatically restore your original saves.
             </p>
+            <div className="mt-3 space-y-1 text-xs text-blue-600 dark:text-blue-400">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                <span>Manual Backup</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 rounded-full bg-purple-500"></div>
+                <span>Scheduled Backup (automatic)</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                <span>Legacy Auto Backup (deprecated)</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

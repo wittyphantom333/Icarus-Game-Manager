@@ -43,7 +43,17 @@ function resetServerStartupDetection() {
   console.log('[Server] Reset startup detection, new session started at:', currentServerStartTime.toISOString());
 }
 
-app.prepare().then(() => {
+app.prepare().then(async () => {
+  // Initialize backup scheduler
+  console.log('Initializing backup scheduler...');
+  try {
+    // We'll initialize the scheduler through an API call to avoid import issues
+    // The scheduler will be initialized when the Next.js app starts
+    console.log('Backup scheduler will be initialized on first API call');
+  } catch (error) {
+    console.error('Failed to initialize backup scheduler:', error.message);
+  }
+
   const server = createServer(async (req, res) => {
     try {
       const parsedUrl = parse(req.url, true);

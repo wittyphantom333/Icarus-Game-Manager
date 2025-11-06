@@ -11,7 +11,7 @@ interface BackupInfo {
   name: string;
   date: string;
   size: string;
-  type: 'manual' | 'auto';
+  type: 'manual' | 'auto' | 'scheduled';
   path: string;
 }
 
@@ -260,13 +260,26 @@ export async function GET() {
         
         const date = new Date(dateStr);
         
-        // Determine if it's auto or manual backup based on time (auto backups typically at specific times)
+        // Determine backup type based on time and naming pattern
         const hour = date.getHours();
-        const type = (hour === 0 || hour === 6 || hour === 12 || hour === 18) ? 'auto' : 'manual';
+        let type: 'manual' | 'auto' | 'scheduled' = 'manual';
+        
+        // Check for scheduled backups (typically at night hours)
+        if (hour >= 0 && hour <= 6) {
+          type = 'scheduled';
+        } else if (hour === 12 || hour === 18) {
+          type = 'auto';
+        }
+        
+        const typeNames = {
+          'manual': 'Manual',
+          'auto': 'Auto',
+          'scheduled': 'Scheduled'
+        };
         
         backups.push({
           id: timestamp,
-          name: `${type === 'auto' ? 'Auto' : 'Manual'} Backup - ${date.toLocaleDateString()}`,
+          name: `${typeNames[type]} Backup - ${date.toLocaleDateString()}`,
           date: date.toISOString(),
           size: formatBytes(stats.size),
           type,
