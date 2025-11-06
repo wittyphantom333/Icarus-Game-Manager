@@ -92,6 +92,40 @@ export default function ModManager() {
     }
   };
 
+  const downloadModPak = async (modId: string, modName: string) => {
+    try {
+      const response = await fetch(`/api/mods/download-pak?id=${encodeURIComponent(modId)}`);
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Download failed');
+      }
+      
+      // Create a blob from the response
+      const blob = await response.blob();
+      
+      // Create a temporary URL for the blob
+      const url = window.URL.createObjectURL(blob);
+      
+      // Create a temporary anchor element and trigger download
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = modId; // Use the original filename
+      document.body.appendChild(a);
+      a.click();
+      
+      // Cleanup
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      
+      modal.showSuccess('Download Started', `${modName} .pak file download has started.`);
+      
+    } catch (error) {
+      modal.showError('Download Failed', `Failed to download ${modName}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error('Error downloading mod pak:', error);
+    }
+  };
+
   const uninstallMod = async (modId: string, modName: string) => {
     // Show confirmation dialog
     const confirmed = await new Promise<boolean>((resolve) => {
@@ -260,6 +294,16 @@ export default function ModManager() {
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                     <button
+                      onClick={() => downloadModPak(mod.id, mod.name)}
+                      className="px-3 py-1 text-xs bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors flex items-center gap-1"
+                      title="Download .pak file"
+                    >
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      Download
+                    </button>
+                    <button
                       onClick={() => uninstallMod(mod.id, mod.name)}
                       className="px-3 py-1 text-xs bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors flex items-center gap-1"
                       title="Uninstall mod"
@@ -345,6 +389,21 @@ export default function ModManager() {
                           <div className="px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-md text-center">
                             ✓ Installed
                           </div>
+                          <button 
+                            onClick={() => {
+                              // Find the installed mod by name to get the correct modId
+                              const installedMod = installedMods.find(m => m.name === mod.name);
+                              if (installedMod) {
+                                downloadModPak(installedMod.id, mod.name);
+                              }
+                            }}
+                            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors text-sm flex items-center justify-center gap-1"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            Download
+                          </button>
                           <button 
                             onClick={() => {
                               // Find the installed mod by name to get the correct modId
