@@ -94,12 +94,92 @@ function findLogFile() {
 let lastLogSize = 0;
 let serverStartupDetected = false; // Global flag to track if we've already detected this server startup
 let currentServerStartTime = null; // Track when current server session started
+let currentSessionStartLineIndex = 0; // Track where current session logs start
 
 // Function to reset server startup detection (call when server stops/starts)
 function resetServerStartupDetection() {
   serverStartupDetected = false;
   currentServerStartTime = new Date();
+  currentSessionStartLineIndex = 0; // Reset session start position
   console.log('[Server] Reset startup detection, new session started at:', currentServerStartTime.toISOString());
+}
+
+// Function to find current session logs by looking for session start markers
+function getCurrentSessionLogs(allLogLines) {
+  if (currentSessionStartLineIndex === 0) {
+    // Look for recent session start indicators (server startup patterns)
+    const sessionMarkers = [
+      'LogLoad: LoadMap:',
+      'LogWorld: Bringing World',
+      'LogGameMode: InitGame:',
+      'LogEngine: Initializing Engine',
+      'LogInit: Engine is initialized'
+    ];
+    
+    // Find the most recent session start (work backwards from end)
+    for (let i = allLogLines.length - 1; i >= 0; i--) {
+      const line = allLogLines[i];
+      if (sessionMarkers.some(marker => line.includes(marker))) {
+        currentSessionStartLineIndex = i;
+        console.log(`[Session Detection] Found session start at line ${i}: ${line.substring(0, 100)}...`);
+        break;
+      }
+    }
+    
+    // Fallback: if no session marker found, look for timestamp gaps (restart indication)
+    if (currentSessionStartLineIndex === 0 && allLogLines.length > 100) {
+      // Look for significant time gaps that might indicate a restart
+      const recentLogs = allLogLines.slice(-500); // Check last 500 lines for patterns
+      let potentialStart = Math.max(0, allLogLines.length - 500);
+      
+      for (let i = 1; i < recentLogs.length; i++) {
+        const prevLine = recentLogs[i - 1];
+        const currentLine = recentLogs[i];
+        
+        // Extract timestamps if they exist
+        const prevTimestamp = extractTimestamp(prevLine);
+        const currentTimestamp = extractTimestamp(currentLine);
+        
+        if (prevTimestamp && currentTimestamp) {
+          const timeDiff = Math.abs(currentTimestamp - prevTimestamp);
+          // If there's a gap of more than 10 minutes, likely a restart
+          if (timeDiff > 10 * 60 * 1000) {
+            currentSessionStartLineIndex = potentialStart + i;
+            console.log(`[Session Detection] Found restart gap at line ${currentSessionStartLineIndex}`);
+            break;
+          }
+        }
+      }
+    }
+  }
+  
+  // Return logs from current session start to end
+  const sessionLogs = allLogLines.slice(currentSessionStartLineIndex);
+  console.log(`[Session Detection] Current session: ${sessionLogs.length} logs (starting from line ${currentSessionStartLineIndex})`);
+  return sessionLogs;
+}
+
+// Helper function to extract timestamp from log line
+function extractTimestamp(logLine) {
+  // Try to match Icarus log timestamp pattern: [2025.11.06-05.55.58:407]
+  const match = logLine.match(/\[(\d{4}\.\d{2}\.\d{2}-\d{2}\.\d{2}\.\d{2}:\d{3})\]/);
+  if (match) {
+    const timestamp = match[1];
+    // Convert to Date object
+    const parts = timestamp.split(/[.-:]/);
+    if (parts.length >= 6) {
+      return new Date(
+        parseInt(parts[0]), // year
+        parseInt(parts[1]) - 1, // month (0-based)
+        parseInt(parts[2]), // day
+        parseInt(parts[3]), // hour
+        parseInt(parts[4]), // minute
+        parseInt(parts[5]), // second
+        parseInt(parts[6] || 0) // millisecond
+      ).getTime();
+    }
+  }
+  return null;
 }
 
 app.prepare().then(async () => {
@@ -147,9 +227,9 @@ app.prepare().then(async () => {
     let lastServerReadyCheck = '';
     let isReadingInitialLogs = true;
     
-    // Send connection confirmation
+    // Send connection confirmation and wait for client to request logs
     ws.send(JSON.stringify({ 
-      type: 'system', 
+      type: 'connection-ready', 
       message: 'WebSocket connected successfully' 
     }));
     
@@ -161,26 +241,15 @@ app.prepare().then(async () => {
     } else {
       console.log(`[WebSocket] Monitoring log file: ${logFilePath}`);
 
-      // Send existing logs (last 50 lines)
+      // Initialize log size tracking but don't send logs yet - wait for client request
       try {
         const logContent = fs.readFileSync(logFilePath, 'utf8');
-        const logs = logContent.split('\n').slice(-50).filter(line => line.trim());
         lastLogSize = logContent.length;
+        isReadingInitialLogs = false; // Ready to monitor for new entries immediately
         
-        // Send logs with a small delay to prevent overwhelming
-        logs.forEach((log, index) => {
-          setTimeout(() => {
-            if (ws.readyState === ws.OPEN) {
-              ws.send(JSON.stringify({ type: 'log', message: log }));
-            }
-          }, index * 10); // 10ms delay between each log line
-        });
-        
-        // Set flag to false after initial logs are sent
-        setTimeout(() => {
-          isReadingInitialLogs = false;
-          console.log('[WebSocket] Finished sending initial logs, now monitoring for new entries');
-        }, logs.length * 10 + 100); // Wait for all initial logs plus a buffer
+        const allLogLines = logContent.split('\n').filter(line => line.trim());
+        const sessionLogs = getCurrentSessionLogs(allLogLines);
+        console.log(`[WebSocket] Ready to send ${sessionLogs.length} current session logs (of ${allLogLines.length} total) on client request`);
       } catch (error) {
         console.error('Error reading log file:', error);
         ws.send(JSON.stringify({ 
@@ -199,7 +268,32 @@ app.prepare().then(async () => {
         try {
           if (fs.existsSync(logFilePath)) {
             const stats = fs.statSync(logFilePath);
-            if (stats.size > lastLogSize) {
+            
+            // Check if file was truncated/rotated (size decreased)
+            if (stats.size < lastLogSize) {
+              console.log('[WebSocket] Log file was truncated/rotated, resending all content');
+              lastLogSize = 0;
+              
+              // Send clear signal to client
+              ws.send(JSON.stringify({ type: 'logs-cleared', message: 'Log file was rotated' }));
+              
+              // Send all current content
+              if (stats.size > 0) {
+                const logContent = fs.readFileSync(logFilePath, 'utf8');
+                const lines = logContent.split('\n').filter(line => line.trim());
+                
+                lines.forEach((line, index) => {
+                  setTimeout(() => {
+                    if (ws.readyState === ws.OPEN) {
+                      ws.send(JSON.stringify({ type: 'log', message: line }));
+                    }
+                  }, index * 5); // 5ms delay between each line
+                });
+                
+                lastLogSize = stats.size;
+              }
+            } else if (stats.size > lastLogSize) {
+              // Normal case: file grew, send new content
               const logContent = fs.readFileSync(logFilePath, 'utf8');
               const newContent = logContent.slice(lastLogSize);
               lastLogSize = stats.size;
@@ -239,7 +333,72 @@ app.prepare().then(async () => {
       try {
         const message = JSON.parse(data.toString());
         
-        if (message.type === 'clear-logs') {
+        if (message.type === 'request-logs') {
+          // Client is requesting current session logs only with smooth loading
+          console.log('[WebSocket] Client requesting current session logs with progressive loading');
+          try {
+            const logContent = fs.readFileSync(logFilePath, 'utf8');
+            const allLogLines = logContent.split('\n').filter(line => line.trim());
+            const sessionLogs = getCurrentSessionLogs(allLogLines);
+            lastLogSize = logContent.length;
+            
+            console.log(`[WebSocket] Sending ${sessionLogs.length} current session logs (of ${allLogLines.length} total) with smooth loading`);
+            
+            if (sessionLogs.length === 0) {
+              ws.send(JSON.stringify({ 
+                type: 'initial-logs-complete', 
+                message: 'No current session logs available' 
+              }));
+              return;
+            }
+            
+            // Send most recent 50 lines immediately for instant display
+            const recentLogs = sessionLogs.slice(-50);
+            const olderLogs = sessionLogs.slice(0, -50);
+            
+            // Send recent logs first (instant)
+            recentLogs.forEach((log, index) => {
+              setTimeout(() => {
+                if (ws.readyState === ws.OPEN) {
+                  ws.send(JSON.stringify({ type: 'log', message: log }));
+                }
+              }, index * 2); // 2ms delay for immediate display
+            });
+            
+            // Send older logs progressively in the background
+            if (olderLogs.length > 0) {
+              const startDelay = recentLogs.length * 2 + 50; // Start after recent logs
+              olderLogs.forEach((log, index) => {
+                setTimeout(() => {
+                  if (ws.readyState === ws.OPEN) {
+                    ws.send(JSON.stringify({ 
+                      type: 'log-background', 
+                      message: log,
+                      position: 'prepend' // Add to beginning of log list
+                    }));
+                  }
+                }, startDelay + (index * 1)); // 1ms delay for background loading
+              });
+            }
+            
+            // Send completion message
+            const totalDelay = (recentLogs.length * 2) + (olderLogs.length * 1) + 200;
+            setTimeout(() => {
+              if (ws.readyState === ws.OPEN) {
+                ws.send(JSON.stringify({ 
+                  type: 'initial-logs-complete', 
+                  message: `All ${sessionLogs.length} current session logs loaded`
+                }));
+              }
+            }, totalDelay);
+          } catch (error) {
+            console.error('Error sending requested logs:', error);
+            ws.send(JSON.stringify({ 
+              type: 'log', 
+              message: `[ERROR] Error reading log file: ${error.message}` 
+            }));
+          }
+        } else if (message.type === 'clear-logs') {
           // Reset log tracking
           lastLogSize = 0;
           lastServerReadyCheck = '';

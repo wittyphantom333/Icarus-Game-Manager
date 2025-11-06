@@ -1,0 +1,2849 @@
+{
+    "name": "Jimk Innovations",
+    "author": "Jimk72",
+    "version": "1.7",
+    "fileName": "Jimk_Innovations",
+    "imageURL": "",
+    "readmeURL": "",
+    "description": "Includes the following mods:Jimk Teleporter, Custom Puck Lights, Precision Bow Workshop, Battery Powered Storage ver 1.1, Added 2 Workshop Pistols, Removed modded lights and added them to better Lights mod due to week 127 update.",
+    "Level2": "True",
+    "Rows": [
+        {
+            "CurrentFile": "Deployables-D_DeployableSetup.json",
+            "File_Items": [
+                {
+                    "Name": "TeleporterBase",
+                    "DeployableBlueprint": "/Game/BP/Teleporter/BP_TeleporterBase.BP_TeleporterBase_C",
+                    "PreviewStaticMesh": "/Game/BP/Teleporter/SM_Teleporter_Base.SM_Teleporter_Base",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "SnapToSurfaceNormal": false,
+                    "SupportsCustomRotation": false,
+                    "SnapBehaviour": "SnapPlacementOnly",
+                    "SnapActorTags": [
+                        "Building_Floor"
+                    ],
+                    "IgnoreCollisionWhenSnapped": true,
+                    "UseSnapSocketRotation": true
+                },
+                {
+                    "Name": "Custom_Gravity_Light_Mini",
+                    "DeployableBlueprint": "/Game/BP/CustomPuckLights/BP_DEP_Gravity_Light_Mini.BP_DEP_Gravity_Light_Mini_C",
+                    "PreviewStaticMesh": "/Game/BP/CustomPuckLights/Meshes/SM_Jimk_Light_Base_Small.SM_Jimk_Light_Base_Small",
+                    "DeployableIcon": "/Game/BP/CustomPuckLights/Icons/Item_Jimk_Gravity_Light.Item_Jimk_Gravity_Light",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Custom_Gravity_Light_Low-DeployableName\", \"Mini Gravity Light\")",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "SnapToSurfaceNormal": false,
+                    "SupportsCustomRotation": false,
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Custom_Floor_Light",
+                    "DeployableBlueprint": "/Game/BP/CustomPuckLights/BP_DEP_Custom_Floor_Light.BP_DEP_Custom_Floor_Light_C",
+                    "PreviewStaticMesh": "/Game/BP/CustomPuckLights/Meshes/SM_DEP_Cavelight_Stick_Floor_Tall.SM_DEP_Cavelight_Stick_Floor_Tall",
+                    "DeployableIcon": "/Game/BP/CustomPuckLights/Icons/T_ITEM_CaveLight_Floor.T_ITEM_CaveLight_Floor",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Custom_Floor_Light-DeployableName\", \"Standard\")",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "SnapToSurfaceNormal": false,
+                    "SupportsCustomRotation": false,
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Custom_Floor_Light_Motion",
+                    "DeployableBlueprint": "/Game/BP/CustomPuckLights/BP_DEP_Custom_Floor_Light_WMotion.BP_DEP_Custom_Floor_Light_WMotion_C",
+                    "PreviewStaticMesh": "/Game/BP/CustomPuckLights/Meshes/SM_DEP_Cavelight_Stick_Floor_Tall.SM_DEP_Cavelight_Stick_Floor_Tall",
+                    "DeployableIcon": "/Game/BP/CustomPuckLights/Icons/T_ITEM_CaveLight_Floor.T_ITEM_CaveLight_Floor",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Custom_Floor_Light_Motion-DeployableName\", \"Motion Detection\")",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "SnapToSurfaceNormal": false,
+                    "SupportsCustomRotation": false,
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Custom_Gravity_Light",
+                    "DeployableBlueprint": "/Game/BP/CustomPuckLights/BP_DEP_Gravity_Light.BP_DEP_Gravity_Light_C",
+                    "PreviewStaticMesh": "/Game/BP/CustomPuckLights/Meshes/SM_Jimk_Light_Base.SM_Jimk_Light_Base",
+                    "DeployableIcon": "/Game/BP/CustomPuckLights/Icons/Item_Jimk_Gravity_Light.Item_Jimk_Gravity_Light",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Custom_Gravity_Light-DeployableName\", \"High\")",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "SnapToSurfaceNormal": false,
+                    "SupportsCustomRotation": false,
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Custom_Gravity_Light_Low",
+                    "DeployableBlueprint": "/Game/BP/CustomPuckLights/BP_DEP_Gravity_Light_Low.BP_DEP_Gravity_Light_Low_C",
+                    "PreviewStaticMesh": "/Game/BP/CustomPuckLights/Meshes/SM_Jimk_Light_Base.SM_Jimk_Light_Base",
+                    "DeployableIcon": "/Game/BP/CustomPuckLights/Icons/Item_Jimk_Gravity_Light.Item_Jimk_Gravity_Light",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Custom_Gravity_Light_Low-DeployableName\", \"Low\")",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "SnapToSurfaceNormal": false,
+                    "SupportsCustomRotation": false,
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Custom_Gravity_Light_High",
+                    "DeployableBlueprint": "/Game/BP/CustomPuckLights/BP_DEP_Gravity_Light_High.BP_DEP_Gravity_Light_High_C",
+                    "PreviewStaticMesh": "/Game/BP/CustomPuckLights/Meshes/SM_Jimk_Light_Base.SM_Jimk_Light_Base",
+                    "DeployableIcon": "/Game/BP/CustomPuckLights/Icons/Item_Jimk_Gravity_Light.Item_Jimk_Gravity_Light",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Custom_Gravity_Light_High-DeployableName\", \"Ultra High\")",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "SnapToSurfaceNormal": false,
+                    "SupportsCustomRotation": false,
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Top_Puck_Light",
+                    "DeployableBlueprint": "/Game/BP/CustomPuckLights/BP_DEP_Top_Puck_Light.BP_DEP_Top_Puck_Light_C",
+                    "PreviewStaticMesh": "/Game/BP/CustomPuckLights/Meshes/SM_DEP_Custom_Wall_Lights_V2.SM_DEP_Custom_Wall_Lights_V2",
+                    "DeployableIcon": "/Game/BP/CustomPuckLights/Icons/ITEM_Ceiling_Puck_Light.ITEM_Ceiling_Puck_Light",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Top_Puck_Light-DeployableName\", \"Standard\")",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "MaxSurfaceSnapAngle": 180,
+                    "SupportsCustomRotation": true,
+                    "WorldPlacementType": "WallPlacement",
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Top_Puck_Light_Motion",
+                    "DeployableBlueprint": "/Game/BP/CustomPuckLights/BP_DEP_Top_Puck_Light_WMotion.BP_DEP_Top_Puck_Light_WMotion_C",
+                    "PreviewStaticMesh": "/Game/BP/CustomPuckLights/Meshes/SM_DEP_Custom_Wall_Lights_V2.SM_DEP_Custom_Wall_Lights_V2",
+                    "DeployableIcon": "/Game/BP/CustomPuckLights/Icons/ITEM_Ceiling_Puck_Light.ITEM_Ceiling_Puck_Light",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Top_Puck_Light_Motion-DeployableName\", \"Motion Detection\")",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "MaxSurfaceSnapAngle": 180,
+                    "SupportsCustomRotation": true,
+                    "WorldPlacementType": "WallPlacement",
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Custom_Wall_Light",
+                    "DeployableBlueprint": "/Game/BP/CustomPuckLights/BP_DEP_Custom_Wall_Light.BP_DEP_Custom_Wall_Light_C",
+                    "PreviewStaticMesh": "/Game/BP/CustomPuckLights/Meshes/SM_Jimk_Steel_Wall_Light_LED.SM_Jimk_Steel_Wall_Light_LED",
+                    "DeployableIcon": "/Game/BP/CustomPuckLights/Icons/ITEM_Custom_Wall_Light.ITEM_Custom_Wall_Light",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Custom_Wall_Light-DeployableName\", \"Standard\")",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "MaxSurfaceSnapAngle": 180,
+                    "SupportsCustomRotation": true,
+                    "WorldPlacementType": "WallPlacement",
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Custom_Wall_Light_Motion",
+                    "DeployableBlueprint": "/Game/BP/CustomPuckLights/BP_DEP_Custom_Wall_Light_WMotion.BP_DEP_Custom_Wall_Light_WMotion_C",
+                    "PreviewStaticMesh": "/Game/BP/CustomPuckLights/Meshes/SM_Jimk_Steel_Wall_Light_LED.SM_Jimk_Steel_Wall_Light_LED",
+                    "DeployableIcon": "/Game/BP/CustomPuckLights/Icons/ITEM_Custom_Wall_Light.ITEM_Custom_Wall_Light",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Custom_Wall_Light_Motion-DeployableName\", \"Motion Detection\")",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "MaxSurfaceSnapAngle": 180,
+                    "SupportsCustomRotation": true,
+                    "WorldPlacementType": "WallPlacement",
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Puck_Light",
+                    "DeployableBlueprint": "/Game/BP/CustomPuckLights/BP_DEP_Puck_Light.BP_DEP_Puck_Light_C",
+                    "PreviewStaticMesh": "/Game/BP/CustomPuckLights/Meshes/SM_DEP_Puck_Light2.SM_DEP_Puck_Light2",
+                    "DeployableIcon": "/Game/BP/CustomPuckLights/Icons/ITEM_Puck_Light.ITEM_Puck_Light",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Puck_Light-DeployableName\", \"Standard\")",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "MaxSurfaceSnapAngle": 180,
+                    "SupportsCustomRotation": true,
+                    "WorldPlacementType": "WallPlacement",
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Puck_Light_Motion",
+                    "DeployableBlueprint": "/Game/BP/CustomPuckLights/BP_DEP_Puck_Light_WMotion.BP_DEP_Puck_Light_WMotion_C",
+                    "PreviewStaticMesh": "/Game/BP/CustomPuckLights/Meshes/SM_DEP_Puck_Light2.SM_DEP_Puck_Light2",
+                    "DeployableIcon": "/Game/BP/CustomPuckLights/Icons/ITEM_Puck_Light.ITEM_Puck_Light",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Puck_Light_Motion-DeployableName\", \"Motion Detection\")",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "MaxSurfaceSnapAngle": 180,
+                    "SupportsCustomRotation": true,
+                    "WorldPlacementType": "WallPlacement",
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Jimk_LightSwitch",
+                    "DeployableBlueprint": "/Game/BP/Light_Switch/BP_DEP_Jimk_Light_Switch.BP_DEP_Jimk_Light_Switch_C",
+                    "PreviewStaticMesh": "/Game/BP/Light_Switch/SM_AVP1_Switch_Off.SM_AVP1_Switch_Off",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "DeployableIcon": "/Game/BP/Light_Switch/Item_Jimk_Light_Switch.Item_Jimk_Light_Switch",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Jimk_LightSwitch-DeployableName\", \"All Lights\")",
+                    "MaxSurfaceSnapAngle": 180,
+                    "SupportsCustomRotation": false,
+                    "WorldPlacementType": "WallPlacement",
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Jimk_LightSwitch_Fire",
+                    "DeployableBlueprint": "/Game/BP/Light_Switch/BP_DEP_Jimk_Light_Sw_Fire.BP_DEP_Jimk_Light_Sw_Fire_C",
+                    "PreviewStaticMesh": "/Game/BP/Light_Switch/SM_AVP1_Switch_Off.SM_AVP1_Switch_Off",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "DeployableIcon": "/Game/Assets/2DArt/UI/Items/Item_Icons/Deployables/ITEM_Kit_Wall_Torch.ITEM_Kit_Wall_Torch",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Jimk_LightSwitch_Fire-DeployableName\", \"Flame Lights\")",
+                    "MaxSurfaceSnapAngle": 180,
+                    "SupportsCustomRotation": false,
+                    "WorldPlacementType": "WallPlacement",
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Jimk_LightSwitch_Floor",
+                    "DeployableBlueprint": "/Game/BP/Light_Switch/BP_DEP_Jimk_Light_Sw_Floor.BP_DEP_Jimk_Light_Sw_Floor_C",
+                    "PreviewStaticMesh": "/Game/BP/Light_Switch/SM_AVP1_Switch_Off.SM_AVP1_Switch_Off",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "DeployableIcon": "/Game/BP/CustomPuckLights/Icons/T_ITEM_CaveLight_Floor.T_ITEM_CaveLight_Floor",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Jimk_LightSwitch_Floor-DeployableName\", \"Floor Lights\")",
+                    "MaxSurfaceSnapAngle": 180,
+                    "SupportsCustomRotation": false,
+                    "WorldPlacementType": "WallPlacement",
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Jimk_LightSwitch_Geode",
+                    "DeployableBlueprint": "/Game/BP/Light_Switch/BP_DEP_Jimk_Light_Sw_Geode.BP_DEP_Jimk_Light_Sw_Geode_C",
+                    "PreviewStaticMesh": "/Game/BP/Light_Switch/SM_AVP1_Switch_Off.SM_AVP1_Switch_Off",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "DeployableIcon": "/Game/Assets/2DArt/UI/Items/Item_Icons/Deployables/ITEM_Geode_Lamp_Burst_Oxite.ITEM_Geode_Lamp_Burst_Oxite",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Jimk_LightSwitch_Geode-DeployableName\", \"Geode Lights\")",
+                    "MaxSurfaceSnapAngle": 180,
+                    "SupportsCustomRotation": false,
+                    "WorldPlacementType": "WallPlacement",
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Jimk_LightSwitch_Gravity",
+                    "DeployableBlueprint": "/Game/BP/Light_Switch/BP_DEP_Jimk_Light_Sw_Gravity.BP_DEP_Jimk_Light_Sw_Gravity_C",
+                    "PreviewStaticMesh": "/Game/BP/Light_Switch/SM_AVP1_Switch_Off.SM_AVP1_Switch_Off",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "DeployableIcon": "/Game/BP/CustomPuckLights/Icons/Item_Jimk_Gravity_Light.Item_Jimk_Gravity_Light",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Jimk_LightSwitch_Gravity-DeployableName\", \"Gravity Lights\")",
+                    "MaxSurfaceSnapAngle": 180,
+                    "SupportsCustomRotation": false,
+                    "WorldPlacementType": "WallPlacement",
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Jimk_LightSwitch_Puck",
+                    "DeployableBlueprint": "/Game/BP/Light_Switch/BP_DEP_Jimk_Light_Sw_Puck.BP_DEP_Jimk_Light_Sw_Puck_C",
+                    "PreviewStaticMesh": "/Game/BP/Light_Switch/SM_AVP1_Switch_Off.SM_AVP1_Switch_Off",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "DeployableIcon": "/Game/BP/CustomPuckLights/Icons/ITEM_Puck_Light.ITEM_Puck_Light",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Jimk_LightSwitch_Puck-DeployableName\", \"Puck Lights\")",
+                    "MaxSurfaceSnapAngle": 180,
+                    "SupportsCustomRotation": false,
+                    "WorldPlacementType": "WallPlacement",
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Jimk_LightSwitch_Top",
+                    "DeployableBlueprint": "/Game/BP/Light_Switch/BP_DEP_Jimk_Light_Sw_top.BP_DEP_Jimk_Light_Sw_top_C",
+                    "PreviewStaticMesh": "/Game/BP/Light_Switch/SM_AVP1_Switch_Off.SM_AVP1_Switch_Off",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "DeployableIcon": "/Game/BP/CustomPuckLights/Icons/ITEM_Ceiling_Puck_Light.ITEM_Ceiling_Puck_Light",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Jimk_LightSwitch_Top-DeployableName\", \"Top Lights\")",
+                    "MaxSurfaceSnapAngle": 180,
+                    "SupportsCustomRotation": false,
+                    "WorldPlacementType": "WallPlacement",
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Jimk_LightSwitch_Wall",
+                    "DeployableBlueprint": "/Game/BP/Light_Switch/BP_DEP_Jimk_Light_Sw_Wall.BP_DEP_Jimk_Light_Sw_Wall_C",
+                    "PreviewStaticMesh": "/Game/BP/Light_Switch/SM_AVP1_Switch_Off.SM_AVP1_Switch_Off",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "DeployableIcon": "/Game/BP/CustomPuckLights/Icons/ITEM_Custom_Wall_Light.ITEM_Custom_Wall_Light",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Jimk_LightSwitch_Wall-DeployableName\", \"Wall Lights\")",
+                    "MaxSurfaceSnapAngle": 180,
+                    "SupportsCustomRotation": false,
+                    "WorldPlacementType": "WallPlacement",
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Jimk_AutoSwitch",
+                    "DeployableBlueprint": "/Game/BP/Light_Switch/BP_DEP_Jimk_Light_Auto_Switch.BP_DEP_Jimk_Light_Auto_Switch_C",
+                    "PreviewStaticMesh": "/Game/BP/Light_Switch/SM_AVP1_Switch_Off.SM_AVP1_Switch_Off",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC",
+                    "DeployableIcon": "/Game/ASS/DEP/Light_Switch/Item_Jimk_Light_Switch.Item_Jimk_Light_Switch",
+                    "DeployableName": "NSLOCTEXT(\"D_DeployableSetup\", \"Jimk_AutoSwitch-DeployableName\", \"All Auto\")",
+                    "MaxSurfaceSnapAngle": 180,
+                    "SupportsCustomRotation": false,
+                    "WorldPlacementType": "WallPlacement",
+                    "bCanAffectNavigation": false,
+                    "MaxRestackingAmount": 2
+                },
+                {
+                    "Name": "Meta_Jimk_Crate_Printed",
+                    "DeployableBlueprint": "/Game/BP/Battery_Crate/BP_Meta_Jimk_Crate_Printed_Medium.BP_Meta_Jimk_Crate_Printed_Medium_C",
+                    "PreviewStaticMesh": "/Game/ASS/DEP/SM_DEP_Crate_LEET.SM_DEP_Crate_LEET",
+                    "DeployedSound": "/Game/FMOD/Events/SFX/D_Deployables/SFX_DEP_GENERIC.SFX_DEP_GENERIC"
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Inventory-D_InventoryInfo.json",
+            "File_Items": [
+                {
+                    "Name": "Storage_Jimk_Printed_Crate",
+                    "InventoryID": {
+                        "Value": "General"
+                    },
+                    "StartingSlots": 50
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Items-D_ItemsStatic.json",
+            "File_Items": [
+                {
+                    "Name": "Meta_Jimk_PistolA",
+                    "Meshable": {
+                        "RowName": "Mesh_Meta_Jimk_PistolA"
+                    },
+                    "Itemable": {
+                        "RowName": "Item_Meta_Jimk_PistolA"
+                    },
+                    "Interactable": {
+                        "RowName": "Item"
+                    },
+                    "Focusable": {
+                        "RowName": "Focusable_Gun_Pistol"
+                    },
+                    "Highlightable": {
+                        "RowName": "Generic"
+                    },
+                    "Actionable": {
+                        "RowName": "Pistol_Handgun"
+                    },
+                    "Usable": {
+                        "RowName": "Repair"
+                    },
+                    "Durable": {
+                        "RowName": "Jimk_Pistols"
+                    },
+                    "Floatable": {
+                        "RowName": "Items"
+                    },
+                    "Decayable": {
+                        "RowName": "Decay_General"
+                    },
+                    "InventoryContainer": {
+                        "RowName": "StandardAmmoInventory"
+                    },
+                    "Audio": {
+                        "RowName": "Pistol"
+                    },
+                    "FirearmData": {
+                        "RowName": "Meta_Jimk_HandgunA"
+                    },
+                    "AdditionalStats": {
+                        "(Value=\"BaseProjectileDamage_+%\")": 25,
+                        "(Value=\"BaseCriticalDamage_+%\")": 25
+                    },
+                    "Manual_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Item.Weapon.Firearm.Pistol"
+                            },
+                            {
+                                "TagName": "Item.Meta"
+                            }
+                        ]
+                    },
+                    "Generated_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Item.Weapon.Firearm.Pistol"
+                            },
+                            {
+                                "TagName": "Item.Meta"
+                            },
+                            {
+                                "TagName": "Traits.Meshable"
+                            },
+                            {
+                                "TagName": "Traits.Itemable"
+                            },
+                            {
+                                "TagName": "Traits.Interactable"
+                            },
+                            {
+                                "TagName": "Traits.Highlightable"
+                            },
+                            {
+                                "TagName": "Traits.Actionable"
+                            },
+                            {
+                                "TagName": "Traits.Usable"
+                            },
+                            {
+                                "TagName": "Traits.Durable"
+                            },
+                            {
+                                "TagName": "Traits.Floatable"
+                            }
+                        ],
+                        "ParentTags": []
+                    }
+                },
+                {
+                    "Name": "Meta_Jimk_PistolB",
+                    "Meshable": {
+                        "RowName": "Mesh_Meta_Jimk_PistolB"
+                    },
+                    "Itemable": {
+                        "RowName": "Item_Meta_Jimk_PistolB"
+                    },
+                    "Interactable": {
+                        "RowName": "Item"
+                    },
+                    "Focusable": {
+                        "RowName": "Focusable_Gun_Pistol"
+                    },
+                    "Highlightable": {
+                        "RowName": "Generic"
+                    },
+                    "Actionable": {
+                        "RowName": "Pistol_Handgun"
+                    },
+                    "Usable": {
+                        "RowName": "Repair"
+                    },
+                    "Durable": {
+                        "RowName": "Jimk_Pistols"
+                    },
+                    "Floatable": {
+                        "RowName": "Items"
+                    },
+                    "Decayable": {
+                        "RowName": "Decay_General"
+                    },
+                    "InventoryContainer": {
+                        "RowName": "StandardAmmoInventory"
+                    },
+                    "Audio": {
+                        "RowName": "Pistol"
+                    },
+                    "FirearmData": {
+                        "RowName": "Meta_Jimk_HandgunB"
+                    },
+                    "AdditionalStats": {
+                        "(Value=\"BaseProjectileDamage_+%\")": 10,
+                        "(Value=\"BaseCriticalDamage_+%\")": 10
+                    },
+                    "Manual_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Item.Weapon.Firearm.Pistol"
+                            },
+                            {
+                                "TagName": "Item.Meta"
+                            }
+                        ]
+                    },
+                    "Generated_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Item.Weapon.Firearm.Pistol"
+                            },
+                            {
+                                "TagName": "Item.Meta"
+                            },
+                            {
+                                "TagName": "Traits.Meshable"
+                            },
+                            {
+                                "TagName": "Traits.Itemable"
+                            },
+                            {
+                                "TagName": "Traits.Interactable"
+                            },
+                            {
+                                "TagName": "Traits.Highlightable"
+                            },
+                            {
+                                "TagName": "Traits.Actionable"
+                            },
+                            {
+                                "TagName": "Traits.Usable"
+                            },
+                            {
+                                "TagName": "Traits.Durable"
+                            },
+                            {
+                                "TagName": "Traits.Floatable"
+                            }
+                        ],
+                        "ParentTags": []
+                    }
+                },
+                {
+                    "Name": "Jimk_Teleporter",
+                    "Meshable": {
+                        "RowName": "Mesh_Jimk_Teleporter"
+                    },
+                    "Itemable": {
+                        "RowName": "Item_Jimk_Teleporter"
+                    },
+                    "Interactable": {
+                        "RowName": "Item"
+                    },
+                    "Focusable": {
+                        "RowName": "Focusable_1H"
+                    },
+                    "Highlightable": {
+                        "RowName": "Generic"
+                    },
+                    "Actionable": {
+                        "RowName": "Generic_Consumable"
+                    },
+                    "Consumable": {
+                        "RowName": "Jimk_Teleporter"
+                    },
+                    "Usable": {
+                        "RowName": "Consume_Stack_FoodWater"
+                    },
+                    "Floatable": {
+                        "RowName": "LightItem"
+                    },
+                    "Decayable": {
+                        "RowName": "Decay_MetaItem"
+                    },
+                    "Audio": {
+                        "RowName": "Default"
+                    },
+                    "CraftingExperience": 10,
+                    "Manual_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Item.Meta.Consumable"
+                            }
+                        ]
+                    },
+                    "Generated_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Item.Meta.Consumable"
+                            },
+                            {
+                                "TagName": "Traits.Meshable"
+                            },
+                            {
+                                "TagName": "Traits.Itemable"
+                            },
+                            {
+                                "TagName": "Traits.Interactable"
+                            },
+                            {
+                                "TagName": "Traits.Highlightable"
+                            },
+                            {
+                                "TagName": "Traits.Consumable"
+                            },
+                            {
+                                "TagName": "Traits.Usable"
+                            },
+                            {
+                                "TagName": "Traits.Floatable"
+                            }
+                        ],
+                        "ParentTags": []
+                    }
+                },
+                {
+                    "Name": "TeleporterHandHeld",
+                    "Meshable": {
+                        "RowName": "Mesh_TeleporterHandHeld"
+                    },
+                    "Itemable": {
+                        "RowName": "Item_TeleporterHandHeld"
+                    },
+                    "Interactable": {
+                        "RowName": "Item"
+                    },
+                    "Focusable": {
+                        "RowName": "Focusable_TeleporterHandHeld"
+                    },
+                    "Highlightable": {
+                        "RowName": "Generic"
+                    },
+                    "Actionable": {
+                        "RowName": "TeleporterHandHeld"
+                    },
+                    "Decayable": {
+                        "RowName": "Decay_General"
+                    },
+                    "Audio": {
+                        "RowName": "Default"
+                    },
+                    "Manual_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Item.Tool"
+                            }
+                        ]
+                    },
+                    "Generated_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Item.Tool"
+                            },
+                            {
+                                "TagName": "Traits.Meshable"
+                            },
+                            {
+                                "TagName": "Traits.Itemable"
+                            },
+                            {
+                                "TagName": "Traits.Interactable"
+                            },
+                            {
+                                "TagName": "Traits.Highlightable"
+                            },
+                            {
+                                "TagName": "Traits.Actionable"
+                            }
+                        ],
+                        "ParentTags": []
+                    }
+                },
+                {
+                    "Name": "TeleporterBase",
+                    "Meshable": {
+                        "RowName": "Mesh_TeleporterBase"
+                    },
+                    "Itemable": {
+                        "RowName": "Item_TeleporterBase"
+                    },
+                    "Interactable": {
+                        "RowName": "Deployable_NoInteract"
+                    },
+                    "Focusable": {
+                        "RowName": "Focusable_1H"
+                    },
+                    "Highlightable": {
+                        "RowName": "Generic"
+                    },
+                    "Actionable": {
+                        "RowName": "Deployable"
+                    },
+                    "Usable": {
+                        "RowName": "Place"
+                    },
+                    "Deployable": {
+                        "RowName": "TeleporterBase"
+                    },
+                    "Durable": {
+                        "RowName": "Deployable_5000"
+                    },
+                    "Floatable": {
+                        "RowName": "Items"
+                    },
+                    "Decayable": {
+                        "RowName": "Decay_General"
+                    },
+                    "Weight": {
+                        "RowName": "LightDeployable"
+                    },
+                    "Audio": {
+                        "RowName": "Default"
+                    },
+                    "Generated_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Traits.Meshable"
+                            },
+                            {
+                                "TagName": "Traits.Itemable"
+                            },
+                            {
+                                "TagName": "Traits.Interactable"
+                            },
+                            {
+                                "TagName": "Traits.Highlightable"
+                            },
+                            {
+                                "TagName": "Traits.Actionable"
+                            },
+                            {
+                                "TagName": "Traits.Usable"
+                            },
+                            {
+                                "TagName": "Traits.Deployable"
+                            },
+                            {
+                                "TagName": "Traits.Durable"
+                            },
+                            {
+                                "TagName": "Traits.Floatable"
+                            }
+                        ],
+                        "ParentTags": []
+                    }
+                },
+                {
+                    "Name": "LED_Lighting_Crate",
+                    "Meshable": {
+                        "RowName": "Mesh_Meta_Crate_Printed"
+                    },
+                    "Itemable": {
+                        "RowName": "Item_Lighting_Crate"
+                    },
+                    "Interactable": {
+                        "RowName": "Item"
+                    },
+                    "Focusable": {
+                        "RowName": "Focusable_1H"
+                    },
+                    "Highlightable": {
+                        "RowName": "Generic"
+                    },
+                    "Actionable": {
+                        "RowName": "Generic_Consumable"
+                    },
+                    "Consumable": {
+                        "RowName": "Meta_Lighting_Crate"
+                    },
+                    "Usable": {
+                        "RowName": "Consume_Stack_FoodWater"
+                    },
+                    "Floatable": {
+                        "RowName": "LightItem"
+                    },
+                    "Decayable": {
+                        "RowName": "Decay_MetaItem"
+                    },
+                    "Audio": {
+                        "RowName": "Default"
+                    },
+                    "CraftingExperience": 10,
+                    "Manual_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Item.Meta"
+                            }
+                        ]
+                    },
+                    "Generated_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Item.Meta"
+                            },
+                            {
+                                "TagName": "Traits.Meshable"
+                            },
+                            {
+                                "TagName": "Traits.Itemable"
+                            },
+                            {
+                                "TagName": "Traits.Interactable"
+                            },
+                            {
+                                "TagName": "Traits.Highlightable"
+                            },
+                            {
+                                "TagName": "Traits.Consumable"
+                            },
+                            {
+                                "TagName": "Traits.Usable"
+                            },
+                            {
+                                "TagName": "Traits.Floatable"
+                            }
+                        ],
+                        "ParentTags": []
+                    }
+                },
+                {
+                    "Name": "Custom_Pole_Light",
+                    "Meshable": {
+                        "RowName": "Mesh_Custom_Pole_Light"
+                    },
+                    "Itemable": {
+                        "RowName": "Item_Custom_Pole_Light"
+                    },
+                    "Interactable": {
+                        "RowName": "Deployable"
+                    },
+                    "Focusable": {
+                        "RowName": "Focusable_1H"
+                    },
+                    "Highlightable": {
+                        "RowName": "Generic"
+                    },
+                    "Actionable": {
+                        "RowName": "Deployable"
+                    },
+                    "Usable": {
+                        "RowName": "Place"
+                    },
+                    "Deployable": {
+                        "RowName": "Custom_Pole_Light"
+                    },
+                    "Decayable": {
+                        "RowName": "Decay_General"
+                    },
+                    "Audio": {
+                        "RowName": "GenericDeployable"
+                    },
+                    "AdditionalStats": {
+                        "(Value=\"BaseComfortLevel_+\")": 4
+                    },
+                    "Generated_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Traits.Meshable"
+                            },
+                            {
+                                "TagName": "Traits.Itemable"
+                            },
+                            {
+                                "TagName": "Traits.Interactable"
+                            },
+                            {
+                                "TagName": "Traits.Highlightable"
+                            },
+                            {
+                                "TagName": "Traits.Actionable"
+                            },
+                            {
+                                "TagName": "Traits.Usable"
+                            },
+                            {
+                                "TagName": "Traits.Deployable"
+                            },
+                            {
+                                "TagName": "Traits.Durable"
+                            }
+                        ],
+                        "ParentTags": []
+                    }
+                },
+                {
+                    "Name": "Custom_Floor_Light",
+                    "Meshable": {
+                        "RowName": "Mesh_Custom_Floor_Light"
+                    },
+                    "Itemable": {
+                        "RowName": "Item_Custom_Floor_Light"
+                    },
+                    "Interactable": {
+                        "RowName": "Deployable"
+                    },
+                    "Focusable": {
+                        "RowName": "Focusable_1H"
+                    },
+                    "Highlightable": {
+                        "RowName": "Generic"
+                    },
+                    "Actionable": {
+                        "RowName": "Deployable"
+                    },
+                    "Usable": {
+                        "RowName": "Place"
+                    },
+                    "Deployable": {
+                        "RowName": "Custom_Floor_Light"
+                    },
+                    "Decayable": {
+                        "RowName": "Decay_General"
+                    },
+                    "Audio": {
+                        "RowName": "GenericDeployable"
+                    },
+                    "AdditionalStats": {
+                        "(Value=\"BaseComfortLevel_+\")": 4
+                    },
+                    "Generated_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Traits.Meshable"
+                            },
+                            {
+                                "TagName": "Traits.Itemable"
+                            },
+                            {
+                                "TagName": "Traits.Interactable"
+                            },
+                            {
+                                "TagName": "Traits.Highlightable"
+                            },
+                            {
+                                "TagName": "Traits.Actionable"
+                            },
+                            {
+                                "TagName": "Traits.Usable"
+                            },
+                            {
+                                "TagName": "Traits.Deployable"
+                            },
+                            {
+                                "TagName": "Traits.Durable"
+                            }
+                        ],
+                        "ParentTags": []
+                    }
+                },
+                {
+                    "Name": "Custom_Gravity_Light",
+                    "Meshable": {
+                        "RowName": "Mesh_Custom_Gravity_Light"
+                    },
+                    "Itemable": {
+                        "RowName": "Item_Custom_Gravity_Light"
+                    },
+                    "Interactable": {
+                        "RowName": "Deployable"
+                    },
+                    "Focusable": {
+                        "RowName": "Focusable_1H"
+                    },
+                    "Highlightable": {
+                        "RowName": "Generic"
+                    },
+                    "Actionable": {
+                        "RowName": "Deployable"
+                    },
+                    "Usable": {
+                        "RowName": "Place"
+                    },
+                    "Deployable": {
+                        "RowName": "Custom_Gravity_Light"
+                    },
+                    "Decayable": {
+                        "RowName": "Decay_General"
+                    },
+                    "Audio": {
+                        "RowName": "GenericDeployable"
+                    },
+                    "AdditionalStats": {
+                        "(Value=\"BaseComfortLevel_+\")": 8
+                    },
+                    "Generated_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Traits.Meshable"
+                            },
+                            {
+                                "TagName": "Traits.Itemable"
+                            },
+                            {
+                                "TagName": "Traits.Interactable"
+                            },
+                            {
+                                "TagName": "Traits.Highlightable"
+                            },
+                            {
+                                "TagName": "Traits.Actionable"
+                            },
+                            {
+                                "TagName": "Traits.Usable"
+                            },
+                            {
+                                "TagName": "Traits.Deployable"
+                            },
+                            {
+                                "TagName": "Traits.Durable"
+                            }
+                        ],
+                        "ParentTags": []
+                    }
+                },
+                {
+                    "Name": "Top_Puck_Light",
+                    "Meshable": {
+                        "RowName": "Mesh_Top_Puck_Light"
+                    },
+                    "Itemable": {
+                        "RowName": "Item_Top_Puck_Light"
+                    },
+                    "Interactable": {
+                        "RowName": "Deployable"
+                    },
+                    "Focusable": {
+                        "RowName": "Focusable_1H"
+                    },
+                    "Highlightable": {
+                        "RowName": "Generic"
+                    },
+                    "Actionable": {
+                        "RowName": "Deployable"
+                    },
+                    "Usable": {
+                        "RowName": "Place"
+                    },
+                    "Deployable": {
+                        "RowName": "Top_Puck_Light"
+                    },
+                    "Decayable": {
+                        "RowName": "Decay_General"
+                    },
+                    "Audio": {
+                        "RowName": "GenericDeployable"
+                    },
+                    "AdditionalStats": {
+                        "(Value=\"BaseComfortLevel_+\")": 4
+                    },
+                    "Generated_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Traits.Meshable"
+                            },
+                            {
+                                "TagName": "Traits.Itemable"
+                            },
+                            {
+                                "TagName": "Traits.Interactable"
+                            },
+                            {
+                                "TagName": "Traits.Highlightable"
+                            },
+                            {
+                                "TagName": "Traits.Actionable"
+                            },
+                            {
+                                "TagName": "Traits.Usable"
+                            },
+                            {
+                                "TagName": "Traits.Deployable"
+                            },
+                            {
+                                "TagName": "Traits.Durable"
+                            }
+                        ],
+                        "ParentTags": []
+                    }
+                },
+                {
+                    "Name": "Custom_Wall_Light",
+                    "Meshable": {
+                        "RowName": "Mesh_Custom_Wall_Light"
+                    },
+                    "Itemable": {
+                        "RowName": "Item_Custom_Wall_Light"
+                    },
+                    "Interactable": {
+                        "RowName": "Deployable"
+                    },
+                    "Focusable": {
+                        "RowName": "Focusable_1H"
+                    },
+                    "Highlightable": {
+                        "RowName": "Generic"
+                    },
+                    "Actionable": {
+                        "RowName": "Deployable"
+                    },
+                    "Usable": {
+                        "RowName": "Place"
+                    },
+                    "Deployable": {
+                        "RowName": "Custom_Wall_Light"
+                    },
+                    "Decayable": {
+                        "RowName": "Decay_General"
+                    },
+                    "Audio": {
+                        "RowName": "GenericDeployable"
+                    },
+                    "AdditionalStats": {
+                        "(Value=\"BaseComfortLevel_+\")": 4
+                    },
+                    "Generated_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Traits.Meshable"
+                            },
+                            {
+                                "TagName": "Traits.Itemable"
+                            },
+                            {
+                                "TagName": "Traits.Interactable"
+                            },
+                            {
+                                "TagName": "Traits.Highlightable"
+                            },
+                            {
+                                "TagName": "Traits.Actionable"
+                            },
+                            {
+                                "TagName": "Traits.Usable"
+                            },
+                            {
+                                "TagName": "Traits.Deployable"
+                            },
+                            {
+                                "TagName": "Traits.Durable"
+                            }
+                        ],
+                        "ParentTags": []
+                    }
+                },
+                {
+                    "Name": "Puck_Light",
+                    "Meshable": {
+                        "RowName": "Mesh_Puck_Light"
+                    },
+                    "Itemable": {
+                        "RowName": "Item_Puck_Light"
+                    },
+                    "Interactable": {
+                        "RowName": "Deployable"
+                    },
+                    "Focusable": {
+                        "RowName": "Focusable_1H"
+                    },
+                    "Highlightable": {
+                        "RowName": "Generic"
+                    },
+                    "Actionable": {
+                        "RowName": "Deployable"
+                    },
+                    "Usable": {
+                        "RowName": "Place"
+                    },
+                    "Deployable": {
+                        "RowName": "Puck_Light"
+                    },
+                    "Decayable": {
+                        "RowName": "Decay_General"
+                    },
+                    "Audio": {
+                        "RowName": "GenericDeployable"
+                    },
+                    "AdditionalStats": {
+                        "(Value=\"BaseComfortLevel_+\")": 4
+                    },
+                    "Generated_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Traits.Meshable"
+                            },
+                            {
+                                "TagName": "Traits.Itemable"
+                            },
+                            {
+                                "TagName": "Traits.Interactable"
+                            },
+                            {
+                                "TagName": "Traits.Highlightable"
+                            },
+                            {
+                                "TagName": "Traits.Actionable"
+                            },
+                            {
+                                "TagName": "Traits.Usable"
+                            },
+                            {
+                                "TagName": "Traits.Deployable"
+                            },
+                            {
+                                "TagName": "Traits.Durable"
+                            }
+                        ],
+                        "ParentTags": []
+                    }
+                },
+                {
+                    "Name": "Jimk_LightSwitch",
+                    "Meshable": {
+                        "RowName": "Mesh_Jimk_LightSwitch"
+                    },
+                    "Itemable": {
+                        "RowName": "Item_Jimk_LightSwitch"
+                    },
+                    "Interactable": {
+                        "RowName": "Deployable"
+                    },
+                    "Focusable": {
+                        "RowName": "Focusable_1H"
+                    },
+                    "Highlightable": {
+                        "RowName": "Generic"
+                    },
+                    "Actionable": {
+                        "RowName": "Deployable"
+                    },
+                    "Usable": {
+                        "RowName": "Place"
+                    },
+                    "Deployable": {
+                        "RowName": "Jimk_LightSwitch"
+                    },
+                    "Decayable": {
+                        "RowName": "Decay_General"
+                    },
+                    "Audio": {
+                        "RowName": "GenericDeployable"
+                    },
+                    "AdditionalStats": {
+                        "(Value=\"BaseComfortLevel_+\")": 2
+                    },
+                    "Generated_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Traits.Meshable"
+                            },
+                            {
+                                "TagName": "Traits.Itemable"
+                            },
+                            {
+                                "TagName": "Traits.Interactable"
+                            },
+                            {
+                                "TagName": "Traits.Highlightable"
+                            },
+                            {
+                                "TagName": "Traits.Actionable"
+                            },
+                            {
+                                "TagName": "Traits.Usable"
+                            },
+                            {
+                                "TagName": "Traits.Deployable"
+                            },
+                            {
+                                "TagName": "Traits.Durable"
+                            }
+                        ],
+                        "ParentTags": []
+                    }
+                },
+                {
+                    "Name": "Jimk_Scoped_Compound_Bow_Workshop",
+                    "Meshable": {
+                        "RowName": "Mesh_Jimk_Scoped_Compound_Bow"
+                    },
+                    "Itemable": {
+                        "RowName": "Item_Jimk_Scoped_Compound_Bow"
+                    },
+                    "Interactable": {
+                        "RowName": "Item"
+                    },
+                    "Focusable": {
+                        "RowName": "Focusable_CompoundBow_Firearm"
+                    },
+                    "Highlightable": {
+                        "RowName": "Generic"
+                    },
+                    "Actionable": {
+                        "RowName": "Compound_Bow_JK"
+                    },
+                    "Usable": {
+                        "RowName": "Repair"
+                    },
+                    "Durable": {
+                        "RowName": "Compound_Bow"
+                    },
+                    "Floatable": {
+                        "RowName": "Items"
+                    },
+                    "Decayable": {
+                        "RowName": "Decay_General"
+                    },
+                    "InventoryContainer": {
+                        "RowName": "Bow_Ammo_Attachment"
+                    },
+                    "Audio": {
+                        "RowName": "Bow"
+                    },
+                    "FirearmData": {
+                        "RowName": "Compound_Bow"
+                    },
+                    "AdditionalStats": {
+                        "(Value=\"BaseBowChargeSpeed_+%\")": -50,
+                        "(Value=\"BaseArrowProjectileSpeed_+%\")": 30,
+                        "(Value=\"BaseBowProjectileDamage_+%\")": 25,
+                        "(Value=\"BaseHardenedPointPenetration_%\")": 100
+                    },
+                    "Manual_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Item.Weapon.Bow"
+                            },
+                            {
+                                "TagName": "Item.Meta"
+                            }
+                        ]
+                    },
+                    "Generated_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Item.Weapon.Bow"
+                            },
+                            {
+                                "TagName": "Item.Meta"
+                            },
+                            {
+                                "TagName": "Traits.Meshable"
+                            },
+                            {
+                                "TagName": "Traits.Itemable"
+                            },
+                            {
+                                "TagName": "Traits.Interactable"
+                            },
+                            {
+                                "TagName": "Traits.Highlightable"
+                            },
+                            {
+                                "TagName": "Traits.Actionable"
+                            },
+                            {
+                                "TagName": "Traits.Usable"
+                            },
+                            {
+                                "TagName": "Traits.Durable"
+                            },
+                            {
+                                "TagName": "Traits.Floatable"
+                            }
+                        ],
+                        "ParentTags": []
+                    }
+                },
+                {
+                    "Name": "Jimk_Crate_Printed",
+                    "Meshable": {
+                        "RowName": "Mesh_Jimk_Crate_Printed"
+                    },
+                    "Itemable": {
+                        "RowName": "Item_Jimk_Crate_Printed"
+                    },
+                    "Interactable": {
+                        "RowName": "Deployable"
+                    },
+                    "Focusable": {
+                        "RowName": "Focusable_1H"
+                    },
+                    "Highlightable": {
+                        "RowName": "Generic"
+                    },
+                    "Actionable": {
+                        "RowName": "Deployable"
+                    },
+                    "Usable": {
+                        "RowName": "Place"
+                    },
+                    "Deployable": {
+                        "RowName": "Meta_Jimk_Crate_Printed"
+                    },
+                    "Durable": {
+                        "RowName": "Meta_Item_Printed"
+                    },
+                    "Inventory": {
+                        "RowName": "Storage_Jimk_Printed_Crate"
+                    },
+                    "Decayable": {
+                        "RowName": "Decay_MetaItem"
+                    },
+                    "Weight": {
+                        "RowName": "LightDeployable"
+                    },
+                    "Audio": {
+                        "RowName": "WoodDeployable"
+                    },
+                    "AdditionalStats": {
+                        "(Value=\"BaseInventoryCannotSpoil_?\")": 1
+                    },
+                    "Manual_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Audio.Shelter.Check"
+                            },
+                            {
+                                "TagName": "Item.Deployable.Storage"
+                            },
+                            {
+                                "TagName": "Item.Meta"
+                            }
+                        ]
+                    },
+                    "Generated_Tags": {
+                        "GameplayTags": [
+                            {
+                                "TagName": "Audio.Shelter.Check"
+                            },
+                            {
+                                "TagName": "Item.Deployable.Storage"
+                            },
+                            {
+                                "TagName": "Item.Meta"
+                            },
+                            {
+                                "TagName": "Traits.Meshable"
+                            },
+                            {
+                                "TagName": "Traits.Itemable"
+                            },
+                            {
+                                "TagName": "Traits.Interactable"
+                            },
+                            {
+                                "TagName": "Traits.Highlightable"
+                            },
+                            {
+                                "TagName": "Traits.Actionable"
+                            },
+                            {
+                                "TagName": "Traits.Usable"
+                            },
+                            {
+                                "TagName": "Traits.Deployable"
+                            },
+                            {
+                                "TagName": "Traits.Durable"
+                            },
+                            {
+                                "TagName": "Traits.Inventory"
+                            }
+                        ],
+                        "ParentTags": []
+                    }
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Items-D_ItemTemplate.json",
+            "File_Items": [
+                {
+                    "Name": "TeleporterHandHeld",
+                    "ItemStaticData": {
+                        "RowName": "TeleporterHandHeld"
+                    }
+                },
+                {
+                    "Name": "TeleporterBase",
+                    "ItemStaticData": {
+                        "RowName": "TeleporterBase"
+                    }
+                },
+                {
+                    "Name": "Jimk_Teleporter",
+                    "ItemStaticData": {
+                        "RowName": "Jimk_Teleporter"
+                    }
+                },
+                {
+                    "Name": "LED_Lighting_Crate",
+                    "ItemStaticData": {
+                        "RowName": "LED_Lighting_Crate"
+                    }
+                },
+                {
+                    "Name": "Jimk_LightSwitch",
+                    "ItemStaticData": {
+                        "RowName": "Jimk_LightSwitch"
+                    }
+                },
+                {
+                    "Name": "Custom_Gravity_Light_Mini",
+                    "ItemStaticData": {
+                        "RowName": "Custom_Gravity_Light_Mini"
+                    }
+                },
+                {
+                    "Name": "Custom_Floor_Light",
+                    "ItemStaticData": {
+                        "RowName": "Custom_Floor_Light"
+                    }
+                },
+                {
+                    "Name": "Custom_Gravity_Light",
+                    "ItemStaticData": {
+                        "RowName": "Custom_Gravity_Light"
+                    },
+                    "ItemDynamicData": [
+                        {
+                            "PropertyType": "ItemableStack",
+                            "Value": 2
+                        }
+                    ]
+                },
+                {
+                    "Name": "Top_Puck_Light",
+                    "ItemStaticData": {
+                        "RowName": "Top_Puck_Light"
+                    }
+                },
+                {
+                    "Name": "Puck_Light",
+                    "ItemStaticData": {
+                        "RowName": "Puck_Light"
+                    }
+                },
+                {
+                    "Name": "Custom_Wall_Light",
+                    "ItemStaticData": {
+                        "RowName": "Custom_Wall_Light"
+                    }
+                },
+                {
+                    "Name": "Custom_Gravity_Light_Mini_x4",
+                    "ItemStaticData": {
+                        "RowName": "Custom_Gravity_Light_Mini"
+                    },
+                    "ItemDynamicData": [
+                        {
+                            "PropertyType": "ItemableStack",
+                            "Value": 4
+                        }
+                    ]
+                },
+                {
+                    "Name": "Custom_Wall_Light_x4",
+                    "ItemStaticData": {
+                        "RowName": "Custom_Wall_Light"
+                    },
+                    "ItemDynamicData": [
+                        {
+                            "PropertyType": "ItemableStack",
+                            "Value": 4
+                        }
+                    ]
+                },
+                {
+                    "Name": "Custom_Floor_Light_x8",
+                    "ItemStaticData": {
+                        "RowName": "Custom_Floor_Light"
+                    },
+                    "ItemDynamicData": [
+                        {
+                            "PropertyType": "ItemableStack",
+                            "Value": 8
+                        }
+                    ]
+                },
+                {
+                    "Name": "Top_Puck_Light_x8",
+                    "ItemStaticData": {
+                        "RowName": "Top_Puck_Light"
+                    },
+                    "ItemDynamicData": [
+                        {
+                            "PropertyType": "ItemableStack",
+                            "Value": 8
+                        }
+                    ]
+                },
+                {
+                    "Name": "Puck_Light_x8",
+                    "ItemStaticData": {
+                        "RowName": "Puck_Light"
+                    },
+                    "ItemDynamicData": [
+                        {
+                            "PropertyType": "ItemableStack",
+                            "Value": 8
+                        }
+                    ]
+                },
+                {
+                    "Name": "Jimk_LightSwitch_x8",
+                    "ItemStaticData": {
+                        "RowName": "Jimk_LightSwitch"
+                    },
+                    "ItemDynamicData": [
+                        {
+                            "PropertyType": "ItemableStack",
+                            "Value": 8
+                        }
+                    ]
+                },
+                {
+                    "Name": "Jimk_Scoped_Compound_Bow_Workshop",
+                    "ItemStaticData": {
+                        "RowName": "Jimk_Scoped_Compound_Bow_Workshop"
+                    }
+                },
+                {
+                    "Name": "Jimk_Crate_Printed",
+                    "ItemStaticData": {
+                        "RowName": "Jimk_Crate_Printed"
+                    }
+                },
+                {
+                    "Name": "Meta_Jimk_PistolA",
+                    "ItemStaticData": {
+                        "RowName": "Meta_Jimk_PistolA"
+                    }
+                },
+                {
+                    "Name": "Meta_Jimk_PistolB",
+                    "ItemStaticData": {
+                        "RowName": "Meta_Jimk_PistolB"
+                    }
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Tools-D_FirearmData.json",
+            "File_Items": [
+                {
+                    "Name": "Meta_Jimk_HandgunA",
+                    "HipAccuracy": {
+                        "X": 0.4000000059604645,
+                        "Y": 0.4000000059604645
+                    },
+                    "AimAccuracy": {
+                        "X": 0.10000000149011612,
+                        "Y": 0.10000000149011612
+                    },
+                    "LaunchForce": 600,
+                    "ChargeData": {
+                        "ChargeSpeed": 0
+                    },
+                    "VisualData": {
+                        "PreviewItemAttachSocket3P": "R_prop_00",
+                        "FireShake": "BlueprintGeneratedClass'/Game/BP/CameraShake/Weapons/CS_PistolHandgun_Fire.CS_PistolHandgun_Fire_C'",
+                        "FireParticle": "/Game/ASS/VFX/WEP/NS_PistolHandgunMuzzle.NS_PistolHandgunMuzzle",
+                        "VisualRecoil": 20,
+                        "AimFOVMultiplier": 0.8500000238418579,
+                        "SkeletalItemAnimData": {
+                            "Fire": "/Game/ASS/WEP/SK_GUN_SGL_SHOT_PISTOL/SK_GUN_SGL_SHOT_PISTOL_Shoot_Montage.SK_GUN_SGL_SHOT_PISTOL_Shoot_Montage",
+                            "AimFire": "/Game/ASS/WEP/SK_GUN_SGL_SHOT_PISTOL/SK_GUN_SGL_SHOT_PISTOL_Shoot_Montage.SK_GUN_SGL_SHOT_PISTOL_Shoot_Montage",
+                            "Reload": "/Game/ASS/WEP/SK_GUN_Pistol_CHAC/ANI_WEP_GUN_Pistol_CHAC_Reload_Montage.ANI_WEP_GUN_Pistol_CHAC_Reload_Montage"
+                        },
+                        "FirstPersonAnimData": {
+                            "Idle": "/Game/ASS/CHA/1ST/1ST_NewRig/1ST_CHA_SGL_Shot_PistolIdle.1ST_CHA_SGL_Shot_PistolIdle",
+                            "Aim": "/Game/ASS/CHA/1ST/1ST_NewRig/1ST_CHA_SGL_Shot_PistolAimIdle.1ST_CHA_SGL_Shot_PistolAimIdle",
+                            "Fire": "/Game/ASS/CHA/1ST/1ST_NewRig/1ST_CHA_Pistol_Shoot_Montage.1ST_CHA_Pistol_Shoot_Montage",
+                            "AimFire": "/Game/ASS/CHA/1ST/1ST_NewRig/1ST_CHA_Pistol_AimShoot_Montage.1ST_CHA_Pistol_AimShoot_Montage",
+                            "Reload": "/Game/ASS/CHA/1ST/1ST_NewRig/1ST_CHA_CHAC_Pistol_Action_Reload.1ST_CHA_CHAC_Pistol_Action_Reload"
+                        },
+                        "ThirdPersonAnimData": {
+                            "Idle": "/Game/ASS/CHA/Human/3RD/Animations/3RD_CHA_MAL_SGL_Shot_PistolIdleUp_to_Dwn.3RD_CHA_MAL_SGL_Shot_PistolIdleUp_to_Dwn",
+                            "Aim": "/Game/ASS/CHA/Human/3RD/Animations/3RD_CHA_MAL_SGL_Shot_PistolAimUp_to_Dwn.3RD_CHA_MAL_SGL_Shot_PistolAimUp_to_Dwn",
+                            "Fire": "/Game/ASS/CHA/Human/3RD/Animations/3RD_CHA_PistolShoot_BS.3RD_CHA_PistolShoot_BS",
+                            "AimFire": "/Game/ASS/CHA/Human/3RD/Animations/3RD_CHA_PistolAimShoot_BS.3RD_CHA_PistolAimShoot_BS",
+                            "ReloadMontage": "/Game/ASS/CHA/Human/3RD/Animations/3RD_CHA_CHAC_PistolReload.3RD_CHA_CHAC_PistolReload"
+                        }
+                    },
+                    "ValidAmmoTypes": {
+                        "RowName": "AllPistol"
+                    },
+                    "AmmoCapacity": 10,
+                    "RoundsPerMinute": 300,
+                    "bUnlimitedAmmo": false,
+                    "ReloadTime": 4,
+                    "AudioData": {
+                        "RowName": "CHAC_Pistol"
+                    },
+                    "WeaponLoudness": 2
+                },
+                {
+                    "Name": "Meta_Jimk_HandgunB",
+                    "HipAccuracy": {
+                        "X": 0.4000000059604645,
+                        "Y": 0.4000000059604645
+                    },
+                    "AimAccuracy": {
+                        "X": 0.10000000149011612,
+                        "Y": 0.10000000149011612
+                    },
+                    "LaunchForce": 500,
+                    "ChargeData": {
+                        "ChargeSpeed": 0
+                    },
+                    "VisualData": {
+                        "PreviewItemAttachSocket3P": "R_prop_00",
+                        "FireShake": "BlueprintGeneratedClass'/Game/BP/CameraShake/Weapons/CS_PistolHandgun_Fire.CS_PistolHandgun_Fire_C'",
+                        "FireParticle": "/Game/ASS/VFX/WEP/NS_PistolHandgunMuzzle.NS_PistolHandgunMuzzle",
+                        "VisualRecoil": 10,
+                        "AimFOVMultiplier": 0.8500000238418579,
+                        "SkeletalItemAnimData": {
+                            "Fire": "/Game/ASS/WEP/SK_GUN_SGL_SHOT_PISTOL/SK_GUN_SGL_SHOT_PISTOL_Shoot_Montage.SK_GUN_SGL_SHOT_PISTOL_Shoot_Montage",
+                            "AimFire": "/Game/ASS/WEP/SK_GUN_SGL_SHOT_PISTOL/SK_GUN_SGL_SHOT_PISTOL_Shoot_Montage.SK_GUN_SGL_SHOT_PISTOL_Shoot_Montage",
+                            "Reload": "/Game/ASS/WEP/SK_GUN_Pistol_CHAC/ANI_WEP_GUN_Pistol_CHAC_Reload_Montage.ANI_WEP_GUN_Pistol_CHAC_Reload_Montage"
+                        },
+                        "FirstPersonAnimData": {
+                            "Idle": "/Game/ASS/CHA/1ST/1ST_NewRig/1ST_CHA_SGL_Shot_PistolIdle.1ST_CHA_SGL_Shot_PistolIdle",
+                            "Aim": "/Game/ASS/CHA/1ST/1ST_NewRig/1ST_CHA_SGL_Shot_PistolAimIdle.1ST_CHA_SGL_Shot_PistolAimIdle",
+                            "Fire": "/Game/ASS/CHA/1ST/1ST_NewRig/1ST_CHA_Pistol_Shoot_Montage.1ST_CHA_Pistol_Shoot_Montage",
+                            "AimFire": "/Game/ASS/CHA/1ST/1ST_NewRig/1ST_CHA_Pistol_AimShoot_Montage.1ST_CHA_Pistol_AimShoot_Montage",
+                            "Reload": "/Game/ASS/CHA/1ST/1ST_NewRig/1ST_CHA_CHAC_Pistol_Action_Reload.1ST_CHA_CHAC_Pistol_Action_Reload"
+                        },
+                        "ThirdPersonAnimData": {
+                            "Idle": "/Game/ASS/CHA/Human/3RD/Animations/3RD_CHA_MAL_SGL_Shot_PistolIdleUp_to_Dwn.3RD_CHA_MAL_SGL_Shot_PistolIdleUp_to_Dwn",
+                            "Aim": "/Game/ASS/CHA/Human/3RD/Animations/3RD_CHA_MAL_SGL_Shot_PistolAimUp_to_Dwn.3RD_CHA_MAL_SGL_Shot_PistolAimUp_to_Dwn",
+                            "Fire": "/Game/ASS/CHA/Human/3RD/Animations/3RD_CHA_PistolShoot_BS.3RD_CHA_PistolShoot_BS",
+                            "AimFire": "/Game/ASS/CHA/Human/3RD/Animations/3RD_CHA_PistolAimShoot_BS.3RD_CHA_PistolAimShoot_BS",
+                            "ReloadMontage": "/Game/ASS/CHA/Human/3RD/Animations/3RD_CHA_CHAC_PistolReload.3RD_CHA_CHAC_PistolReload"
+                        }
+                    },
+                    "ValidAmmoTypes": {
+                        "RowName": "AllPistol"
+                    },
+                    "AmmoCapacity": 15,
+                    "RoundsPerMinute": 300,
+                    "bUnlimitedAmmo": false,
+                    "ReloadTime": 4,
+                    "AudioData": {
+                        "RowName": "CHAC_Pistol"
+                    },
+                    "WeaponLoudness": 2
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Traits-D_Durable.json",
+            "File_Items": [
+                {
+                    "Name": "Jimk_Pistols",
+                    "Max_Durability": 120000,
+                    "ItemsForRepair": [
+                        {
+                            "Item": {
+                                "RowName": "Steel_Ingot",
+                                "DataTableName": "D_ItemsStatic"
+                            },
+                            "Amount": 1
+                        }
+                    ]
+                },
+                {
+                    "Name": "TeleporterHandHeld",
+                    "ItemStaticData": {
+                        "RowName": "TeleporterHandHeld"
+                    }
+                },
+                {
+                    "Name": "TeleporterBase",
+                    "ItemStaticData": {
+                        "RowName": "TeleporterBase"
+                    }
+                },
+                {
+                    "Name": "Jimk_Teleporter",
+                    "ItemStaticData": {
+                        "RowName": "Jimk_Teleporter"
+                    }
+                },
+                {
+                    "Name": "LED_Lighting_Crate",
+                    "ItemStaticData": {
+                        "RowName": "LED_Lighting_Crate"
+                    }
+                },
+                {
+                    "Name": "Jimk_LightSwitch",
+                    "ItemStaticData": {
+                        "RowName": "Jimk_LightSwitch"
+                    }
+                },
+                {
+                    "Name": "Custom_Pole_Light",
+                    "ItemStaticData": {
+                        "RowName": "Custom_Pole_Light"
+                    }
+                },
+                {
+                    "Name": "Custom_Floor_Light",
+                    "ItemStaticData": {
+                        "RowName": "Custom_Floor_Light"
+                    }
+                },
+                {
+                    "Name": "Custom_Gravity_Light",
+                    "ItemStaticData": {
+                        "RowName": "Custom_Gravity_Light"
+                    },
+                    "ItemDynamicData": [
+                        {
+                            "PropertyType": "ItemableStack",
+                            "Value": 2
+                        }
+                    ]
+                },
+                {
+                    "Name": "Top_Puck_Light",
+                    "ItemStaticData": {
+                        "RowName": "Top_Puck_Light"
+                    }
+                },
+                {
+                    "Name": "Puck_Light",
+                    "ItemStaticData": {
+                        "RowName": "Puck_Light"
+                    }
+                },
+                {
+                    "Name": "Custom_Wall_Light",
+                    "ItemStaticData": {
+                        "RowName": "Custom_Wall_Light"
+                    }
+                },
+                {
+                    "Name": "Custom_Pole_Light_x4",
+                    "ItemStaticData": {
+                        "RowName": "Custom_Pole_Light"
+                    },
+                    "ItemDynamicData": [
+                        {
+                            "PropertyType": "ItemableStack",
+                            "Value": 8
+                        }
+                    ]
+                },
+                {
+                    "Name": "Custom_Wall_Light_x4",
+                    "ItemStaticData": {
+                        "RowName": "Custom_Wall_Light"
+                    },
+                    "ItemDynamicData": [
+                        {
+                            "PropertyType": "ItemableStack",
+                            "Value": 8
+                        }
+                    ]
+                },
+                {
+                    "Name": "Custom_Floor_Light_x4",
+                    "ItemStaticData": {
+                        "RowName": "Custom_Floor_Light"
+                    },
+                    "ItemDynamicData": [
+                        {
+                            "PropertyType": "ItemableStack",
+                            "Value": 8
+                        }
+                    ]
+                },
+                {
+                    "Name": "Top_Puck_Light_x4",
+                    "ItemStaticData": {
+                        "RowName": "Top_Puck_Light"
+                    },
+                    "ItemDynamicData": [
+                        {
+                            "PropertyType": "ItemableStack",
+                            "Value": 8
+                        }
+                    ]
+                },
+                {
+                    "Name": "Puck_Light_x4",
+                    "ItemStaticData": {
+                        "RowName": "Puck_Light"
+                    },
+                    "ItemDynamicData": [
+                        {
+                            "PropertyType": "ItemableStack",
+                            "Value": 8
+                        }
+                    ]
+                },
+                {
+                    "Name": "Jimk_LightSwitch_x8",
+                    "ItemStaticData": {
+                        "RowName": "Jimk_LightSwitch"
+                    },
+                    "ItemDynamicData": [
+                        {
+                            "PropertyType": "ItemableStack",
+                            "Value": 8
+                        }
+                    ]
+                },
+                {
+                    "Name": "Jimk_Scoped_Compound_Bow_Workshop",
+                    "ItemStaticData": {
+                        "RowName": "Jimk_Scoped_Compound_Bow_Workshop"
+                    }
+                },
+                {
+                    "Name": "Jimk_Crate_Printed",
+                    "ItemStaticData": {
+                        "RowName": "Jimk_Crate_Printed"
+                    }
+                }
+            ]
+        },
+        {
+            "CurrentFile": "MetaWorkshop-D_WorkshopItems.json",
+            "File_Items": [
+                {
+                    "Name": "Meta_Teleporter_Kit",
+                    "Item": {
+                        "RowName": "Jimk_Teleporter"
+                    },
+                    "ResearchCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Credits",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 1000
+                        },
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 650
+                        }
+                    ],
+                    "ReplicationCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Credits",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 50
+                        },
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 50
+                        }
+                    ]
+                },
+                {
+                    "Name": "Meta_LED_Lighting_Crate",
+                    "Item": {
+                        "RowName": "LED_Lighting_Crate"
+                    },
+                    "ResearchCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Credits",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 200
+                        },
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 150
+                        }
+                    ],
+                    "ReplicationCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Credits",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 25
+                        },
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 25
+                        }
+                    ]
+                },
+                {
+                    "Name": "Meta_Jimk_Scoped_Compound_Bow_Workshop",
+                    "Item": {
+                        "RowName": "Jimk_Scoped_Compound_Bow_Workshop"
+                    },
+                    "ResearchCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Credits",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 600
+                        },
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 350
+                        }
+                    ],
+                    "ReplicationCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Credits",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 400
+                        },
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 175
+                        }
+                    ]
+                },
+                {
+                    "Name": "Meta_Jimk_Crate_Printed",
+                    "Item": {
+                        "RowName": "Jimk_Crate_Printed"
+                    },
+                    "ResearchCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Credits",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 600
+                        },
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 350
+                        }
+                    ],
+                    "ReplicationCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Credits",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 300
+                        },
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 175
+                        }
+                    ]
+                },
+                {
+                    "Name": "Meta_Jimk_A_Pistol",
+                    "Item": {
+                        "RowName": "Meta_Jimk_PistolA"
+                    },
+                    "ResearchCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Credits",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 1100
+                        },
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 500
+                        }
+                    ],
+                    "ReplicationCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Credits",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 600
+                        },
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 250
+                        }
+                    ]
+                },
+                {
+                    "Name": "Meta_Jimk_B_Pistol",
+                    "Item": {
+                        "RowName": "Meta_Jimk_PistolB"
+                    },
+                    "ResearchCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Credits",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 1050
+                        },
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 500
+                        }
+                    ],
+                    "ReplicationCost": [
+                        {
+                            "Meta": {
+                                "RowName": "Credits",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 550
+                        },
+                        {
+                            "Meta": {
+                                "RowName": "Exotic1",
+                                "DataTableName": "D_MetaCurrency"
+                            },
+                            "Amount": 250
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Talents-D_TalentArchetypes.json",
+            "File_Items": [
+                {
+                    "Name": "Workshop_JimK",
+                    "Model": {
+                        "RowName": "Workshop"
+                    },
+                    "DisplayName": "NSLOCTEXT(\"D_TalentArchetypes\", \"Workshop_JimK-DisplayName\", \"JimK Innovations\")",
+                    "Icon": "/Game/Assets/2DArt/UI/Icons/Icon_Alteration_Item.Icon_Alteration_Item"
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Talents-D_Talents.json",
+            "File_Items": [
+                {
+                    "Name": "Workshop_Teleporter_Kit",
+                    "ExtraData": {
+                        "RowName": "Meta_Teleporter_Kit",
+                        "DataTableName": "D_WorkshopItems"
+                    },
+                    "TalentTree": {
+                        "RowName": "Workshop_JimK"
+                    },
+                    "Position": {
+                        "X": 850,
+                        "Y": 400
+                    },
+                    "Size": {
+                        "X": 250,
+                        "Y": 250
+                    }
+                },
+                {
+                    "Name": "Workshop_LED_Lighting_Crate",
+                    "ExtraData": {
+                        "RowName": "Meta_LED_Lighting_Crate",
+                        "DataTableName": "D_WorkshopItems"
+                    },
+                    "TalentTree": {
+                        "RowName": "Workshop_JimK"
+                    },
+                    "Position": {
+                        "X": 500,
+                        "Y": 400
+                    },
+                    "Size": {
+                        "X": 250,
+                        "Y": 250
+                    }
+                },
+                {
+                    "Name": "Jimk_Scoped_Compound_Bow_Workshop",
+                    "ExtraData": {
+                        "RowName": "Meta_Jimk_Scoped_Compound_Bow_Workshop",
+                        "DataTableName": "D_WorkshopItems"
+                    },
+                    "TalentTree": {
+                        "RowName": "Workshop_JimK"
+                    },
+                    "Position": {
+                        "X": 1200,
+                        "Y": 400
+                    },
+                    "Size": {
+                        "X": 250,
+                        "Y": 250
+                    }
+                },
+                {
+                    "Name": "Workshop_Jimk_Crate_Printed",
+                    "ExtraData": {
+                        "RowName": "Meta_Jimk_Crate_Printed",
+                        "DataTableName": "D_WorkshopItems"
+                    },
+                    "TalentTree": {
+                        "RowName": "Workshop_JimK"
+                    },
+                    "Position": {
+                        "X": 1550,
+                        "Y": 400
+                    },
+                    "Size": {
+                        "X": 250,
+                        "Y": 250
+                    }
+                },
+                {
+                    "Name": "Workshop_Jimk_Pistol_A",
+                    "ExtraData": {
+                        "RowName": "Meta_Jimk_A_Pistol",
+                        "DataTableName": "D_WorkshopItems"
+                    },
+                    "TalentTree": {
+                        "RowName": "Workshop_JimK"
+                    },
+                    "Position": {
+                        "X": 500,
+                        "Y": 750
+                    },
+                    "Size": {
+                        "X": 250,
+                        "Y": 250
+                    }
+                },
+                {
+                    "Name": "Workshop_Jimk_Pistol_B",
+                    "ExtraData": {
+                        "RowName": "Meta_Jimk_B_Pistol",
+                        "DataTableName": "D_WorkshopItems"
+                    },
+                    "TalentTree": {
+                        "RowName": "Workshop_JimK"
+                    },
+                    "Position": {
+                        "X": 850,
+                        "Y": 750
+                    },
+                    "Size": {
+                        "X": 250,
+                        "Y": 250
+                    }
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Talents-D_TalentTrees.json",
+            "File_Items": [
+                {
+                    "Name": "Workshop_JimK",
+                    "BackgroundTexture": "/Game/Assets/2DArt/UI/Windows/EmptyAsset.EmptyAsset",
+                    "Icon": "/Game/Assets/2DArt/UI/Items/Item_Icons/Tools/ITEM_Meta_Pickaxe.ITEM_Meta_Pickaxe",
+                    "Archetype": {
+                        "RowName": "Workshop_JimK"
+                    }
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Tools-D_Actions.json",
+            "File_Items": [
+                {
+                    "Name": "TeleporterHandHeld_Main",
+                    "Behaviour": "BlueprintGeneratedClass'/Game/BP/Behaviours/Actionable/BP_Actionable_Teleport_Primary.BP_Actionable_Teleport_Primary_C'"
+                },
+                {
+                    "Name": "TeleporterHandHeld_Secondary",
+                    "Behaviour": "BlueprintGeneratedClass'/Game/BP/Behaviours/Actionable/BP_Actionable_Teleport_Secondary.BP_Actionable_Teleport_Secondary_C'"
+                },
+                {
+                    "Name": "TeleporterHandHeld_Reload",
+                    "Behaviour": "BlueprintGeneratedClass'/Game/BP/Behaviours/Actionable/BP_Actionable_Teleport_Reset.BP_Actionable_Teleport_Reset_C'"
+                },
+                {
+                    "Name": "Weapon_BOW_Scope_Aim_20x",
+                    "Behaviour": "BlueprintGeneratedClass'/Game/BP/Behaviours/Actionable/Firearm/BP_ActionableBehaviour_BOW_Scope_20x1.BP_ActionableBehaviour_BOW_Scope_20x1_C'"
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Traits-D_Actionable.json",
+            "File_Items": [
+                {
+                    "Name": "TeleporterHandHeld",
+                    "ActionMapping": {
+                        "(RowName=\"TeleporterHandHeld_Main\",DataTableName=\"D_Actions\")": {
+                            "InputTypes": {
+                                "Primary": {
+                                    "RowName": "None",
+                                    "DataTableName": "D_StaminaActionCosts"
+                                }
+                            },
+                            "ModifierState": {
+                                "RowName": "None",
+                                "DataTableName": "D_ModifierStates"
+                            }
+                        },
+                        "(RowName=\"TeleporterHandHeld_Secondary\",DataTableName=\"D_Actions\")": {
+                            "InputTypes": {
+                                "Secondary": {
+                                    "RowName": "None",
+                                    "DataTableName": "D_StaminaActionCosts"
+                                }
+                            },
+                            "ModifierState": {
+                                "RowName": "None",
+                                "DataTableName": "D_ModifierStates"
+                            }
+                        },
+                        "(RowName=\"TeleporterHandHeld_Reload\",DataTableName=\"D_Actions\")": {
+                            "InputTypes": {
+                                "Reload": {
+                                    "RowName": "None",
+                                    "DataTableName": "D_StaminaActionCosts"
+                                }
+                            },
+                            "ModifierState": {
+                                "RowName": "None",
+                                "DataTableName": "D_ModifierStates"
+                            }
+                        }
+                    },
+                    "bUseClientPrediction": true
+                },
+                {
+                    "Name": "Compound_Bow_JK",
+                    "ActionMapping": {
+                        "(RowName=\"Bow_Shoot\",DataTableName=\"D_Actions\")": {
+                            "InputTypes": {
+                                "Primary": {
+                                    "RowName": "Compound_Bow_Draw",
+                                    "DataTableName": "D_StaminaActionCosts"
+                                }
+                            },
+                            "ModifierState": {
+                                "RowName": "None",
+                                "DataTableName": "D_ModifierStates"
+                            }
+                        },
+                        "(RowName=\"Weapon_BOW_Scope_Aim_20x\",DataTableName=\"D_Actions\")": {
+                            "InputTypes": {
+                                "Secondary": {
+                                    "RowName": "None",
+                                    "DataTableName": "D_StaminaActionCosts"
+                                }
+                            },
+                            "ModifierState": {
+                                "RowName": "None",
+                                "DataTableName": "D_ModifierStates"
+                            }
+                        },
+                        "(RowName=\"Bow_Ammo\",DataTableName=\"D_Actions\")": {
+                            "InputTypes": {
+                                "Reload": {
+                                    "RowName": "None",
+                                    "DataTableName": "D_StaminaActionCosts"
+                                }
+                            },
+                            "ModifierState": {
+                                "RowName": "None",
+                                "DataTableName": "D_ModifierStates"
+                            }
+                        }
+                    },
+                    "bUseClientPrediction": true
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Traits-D_Consumable.json",
+            "File_Items": [
+                {
+                    "Name": "Jimk_Teleporter",
+                    "Modifier": {
+                        "ModifierLifetime": 0
+                    },
+                    "Byproducts": [
+                        {
+                            "RowName": "TeleporterHandHeld",
+                            "DataTableName": "D_ItemTemplate"
+                        },
+                        {
+                            "RowName": "TeleporterBase",
+                            "DataTableName": "D_ItemTemplate"
+                        }
+                    ]
+                },
+                {
+                    "Name": "Meta_Lighting_Crate",
+                    "Modifier": {
+                        "ModifierLifetime": 0
+                    },
+                    "Byproducts": [
+                        {
+                            "RowName": "Custom_Gravity_Light_Mini_x4",
+                            "DataTableName": "D_ItemTemplate"
+                        },
+                        {
+                            "RowName": "Custom_Floor_Light_x8",
+                            "DataTableName": "D_ItemTemplate"
+                        },
+                        {
+                            "RowName": "Custom_Gravity_Light",
+                            "DataTableName": "D_ItemTemplate"
+                        },
+                        {
+                            "RowName": "Custom_Wall_Light_x4",
+                            "DataTableName": "D_ItemTemplate"
+                        },
+                        {
+                            "RowName": "Top_Puck_Light_x8",
+                            "DataTableName": "D_ItemTemplate"
+                        },
+                        {
+                            "RowName": "Puck_Light_x8",
+                            "DataTableName": "D_ItemTemplate"
+                        },
+                        {
+                            "RowName": "Jimk_LightSwitch_x8",
+                            "DataTableName": "D_ItemTemplate"
+                        },
+                        {
+                            "RowName": "Meta_Crate_Printed",
+                            "DataTableName": "D_ItemTemplate"
+                        },
+                        {
+                            "RowName": "Jimk_AutoSwitch",
+                            "DataTableName": "D_ItemTemplate"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Traits-D_Deployable.json",
+            "File_Items": [
+                {
+                    "Name": "TeleporterBase",
+                    "Variants": [
+                        {
+                            "RowName": "TeleporterBase",
+                            "DataTableName": "D_DeployableSetup"
+                        }
+                    ],
+                    "EffectedByWeather": false
+                },
+                {
+                    "Name": "Custom_Gravity_Light_Mini",
+                    "Variants": [
+                        {
+                            "RowName": "Custom_Gravity_Light_Mini",
+                            "DataTableName": "D_DeployableSetup"
+                        }
+                    ],
+                    "EffectedByWeather": false
+                },
+                {
+                    "Name": "Custom_Floor_Light",
+                    "Variants": [
+                        {
+                            "RowName": "Custom_Floor_Light",
+                            "DataTableName": "D_DeployableSetup"
+                        },
+                        {
+                            "RowName": "Custom_Floor_Light_Motion",
+                            "DataTableName": "D_DeployableSetup"
+                        }
+                    ],
+                    "EffectedByWeather": false
+                },
+                {
+                    "Name": "Custom_Gravity_Light",
+                    "Variants": [
+                        {
+                            "RowName": "Custom_Gravity_Light",
+                            "DataTableName": "D_DeployableSetup"
+                        },
+                        {
+                            "RowName": "Custom_Gravity_Light_Low",
+                            "DataTableName": "D_DeployableSetup"
+                        },
+                        {
+                            "RowName": "Custom_Gravity_Light_High",
+                            "DataTableName": "D_DeployableSetup"
+                        }
+                    ],
+                    "EffectedByWeather": false
+                },
+                {
+                    "Name": "Top_Puck_Light",
+                    "Variants": [
+                        {
+                            "RowName": "Top_Puck_Light",
+                            "DataTableName": "D_DeployableSetup"
+                        },
+                        {
+                            "RowName": "Top_Puck_Light_Motion",
+                            "DataTableName": "D_DeployableSetup"
+                        }
+                    ],
+                    "EffectedByWeather": false
+                },
+                {
+                    "Name": "Custom_Wall_Light",
+                    "Variants": [
+                        {
+                            "RowName": "Custom_Wall_Light",
+                            "DataTableName": "D_DeployableSetup"
+                        },
+                        {
+                            "RowName": "Custom_Wall_Light_Motion",
+                            "DataTableName": "D_DeployableSetup"
+                        }
+                    ],
+                    "EffectedByWeather": false
+                },
+                {
+                    "Name": "Puck_Light",
+                    "Variants": [
+                        {
+                            "RowName": "Puck_Light",
+                            "DataTableName": "D_DeployableSetup"
+                        },
+                        {
+                            "RowName": "Puck_Light_Motion",
+                            "DataTableName": "D_DeployableSetup"
+                        }
+                    ],
+                    "EffectedByWeather": false
+                },
+                {
+                    "Name": "Jimk_LightSwitch",
+                    "Variants": [
+                        {
+                            "RowName": "Jimk_LightSwitch",
+                            "DataTableName": "D_DeployableSetup"
+                        },
+                        {
+                            "RowName": "Jimk_LightSwitch_Fire",
+                            "DataTableName": "D_DeployableSetup"
+                        },
+                        {
+                            "RowName": "Jimk_LightSwitch_Floor",
+                            "DataTableName": "D_DeployableSetup"
+                        },
+                        {
+                            "RowName": "Jimk_LightSwitch_Geode",
+                            "DataTableName": "D_DeployableSetup"
+                        },
+                        {
+                            "RowName": "Jimk_LightSwitch_Gravity",
+                            "DataTableName": "D_DeployableSetup"
+                        },
+                        {
+                            "RowName": "Jimk_LightSwitch_Puck",
+                            "DataTableName": "D_DeployableSetup"
+                        },
+                        {
+                            "RowName": "Jimk_LightSwitch_Top",
+                            "DataTableName": "D_DeployableSetup"
+                        },
+                        {
+                            "RowName": "Jimk_LightSwitch_Wall",
+                            "DataTableName": "D_DeployableSetup"
+                        },
+                        {
+                            "RowName": "Jimk_AutoSwitch",
+                            "DataTableName": "D_DeployableSetup"
+                        }
+                    ],
+                    "EffectedByWeather": false
+                },
+                {
+                    "Name": "Meta_Jimk_Crate_Printed",
+                    "Variants": [
+                        {
+                            "RowName": "Meta_Jimk_Crate_Printed",
+                            "DataTableName": "D_DeployableSetup"
+                        }
+                    ],
+                    "EffectedByWeather": false
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Traits-D_Focusable.json",
+            "File_Items": [
+                {
+                    "Name": "Focusable_TeleporterHandHeld",
+                    "Behaviour": "/Game/BP/Behaviours/Focusable/BP_FocusableBehaviour.BP_FocusableBehaviour_C",
+                    "AttachmentData": {
+                        "RowName": "GeneralRight"
+                    },
+                    "AttachmentOffset": {
+                        "Rotation": {
+                            "X": 0.6077443957328796,
+                            "Y": -0.39130380749702454,
+                            "Z": 0.5099575519561768,
+                            "W": 0.4663381576538086
+                        },
+                        "Translation": {
+                            "X": 0,
+                            "Y": 0
+                        }
+                    },
+                    "AnimOverlayType": "OneHanded",
+                    "AnimationData": {
+                        "RowName": "1HWEP"
+                    },
+                    "FPFocusedMontage": "/Game/ASS/CHA/1ST/1ST_NewRig/1ST_CHA_1HOreScanner_Equip_Montage.1ST_CHA_1HOreScanner_Equip_Montage",
+                    "FPIdleAnim": "/Game/ASS/CHA/1ST/1ST_NewRig/1ST_CHA_1HOreScanner_Idle.1ST_CHA_1HOreScanner_Idle",
+                    "TPFocusedMontage": "/Game/ASS/CHA/Human/3RD/Animations/3RD_CHA_1HOreScannerEquip_Montage.3RD_CHA_1HOreScannerEquip_Montage",
+                    "TPUprightIdle": "/Game/ASS/CHA/Human/3RD/Animations/3ST_CHA_1HOreScanner_Idle.3ST_CHA_1HOreScanner_Idle",
+                    "TPCrouchedIdle": "/Game/ASS/CHA/Human/3RD/Animations/3RD_CHA_MAL_CrouchIdle.3RD_CHA_MAL_CrouchIdle"
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Traits-D_Inventory.json",
+            "File_Items": [
+                {
+                    "Name": "Storage_Jimk_Printed_Crate",
+                    "Inventories": [
+                        {
+                            "RowName": "Storage_Jimk_Printed_Crate",
+                            "DataTableName": "D_InventoryInfo"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Traits-D_Itemable.json",
+            "File_Items": [
+                {
+                    "Name": "Item_Meta_Jimk_PistolA",
+                    "DisplayName": "NSLOCTEXT(\"D_Itemable\", \"Item_Meta_Jimk_PistolA-DisplayName\", \"45 APC Handgun\")",
+                    "Icon": "/Game/Pistols/Icons/Pistol_A.Pistol_A",
+                    "Description": "NSLOCTEXT(\"D_Itemable\", \"Item_Meta_Jimk_PistolA-Description\", \"A great 45mm handgun.\")",
+                    "FlavorText": "NSLOCTEXT(\"D_Itemable\", \"Item_Meta_Jimk_PistolA-FlavorText\", \"Provided by Jimk Innovations.\")",
+                    "Weight": 500
+                },
+                {
+                    "Name": "Item_Meta_Jimk_PistolB",
+                    "DisplayName": "NSLOCTEXT(\"D_Itemable\", \"Item_Meta_Jimk_PistolB-DisplayName\", \"9mm Sidearm\")",
+                    "Icon": "/Game/Pistols/Icons/Pistol_B.Pistol_B",
+                    "Description": "NSLOCTEXT(\"D_Itemable\", \"Item_Meta_Jimk_PistolB-Description\", \"A fast fireing 9mm handgun.\")",
+                    "FlavorText": "NSLOCTEXT(\"D_Itemable\", \"Item_Meta_Jimk_PistolB-FlavorText\", \"Provided by Jimk Innovations.\")",
+                    "Weight": 500
+                },
+                {
+                    "Name": "Item_TeleporterHandHeld",
+                    "DisplayName": "NSLOCTEXT(\"D_Itemable\", \"Item_Teleporter-DisplayName\", \"Teleporter Transmiter\")",
+                    "Icon": "/Game/BP/Teleporter/ITEM_TeleporterHaldHald.ITEM_TeleporterHaldHald",
+                    "Description": "NSLOCTEXT(\"D_Itemable\", \"Item_Teleporter-Description\", \"Fast travel in Icarus.\")",
+                    "FlavorText": "NSLOCTEXT(\"D_Itemable\", \"Item_Teleporter-FlavorText\", \"Trigger returns to base, R stores location, Right click takes you to stored location.\")",
+                    "Weight": 1000
+                },
+                {
+                    "Name": "Item_Jimk_Teleporter",
+                    "DisplayName": "NSLOCTEXT(\"D_Itemable\", \"Item_Jimk_Teleporter-DisplayName\", \"Teleporter Kit\")",
+                    "Icon": "/Game/BP/Teleporter/Item_Jimk_Teleporter.Item_Jimk_Teleporter",
+                    "Description": "NSLOCTEXT(\"D_Itemable\", \"Item_Jimk_Teleporter-Description\", \"All the tools you need for fast travel!\")",
+                    "FlavorText": "NSLOCTEXT(\"D_Itemable\", \"Item_Jimk_Teleporter-FlavorText\", \"Provided by Jimk Innovations.\")",
+                    "Weight": 1000
+                },
+                {
+                    "Name": "Item_TeleporterBase",
+                    "DisplayName": "NSLOCTEXT(\"D_Itemable\", \"Item_TeleporterBase-DisplayName\", \"Teleporter Base\")",
+                    "Icon": "/Game/BP/Teleporter/ITEM_TeleporterBase.ITEM_TeleporterBase",
+                    "Description": "NSLOCTEXT(\"D_Itemable\", \"Item_TeleporterBase-Description\", \"Place anywhere you want to travel back too!\")",
+                    "Weight": 1000
+                },
+                {
+                    "Name": "Item_Custom_Gravity_Light_Mini",
+                    "DisplayName": "NSLOCTEXT(\"D_Itemable\", \"Item_Custom_Gravity_Light_Mini-DisplayName\", \"Small Anti-Gravity Light to light up your base.\")",
+                    "Icon": "/Game/BP/CustomPuckLights/Icons/Item_Jimk_Gravity_Light.Item_Jimk_Gravity_Light",
+                    "Description": "NSLOCTEXT(\"D_Itemable\", \"Item_Custom_Pole_Light-Description\", \"Outdoors or inside a larger base!\")",
+                    "FlavorText": "NSLOCTEXT(\"D_Itemable\", \"Item_Custom_Pole_Light-FlavorText\", \"Provided by Jimk Innovations.\")",
+                    "Weight": 1000,
+                    "MaxStack": 100
+                },
+                {
+                    "Name": "Item_Lighting_Crate",
+                    "DisplayName": "NSLOCTEXT(\"D_Itemable\", \"Item_Lighting_Crate-DisplayName\", \"Crate full of LED Lights\")",
+                    "Icon": "/Game/BP/CustomPuckLights/Icons/ITEM_Meta_Lighting_Crate.ITEM_Meta_Lighting_Crate",
+                    "Description": "NSLOCTEXT(\"D_Itemable\", \"Item_Lighting_Crate-Description\", \"Includes 8 of each light and a usable crate.\")",
+                    "FlavorText": "NSLOCTEXT(\"D_Itemable\", \"Item_Lighting_Crate-FlavorText\", \"Provided by Jimk Innovations.\")",
+                    "Weight": 1000,
+                    "MaxStack": 1
+                },
+                {
+                    "Name": "Item_Custom_Floor_Light",
+                    "DisplayName": "NSLOCTEXT(\"D_Itemable\", \"Item_Custom_Floor_Light-DisplayName\", \"LED Floor Light\")",
+                    "Icon": "/Game/BP/CustomPuckLights/Icons/T_ITEM_CaveLight_Floor.T_ITEM_CaveLight_Floor",
+                    "Description": "NSLOCTEXT(\"D_Itemable\", \"Item_Custom_Floor_Light-Description\", \"Led Floor Light for those dark caves.\")",
+                    "FlavorText": "NSLOCTEXT(\"D_Itemable\", \"Item_Custom_Floor_Light-FlavorText\", \"Provided by Jimk Innovations.\")",
+                    "Weight": 100,
+                    "MaxStack": 100
+                },
+                {
+                    "Name": "Item_Custom_Gravity_Light",
+                    "DisplayName": "NSLOCTEXT(\"D_Itemable\", \"Item_Custom_Gravity_Light-DisplayName\", \"Anti-Gravity Light\")",
+                    "Icon": "/Game/BP/CustomPuckLights/Icons/Item_Jimk_Gravity_Light.Item_Jimk_Gravity_Light",
+                    "Description": "NSLOCTEXT(\"D_Itemable\", \"Item_Custom_Gravity_Light-Description\", \"Ultimate Light for the darkest of nights.\")",
+                    "FlavorText": "NSLOCTEXT(\"D_Itemable\", \"Item_Custom_Gravity_Light-FlavorText\", \"Provided by Jimk Innovations.\")",
+                    "Weight": 100,
+                    "MaxStack": 100
+                },
+                {
+                    "Name": "Item_Custom_Wall_Light",
+                    "DisplayName": "NSLOCTEXT(\"D_Itemable\", \"Item_Custom_Wall_Light-DisplayName\", \"LED Wall Light\")",
+                    "Icon": "/Game/BP/CustomPuckLights/Icons/ITEM_Custom_Wall_Light.ITEM_Custom_Wall_Light",
+                    "Description": "NSLOCTEXT(\"D_Itemable\", \"Item_Custom_Wall_Light-Description\", \"Simple Wall Light to light up benches.\")",
+                    "FlavorText": "NSLOCTEXT(\"D_Itemable\", \"Item_Custom_Wall_Light-FlavorText\", \"Provided by Jimk Innovations.\")",
+                    "Weight": 100,
+                    "MaxStack": 100
+                },
+                {
+                    "Name": "Item_Top_Puck_Light",
+                    "DisplayName": "NSLOCTEXT(\"D_Itemable\", \"Item_Top_Puck_Light-DisplayName\", \"Ceiling Light\")",
+                    "Icon": "/Game/BP/CustomPuckLights/Icons/ITEM_Ceiling_Puck_Light.ITEM_Ceiling_Puck_Light",
+                    "Description": "NSLOCTEXT(\"D_Itemable\", \"Item_Top_Puck_Light-Description\", \"Can be placed on wall or Ceiling!\")",
+                    "FlavorText": "NSLOCTEXT(\"D_Itemable\", \"Item_Top_Puck_Light-FlavorText\", \"Provided by Jimk Innovations.\")",
+                    "Weight": 100,
+                    "MaxStack": 100
+                },
+                {
+                    "Name": "Item_Puck_Light",
+                    "DisplayName": "NSLOCTEXT(\"D_Itemable\", \"Item_Puck_Light-DisplayName\", \"Puck Light\")",
+                    "Icon": "/Game/BP/CustomPuckLights/Icons/ITEM_Puck_Light.ITEM_Puck_Light",
+                    "Description": "NSLOCTEXT(\"D_Itemable\", \"Item_Puck_Light-Description\", \"Simple Light to place anywhere.\")",
+                    "FlavorText": "NSLOCTEXT(\"D_Itemable\", \"Item_Puck_Light-FlavorText\", \"Provided by Jimk Innovations.\")",
+                    "Weight": 100,
+                    "MaxStack": 100
+                },
+                {
+                    "Name": "Item_Jimk_LightSwitch",
+                    "DisplayName": "NSLOCTEXT(\"D_Itemable\", \"Item_Jimk_LightSwitch-DisplayName\", \"Light Switch\")",
+                    "Icon": "/Game/BP/Light_Switch/Item_Jimk_Light_Switch.Item_Jimk_Light_Switch",
+                    "Description": "NSLOCTEXT(\"D_Itemable\", \"Item_Jimk_LightSwitch-Description\", \"Controls the lights in Game from one spot. Several variations now available! \")",
+                    "FlavorText": "NSLOCTEXT(\"D_Itemable\", \"Item_Jimk_LightSwitch-FlavorText\", \"Provided by Jimk Innovations.\")",
+                    "Weight": 100,
+                    "MaxStack": 20
+                },
+                {
+                    "Name": "Item_Jimk_Scoped_Compound_Bow",
+                    "DisplayName": "NSLOCTEXT(\"D_Itemable\", \"Item_Jimk_Scoped_Compound_Bow-DisplayName\", \"Precision Compound Bow\")",
+                    "Icon": "/Game/ASS/WEP/SK_BOW_Compound_JK/ITEM_Scoped_Compound_Bow.ITEM_Scoped_Compound_Bow",
+                    "Description": "NSLOCTEXT(\"D_Itemable\", \"Item_Jimk_Scoped_Compound_Bow-Description\", \"Equipped with a powered scope for long distance accuracy.\")",
+                    "Weight": 1000
+                },
+                {
+                    "Name": "Item_Jimk_Crate_Printed",
+                    "DisplayName": "NSLOCTEXT(\"D_Itemable\", \"Item_Jimk_Crate_Printed-DisplayName\", \"Jimk \\\"Preservation\\\" Crate\")",
+                    "Description": "NSLOCTEXT(\"D_Itemable\", \"Item_Jimk_Crate_Printed-Description\", \"A 3D Printed Crate with an internal battery for keeping contents preserved.\")",
+                    "FlavorText": "NSLOCTEXT(\"D_Itemable\", \"Item_Jimk_Crate_Printed-FlavorText\", \"Provided By Jimk Innovations.\")",
+                    "Icon": "/Game/BP/Battery_Crate/Item_Jimk_Battery_Crate.Item_Jimk_Battery_Crate",
+                    "Weight": 1000
+                }
+            ]
+        },
+        {
+            "CurrentFile": "Traits-D_Meshable.json",
+            "File_Items": [
+                {
+                    "Name": "Mesh_Meta_Jimk_PistolA",
+                    "ItemMesh": "/Game/Pistols/Pistol_A.Pistol_A",
+                    "EquipHandMesh": "/Game/Pistols/Pistol_A.Pistol_A",
+                    "EquipHandActor": "/Game/BP/Objects/World/Items/Weapons/BP_SkeletalItem_SGL_Pistol.BP_SkeletalItem_SGL_Pistol_C"
+                },
+                {
+                    "Name": "Mesh_Meta_Jimk_PistolB",
+                    "ItemMesh": "/Game/Pistols/Pistol_B.Pistol_B",
+                    "EquipHandMesh": "/Game/Pistols/Pistol_B.Pistol_B",
+                    "EquipHandActor": "/Game/BP/Objects/World/Items/Weapons/BP_SkeletalItem_SGL_Pistol.BP_SkeletalItem_SGL_Pistol_C"
+                },
+                {
+                    "Name": "Mesh_TeleporterHandHeld",
+                    "ItemMesh": "/Game/BP/Teleporter/SK_ITM_Teleporter.SK_ITM_Teleporter",
+                    "EquipHandMesh": "/Game/BP/Teleporter/SK_ITM_Teleporter.SK_ITM_Teleporter"
+                },
+                {
+                    "Name": "Mesh_TeleporterBase",
+                    "ItemMesh": "/Game/BP/Teleporter/SM_Teleporter_Base.SM_Teleporter_Base",
+                    "EquipHandMesh": "/Game/Assets/3DArt/Interactables/Items/DummyCube/SK_dummy_cube.SK_dummy_cube",
+                    "DeployableActor": "/Game/BP/Teleporter/BP_TeleporterBase.BP_TeleporterBase_C "
+                },
+                {
+                    "Name": "Mesh_Jimk_Teleporter",
+                    "ItemMesh": "/Game/Assets/3DArt/Interactables/Items/StaticMeshes/SM_wooden_crate.SM_wooden_crate",
+                    "EquipHandMesh": "/Game/Assets/3DArt/Interactables/Items/DummyCube/SK_dummy_cube.SK_dummy_cube"
+                },
+                {
+                    "Name": "Mesh_Custom_Gravity_Light_Mini",
+                    "ItemMesh": "/Game/BP/CustomPuckLights/Meshes/SM_Jimk_Light_Base_Small.SM_Jimk_Light_Base_Small",
+                    "EquipHandMesh": "/Game/Assets/3DArt/Interactables/Items/DummyCube/SK_dummy_cube.SK_dummy_cube",
+                    "DeployableActor": "/Game/BP/CustomPuckLights/BP_DEP_Gravity_Light_Mini.BP_DEP_Gravity_Light_Mini_C"
+                },
+                {
+                    "Name": "Mesh_Custom_Floor_Light",
+                    "ItemMesh": "/Game/BP/CustomPuckLights/Meshes/SM_DEP_Cavelight_Stick_Floor_Tall.SM_DEP_Cavelight_Stick_Floor_Tall",
+                    "EquipHandMesh": "/Game/Assets/3DArt/Interactables/Items/DummyCube/SK_dummy_cube.SK_dummy_cube",
+                    "DeployableActor": "/Game/BP/CustomPuckLights/BP_Custom_Floor_Light.BP_Custom_Floor_Light_C"
+                },
+                {
+                    "Name": "Mesh_Custom_Gravity_Light",
+                    "ItemMesh": "/Game/BP/CustomPuckLights/Meshes/SM_Jimk_Light_Base.SM_Jimk_Light_Base",
+                    "EquipHandMesh": "/Game/Assets/3DArt/Interactables/Items/DummyCube/SK_dummy_cube.SK_dummy_cube",
+                    "DeployableActor": "/Game/BP/CustomPuckLights/BP_DEP_Gravity_Light.BP_DEP_Gravity_Light_C"
+                },
+                {
+                    "Name": "Mesh_Custom_Wall_Light",
+                    "ItemMesh": "/Game/BP/CustomPuckLights/Meshes/SM_Jimk_Steel_Wall_Light_LED.SM_Jimk_Steel_Wall_Light_LED",
+                    "EquipHandMesh": "/Game/Assets/3DArt/Interactables/Items/DummyCube/SK_dummy_cube.SK_dummy_cube",
+                    "DeployableActor": "/Game/BP/CustomPuckLights/BP_DEP_Custom_Wall_Light.BP_DEP_Custom_Wall_Light_C"
+                },
+                {
+                    "Name": "Mesh_Top_Puck_Light",
+                    "ItemMesh": "/Game/BP/CustomPuckLights/Meshes/SM_DEP_Custom_Wall_Lights_V2.SM_DEP_Custom_Wall_Lights_V2",
+                    "EquipHandMesh": "/Game/Assets/3DArt/Interactables/Items/DummyCube/SK_dummy_cube.SK_dummy_cube",
+                    "DeployableActor": "/Game/BP/CustomPuckLights/BP_DEP_Top_Puck_Light.BP_DEP_Top_Puck_Light_C"
+                },
+                {
+                    "Name": "Mesh_Puck_Light",
+                    "ItemMesh": "/Game/BP/CustomPuckLights/Meshes/SM_DEP_Puck_Light2.SM_DEP_Puck_Light2",
+                    "EquipHandMesh": "/Game/Assets/3DArt/Interactables/Items/DummyCube/SK_dummy_cube.SK_dummy_cube",
+                    "DeployableActor": "/Game/BP/CustomPuckLights/BP_DEP_Puck_Light.BP_DEP_Puck_Light_C"
+                },
+                {
+                    "Name": "Mesh_Jimk_LightSwitch",
+                    "ItemMesh": "/Game/BP/Light_Switch/SM_AVP1_Switch_Off.SM_AVP1_Switch_Off",
+                    "EquipHandMesh": "/Game/Assets/3DArt/Interactables/Items/DummyCube/SK_dummy_cube.SK_dummy_cube",
+                    "DeployableActor": "/Game/BP/Light_Switch/BP_DEP_Jimk_Light_Switch.BP_DEP_Jimk_Light_Switch_C"
+                },
+                {
+                    "Name": "Mesh_Jimk_Scoped_Compound_Bow",
+                    "ItemMesh": "/Game/ASS/WEP/SK_BOW_Compound_JK/SM_BOW_Compound.SM_BOW_Compound",
+                    "EquipHandMesh": "/Game/ASS/WEP/SK_BOW_Compound_JK/SK_BOW_Compound_Rig.SK_BOW_Compound_Rig",
+                    "EquipHandActor": "/Game/BP/Objects/World/Items/Weapons/BP_SkeletalItem_Compound_Bow.BP_SkeletalItem_Compound_Bow_C"
+                },
+                {
+                    "Name": "Mesh_Jimk_Crate_Printed",
+                    "ItemMesh": "/Game/ASS/KIT/SM_KIT_Fabricator.SM_KIT_Fabricator",
+                    "EquipHandMesh": "/Game/Assets/3DArt/Interactables/Items/DummyCube/SK_dummy_cube.SK_dummy_cube",
+                    "DeployableActor": "/Game/BP/Battery_Crate/BP_Meta_Jimk_Crate_Printed_Medium.BP_Meta_Jimk_Crate_Printed_Medium_C"
+                }
+            ]
+        },
+        {
+            "CurrentFile": "EndOfMod"
+        }
+    ]
+}

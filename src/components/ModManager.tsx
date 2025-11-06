@@ -148,19 +148,21 @@ export default function ModManager() {
 
   const downloadPakFile = async (modId: string, modName: string) => {
     try {
-      const response = await fetch(`/api/mods/${modId}/download-pak`);
+      // The API expects the modId as a query parameter 'id'
+      const response = await fetch(`/api/mods/download-pak?id=${encodeURIComponent(modId)}`);
       
       if (response.ok) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${modName}.pak`;
+        // Use the original modId as filename since it should already be the .pak filename
+        a.download = modId;
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
-        modal.showSuccess('Download Started', `Downloading ${modName}.pak`);
+        modal.showSuccess('Download Started', `Downloading ${modId}`);
       } else {
         const data = await response.json();
         modal.showError('Download Failed', data.error || 'Failed to download .pak file');
