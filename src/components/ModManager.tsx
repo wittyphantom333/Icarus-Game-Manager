@@ -20,9 +20,11 @@ interface AvailableMod {
   imageURL: string;
   readmeURL: string;
   files: {
-    exmodz: string;
+    exmodz?: string;
+    download_url?: string;
     png?: string;
   };
+  source: 'github';
   installed?: boolean;
 }
 
@@ -34,6 +36,10 @@ export default function ModManager() {
   const [activeTab, setActiveTab] = useState<'installed' | 'browse'>('installed');
   const [searchTerm, setSearchTerm] = useState('');
   const [downloading, setDownloading] = useState<string[]>([]);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [uploadUrl, setUploadUrl] = useState('');
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
   
   const modal = useModal();
 
@@ -42,16 +48,18 @@ export default function ModManager() {
   }, []);
 
   useEffect(() => {
-    if (activeTab === 'browse' && availableMods.length === 0) {
+    if (activeTab === 'browse') {
       loadAvailableMods();
     }
-  }, [activeTab, availableMods.length]);
+  }, [activeTab]);
 
   const loadInstalledMods = async () => {
     try {
       const response = await fetch('/api/mods');
-      const data = await response.json();
-      setInstalledMods(data.mods || []);
+      if (response.ok) {
+        const data = await response.json();
+        setInstalledMods(data.mods || []);
+      }
     } catch (error) {
       console.error('Failed to load installed mods:', error);
     } finally {
@@ -64,8 +72,8 @@ export default function ModManager() {
     try {
       const response = await fetch('/api/mods/browse');
       if (response.ok) {
-        const mods = await response.json();
-        setAvailableMods(mods);
+        const data = await response.json();
+        setAvailableMods(data.mods || []);
       }
     } catch (error) {
       console.error('Failed to load available mods:', error);
@@ -74,137 +82,70 @@ export default function ModManager() {
     }
   };
 
-  const toggleMod = async (modId: string, enabled: boolean) => {
+  const toggleMod = async (modId: string, enable: boolean) => {
     try {
       const response = await fetch(`/api/mods/${modId}/toggle`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ enabled })
-      });
-      
-      if (response.ok) {
-        setInstalledMods(installedMods.map(mod => 
-          mod.id === modId ? { ...mod, enabled } : mod
-        ));
-      }
-    } catch (error) {
-      console.error('Failed to toggle mod:', error);
-    }
-  };
-
-  const downloadModPak = async (modId: string, modName: string) => {
-    try {
-      const response = await fetch(`/api/mods/download-pak?id=${encodeURIComponent(modId)}`);
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Download failed');
-      }
-      
-      // Create a blob from the response
-      const blob = await response.blob();
-      
-      // Create a temporary URL for the blob
-      const url = window.URL.createObjectURL(blob);
-      
-      // Create a temporary anchor element and trigger download
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = modId; // Use the original filename
-      document.body.appendChild(a);
-      a.click();
-      
-      // Cleanup
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-      
-      modal.showSuccess('Download Started', `${modName} .pak file download has started.`);
-      
-    } catch (error) {
-      modal.showError('Download Failed', `Failed to download ${modName}: ${error instanceof Error ? error.message : 'Unknown error'}`);
-      console.error('Error downloading mod pak:', error);
-    }
-  };
-
-  const uninstallMod = async (modId: string, modName: string) => {
-    // Show confirmation dialog
-    const confirmed = await new Promise<boolean>((resolve) => {
-      modal.showConfirm(
-        'Uninstall Mod',
-        `Are you sure you want to uninstall "${modName}"? This action cannot be undone.`,
-        () => resolve(true), // onConfirm
-        () => resolve(false), // onCancel
-        'Uninstall', // confirmText
-        'Cancel' // cancelText
-      );
-    });
-
-    if (!confirmed) return;
-
-    try {
-      const response = await fetch(`/api/mods/${encodeURIComponent(modId)}/uninstall`, {
-        method: 'DELETE'
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setInstalledMods(installedMods.filter(mod => mod.id !== modId));
-        
-        // Update available mods list to show as not installed
-        setAvailableMods(availableMods.map(mod => 
-          mod.name === modName ? { ...mod, installed: false } : mod
-        ));
-        
-        modal.showSuccess('Mod Uninstalled', data.message);
-      } else {
-        const errorData = await response.json();
-        
-        if (errorData.code === 'SERVER_RUNNING') {
-          modal.showWarning(
-            'Server Must Be Stopped',
-            `Cannot uninstall "${modName}" while the Icarus server is running.\n\nPlease stop the server first, then try uninstalling the mod.`
-          );
-        } else {
-          modal.showError('Uninstall Failed', `Failed to uninstall ${modName}: ${errorData.error || errorData.details || 'Unknown error'}`);
-        }
-      }
-    } catch (error) {
-      console.error('Failed to uninstall mod:', error);
-      modal.showError('Uninstall Failed', `Failed to uninstall ${modName}: Network error`);
-    }
-  };
-
-  const installModFromFile = async (file: File) => {
-    const formData = new FormData();
-    formData.append('mod', file);
-
-    try {
-      const response = await fetch('/api/mods/install', {
-        method: 'POST',
-        body: formData
+        body: JSON.stringify({ enabled: enable })
       });
 
       if (response.ok) {
         loadInstalledMods();
+        modal.showSuccess('Mod Updated', `Mod ${enable ? 'enabled' : 'disabled'} successfully!`);
+      } else {
+        modal.showError('Update Failed', 'Failed to update mod status');
       }
     } catch (error) {
-      console.error('Failed to install mod:', error);
+      modal.showError('Update Failed', 'Network error occurred');
     }
+  };
+
+  const uninstallMod = async (modId: string, modName: string) => {
+    modal.showConfirm(
+      'Confirm Uninstall',
+      `Are you sure you want to uninstall "${modName}"?`,
+      async () => {
+        try {
+          const response = await fetch(`/api/mods/${modId}/uninstall`, {
+            method: 'DELETE'
+          });
+
+          if (response.ok) {
+            loadInstalledMods();
+            setAvailableMods(availableMods.map(mod => 
+              mod.name === modName ? { ...mod, installed: false } : mod
+            ));
+            modal.showSuccess('Mod Uninstalled', `Successfully uninstalled ${modName}!`);
+          } else {
+            modal.showError('Uninstall Failed', `Failed to uninstall ${modName}`);
+          }
+        } catch (error) {
+          modal.showError('Uninstall Failed', 'Network error occurred');
+        }
+      }
+    );
   };
 
   const downloadAndInstallMod = async (mod: AvailableMod) => {
     setDownloading([...downloading, mod.name]);
     
     try {
+      const downloadUrl = mod.files.exmodz || mod.files.download_url;
+      if (!downloadUrl) {
+        throw new Error('No download URL available for this mod');
+      }
+
       const response = await fetch('/api/mods/download', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: mod.name,
-          downloadUrl: mod.files.exmodz,
+          downloadUrl: downloadUrl,
           author: mod.author,
           version: mod.version,
-          description: mod.description
+          description: mod.description,
+          source: mod.source
         })
       });
 
@@ -220,239 +161,371 @@ export default function ModManager() {
       }
     } catch (error) {
       console.error('Failed to download mod:', error);
-      modal.showError('Installation Failed', `Failed to install ${mod.name}: Network error`);
+      modal.showError('Installation Failed', `Failed to install ${mod.name}: ${error instanceof Error ? error.message : 'Network error'}`);
     } finally {
       setDownloading(downloading.filter(name => name !== mod.name));
     }
   };
 
-  const filteredAvailableMods = availableMods.filter(mod =>
-    mod.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    mod.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    mod.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleUploadMod = async () => {
+    if (!uploadUrl && !uploadFile) {
+      modal.showError('Upload Error', 'Please provide either a URL or select a file to upload.');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      if (uploadUrl) {
+        // Handle URL upload
+        const response = await fetch('/api/mods/download', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: 'Custom Mod',
+            downloadUrl: uploadUrl,
+            author: 'Unknown',
+            version: '1.0',
+            description: 'Manually uploaded mod',
+            source: 'url'
+          })
+        });
+
+        if (response.ok) {
+          loadInstalledMods();
+          modal.showSuccess('Mod Installed', 'Successfully installed mod from URL!');
+          setUploadUrl('');
+          setShowUploadModal(false);
+        } else {
+          const data = await response.json();
+          modal.showError('Installation Failed', `Failed to install mod: ${data.error}`);
+        }
+      } else if (uploadFile) {
+        // Handle file upload
+        const formData = new FormData();
+        formData.append('mod', uploadFile);
+
+        const response = await fetch('/api/mods/install', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          loadInstalledMods();
+          modal.showSuccess('Mod Installed', `Successfully installed ${uploadFile.name}!`);
+          setUploadFile(null);
+          setShowUploadModal(false);
+        } else {
+          const data = await response.json();
+          modal.showError('Installation Failed', `Failed to install mod: ${data.error}`);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to upload mod:', error);
+      modal.showError('Upload Failed', `Failed to upload mod: ${error instanceof Error ? error.message : 'Network error'}`);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const filteredAvailableMods = availableMods.filter(mod => {
+    const matchesSearch = mod.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      mod.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      mod.description.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    return matchesSearch;
+  });
 
   if (loading) {
     return <div className="text-center py-4 text-gray-600 dark:text-gray-400">Loading mods...</div>;
   }
 
   return (
-    <div className="space-y-4">
-      <Modal isOpen={modal.isOpen} options={modal.options} onClose={modal.hideModal} />
-      
-      {/* Tab Navigation */}
-      <div className="flex space-x-1 border-b border-gray-200 dark:border-gray-600">
-        <button
-          onClick={() => setActiveTab('installed')}
-          className={`px-4 py-2 font-medium text-sm transition-colors ${
-            activeTab === 'installed'
-              ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
-              : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-          }`}
-        >
-          Installed Mods
-        </button>
-        <button
-          onClick={() => setActiveTab('browse')}
-          className={`px-4 py-2 font-medium text-sm transition-colors ${
-            activeTab === 'browse'
-              ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
-              : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-          }`}
-        >
-          Browse Mods
-        </button>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Mod Manager</h2>
+        <div className="flex space-x-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+          <button
+            onClick={() => setActiveTab('installed')}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              activeTab === 'installed'
+                ? 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm'
+                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+            }`}
+          >
+            Installed ({installedMods.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('browse')}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              activeTab === 'browse'
+                ? 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm'
+                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+            }`}
+          >
+            Browse ({availableMods.length})
+          </button>
+        </div>
       </div>
 
-      {/* Tab Content */}
       {activeTab === 'installed' ? (
+        // Installed Tab
         <div>
-          <div className="space-y-2">
-            {installedMods.length === 0 ? (
-              <p className="text-gray-500 dark:text-gray-400 text-center py-8">
-                No mods installed yet. Go to the Browse Mods tab to install some!
-              </p>
-            ) : (
-              installedMods.map((mod: InstalledMod) => (
-                <div key={mod.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-medium text-gray-900 dark:text-gray-100">{mod.name}</h3>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">v{mod.version}</span>
-                      <span className="text-xs text-gray-400 dark:text-gray-500">by {mod.author || 'Unknown'}</span>
+          {installedMods.length === 0 ? (
+            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+              <p className="text-lg mb-2">No mods installed</p>
+              <p>Install mods from the Browse tab or upload your own files</p>
+            </div>
+          ) : (
+            <div className="grid gap-4">
+              {installedMods.map((mod) => (
+                <div
+                  key={mod.id}
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700"
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                        {mod.name}
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Version {mod.version} {mod.author && `by ${mod.author}`}
+                      </p>
                     </div>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{mod.description}</p>
+                    <div className="flex items-center space-x-3">
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={mod.enabled}
+                          onChange={(e) => toggleMod(mod.id, e.target.checked)}
+                          className="mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        />
+                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                          {mod.enabled ? 'Enabled' : 'Disabled'}
+                        </span>
+                      </label>
+                      <button
+                        onClick={() => uninstallMod(mod.id, mod.name)}
+                        className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm transition-colors"
+                      >
+                        Uninstall
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <label className="relative inline-flex items-center cursor-pointer" title={mod.enabled ? 'Disable mod' : 'Enable mod'}>
-                      <input
-                        type="checkbox"
-                        checked={mod.enabled}
-                        onChange={(e) => toggleMod(mod.id, e.target.checked)}
-                        className="sr-only peer"
-                      />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                    </label>
-                    <button
-                      onClick={() => downloadModPak(mod.id, mod.name)}
-                      className="px-3 py-1 text-xs bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors flex items-center gap-1"
-                      title="Download .pak file"
-                    >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                      Download
-                    </button>
-                    <button
-                      onClick={() => uninstallMod(mod.id, mod.name)}
-                      className="px-3 py-1 text-xs bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors flex items-center gap-1"
-                      title="Uninstall mod"
-                    >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                      Uninstall
-                    </button>
-                  </div>
+                  {mod.description && (
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">{mod.description}</p>
+                  )}
                 </div>
-              ))
-            )}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       ) : (
         // Browse Tab
         <div>
+          {/* Upload Button and Search */}
           <div className="mb-6 space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Install Local Mod File
-              </label>
-              <input
-                type="file"
-                accept=".pak,.zip,.EXMODZ"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) installModFromFile(file);
-                }}
-                className="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900 file:text-blue-700 dark:file:text-blue-300 hover:file:bg-blue-100 dark:hover:file:bg-blue-800"
-              />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                Upload .pak, .zip, or .EXMODZ files directly
-              </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button
+                onClick={() => setShowUploadModal(true)}
+                className="flex items-center justify-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                Install Local Mod File or URL
+              </button>
+              
+              <div className="flex-1">
+                <input
+                  type="text"
+                  placeholder="Search mods..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
             </div>
-            
-            <div className="border-t pt-4">
-              <input
-                type="text"
-                placeholder="Search community mods..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-              />
+
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+              <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">How to Install Mods:</h4>
+              <div className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+                <div><span className="font-semibold">🟢 GitHub Mods:</span> Auto-install with one click</div>
+                <div><span className="font-semibold">📁 Local Files:</span> Upload .pak, .zip, or .EXMODZ files</div>
+                <div><span className="font-semibold">🔗 URLs:</span> Direct download from any URL</div>
+              </div>
             </div>
           </div>
 
           {loadingAvailable ? (
-            <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="mt-2 text-gray-600 dark:text-gray-400">Loading available mods...</p>
+            <div className="text-center py-8 text-gray-600 dark:text-gray-400">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+              Loading available mods...
+            </div>
+          ) : filteredAvailableMods.length === 0 ? (
+            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+              <p className="text-lg mb-2">No mods found</p>
+              <p>Try adjusting your search terms</p>
             </div>
           ) : (
-            <div className="grid gap-4">
-              {filteredAvailableMods.map((mod) => (
-                <div key={mod.name} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-800">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100">{mod.name}</h3>
-                        {mod.installed && (
-                          <span className="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-xs rounded-full">
+            <div>
+              <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+                Showing {filteredAvailableMods.length} of {availableMods.length} mods from GitHub
+              </div>
+              
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {filteredAvailableMods.map((mod, index) => (
+                  <div
+                    key={index}
+                    className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700"
+                  >
+                    <div className="aspect-video bg-gray-200 dark:bg-gray-700">
+                      <img
+                        src={mod.imageURL}
+                        alt={mod.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = 'https://via.placeholder.com/300x200/6B7280/FFFFFF?text=Mod+Image';
+                        }}
+                      />
+                    </div>
+                    
+                    <div className="p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
+                          {mod.name}
+                        </h3>
+                        <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">
+                          GitHub
+                        </span>
+                      </div>
+                      
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                        by {mod.author} • v{mod.version}
+                      </p>
+                      
+                      <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">
+                        {mod.description}
+                      </p>
+                      
+                      <div className="flex items-center justify-between">
+                        <a
+                          href={mod.readmeURL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm"
+                        >
+                          View Details
+                        </a>
+                        
+                        {mod.installed ? (
+                          <span className="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-md text-sm">
                             Installed
                           </span>
+                        ) : downloading.includes(mod.name) ? (
+                          <button 
+                            disabled
+                            className="px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-md cursor-not-allowed flex items-center gap-2"
+                          >
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                            Installing...
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => downloadAndInstallMod(mod)}
+                            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors"
+                          >
+                            <div className="text-center">
+                              Install Mod
+                              <div className="text-xs text-blue-200 mt-1">
+                                (Auto conversion)
+                              </div>
+                            </div>
+                          </button>
                         )}
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                        <strong>Author:</strong> {mod.author} | <strong>Version:</strong> {mod.version}
-                      </p>
-                      <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">{mod.description}</p>
-                      {mod.imageURL && (
-                        <img 
-                          src={mod.imageURL} 
-                          alt={mod.name}
-                          className="w-full max-w-md h-32 object-cover rounded-md mb-3"
-                        />
-                      )}
-                    </div>
-                    <div className="ml-4 flex flex-col gap-2">
-                      {mod.installed ? (
-                        <div className="flex flex-col gap-2">
-                          <div className="px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-md text-center">
-                            ✓ Installed
-                          </div>
-                          <button 
-                            onClick={() => {
-                              // Find the installed mod by name to get the correct modId
-                              const installedMod = installedMods.find(m => m.name === mod.name);
-                              if (installedMod) {
-                                downloadModPak(installedMod.id, mod.name);
-                              }
-                            }}
-                            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors text-sm flex items-center justify-center gap-1"
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            Download
-                          </button>
-                          <button 
-                            onClick={() => {
-                              // Find the installed mod by name to get the correct modId
-                              const installedMod = installedMods.find(m => m.name === mod.name);
-                              if (installedMod) {
-                                uninstallMod(installedMod.id, mod.name);
-                              }
-                            }}
-                            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors text-sm"
-                          >
-                            Uninstall
-                          </button>
-                        </div>
-                      ) : downloading.includes(mod.name) ? (
-                        <button 
-                          disabled
-                          className="px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-md cursor-not-allowed flex items-center gap-2"
-                        >
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-                          Installing...
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => downloadAndInstallMod(mod)}
-                          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                        >
-                          <div className="text-center">
-                            Install Mod
-                            {mod.files.exmodz?.endsWith('.EXMODZ') && (
-                              <div className="text-xs text-blue-200 mt-1">
-                                (Placeholder conversion)
-                              </div>
-                            )}
-                          </div>
-                        </button>
-                      )}
                     </div>
                   </div>
-                </div>
-              ))}
-              {filteredAvailableMods.length === 0 && (
-                <p className="text-center text-gray-500 dark:text-gray-400 py-8">
-                  No mods found matching your search.
-                </p>
-              )}
+                ))}
+              </div>
             </div>
           )}
         </div>
       )}
+
+      {/* Upload Modal */}
+      {showUploadModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Install Mod File or URL
+            </h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Download URL (optional)
+                </label>
+                <input
+                  type="url"
+                  placeholder="https://example.com/mod.pak"
+                  value={uploadUrl}
+                  onChange={(e) => setUploadUrl(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              <div className="text-center text-gray-500 dark:text-gray-400">
+                — OR —
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Upload File
+                </label>
+                <input
+                  type="file"
+                  accept=".pak,.zip,.EXMODZ"
+                  onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Supports .pak, .zip, and .EXMODZ files
+                </p>
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-3 mt-6">
+              <button
+                onClick={() => {
+                  setShowUploadModal(false);
+                  setUploadUrl('');
+                  setUploadFile(null);
+                }}
+                className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
+                disabled={uploading}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleUploadMod}
+                disabled={uploading || (!uploadUrl && !uploadFile)}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-md transition-colors flex items-center gap-2"
+              >
+                {uploading && <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>}
+                {uploading ? 'Installing...' : 'Install'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Modal 
+        isOpen={modal.isOpen} 
+        options={modal.options} 
+        onClose={modal.hideModal} 
+      />
     </div>
   );
 }

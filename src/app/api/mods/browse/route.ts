@@ -1,6 +1,4 @@
 import { NextResponse } from 'next/server';
-import path from 'path';
-import fs from 'fs';
 
 const MODS_BASE_URL = 'https://raw.githubusercontent.com/Jimk72/Icarus_Mods/main';
 const MODINFO_URL = `${MODS_BASE_URL}/modinfo.json`;
@@ -14,84 +12,80 @@ interface ModInfo {
   imageURL: string;
   readmeURL: string;
   files: {
-    exmodz: string;
+    exmodz?: string;
+    download_url?: string;
   };
+  source: 'github';
 }
 
-export async function GET() {
+// Function to fetch mods from GitHub (Jimk's repository)
+async function fetchGitHubMods(): Promise<any[]> {
   try {
-    // Fetch mod info from the repository
     const response = await fetch(MODINFO_URL);
     if (!response.ok) {
-      throw new Error(`Failed to fetch mod info: ${response.statusText}`);
+      throw new Error(`Failed to fetch GitHub mod info: ${response.statusText}`);
     }
 
     const modInfoData = await response.json();
-    
-    // Extract the mods array from the JSON structure
     const modsArray = modInfoData.mods || [];
-    console.log('[Browse API] Found', modsArray.length, 'mods available');
-    
-    // Check which mods are already installed
-    const serverPath = 'C:\\icarusserver';
-    const modsPath = path.join(serverPath, 'Icarus', 'Content', 'Paks', 'Mods');
-    
-    let installedMods: Array<{name: string, file: string}> = [];
-    try {
-      if (fs.existsSync(modsPath)) {
-        const allFiles = fs.readdirSync(modsPath);
-        const modFiles = allFiles.filter(file => 
-          file.endsWith('.pak') || file.endsWith('.EXMODZ')
-        );
+
+    // Transform to include source information and fix missing images
+    return modsArray.map((mod: any) => {
+      let imageURL = mod.imageURL;
+      
+      // If no image URL, try to generate one based on mod name
+      if (!imageURL || imageURL.trim() === '') {
+        const modName = mod.name || '';
+        // Try to construct GitHub image URL based on naming patterns
+        const sanitizedName = modName.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+        imageURL = `https://github.com/Jimk72/Icarus_Mods/raw/main/${sanitizedName}.png`;
         
-        for (const file of modFiles) {
-          const cleanName = file.replace(/\.(pak|EXMODZ)$/, '').replace('_disabled_', '');
-          
-          // Try to read metadata to get original name
-          const metadataFile = `${cleanName}.meta.json`;
-          const metadataPath = path.join(modsPath, metadataFile);
-          
-          let originalName = cleanName;
-          if (fs.existsSync(metadataPath)) {
-            try {
-              const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
-              originalName = metadata.name || cleanName;
-            } catch (error) {
-              console.warn(`Failed to read metadata for ${file}:`, error);
-            }
-          }
-          
-          installedMods.push({ name: originalName, file: cleanName });
+        // Fallback to a generic Icarus mod image if we can't construct one
+        if (!sanitizedName) {
+          imageURL = 'https://github.com/Jimk72/Icarus_Mods/raw/main/Icarus_Mod_Generic.png';
         }
       }
-    } catch (error) {
-      console.warn('Could not read mods directory:', error);
-    }
+      
+      return {
+        ...mod,
+        imageURL,
+        source: 'github'
+      };
+    });
 
-    // Process mod info and mark installed mods
-    const processedMods = modsArray.map((mod: any) => ({
-      name: mod.name || 'Unknown Mod',
-      author: mod.author || 'Unknown',
-      version: mod.version || '1.0.0',
-      compatibility: mod.compatibility || 'Unknown',
-      description: mod.description || 'No description available',
-      imageURL: mod.imageURL || '',
-      readmeURL: mod.readmeURL || '',
-      files: {
-        exmodz: mod.files?.exmodz || '',
-        png: mod.imageURL || undefined
-      },
-      installed: installedMods.some(installedMod => 
-        installedMod.name.toLowerCase() === mod.name?.toLowerCase() ||
-        installedMod.file.toLowerCase().includes(mod.name?.toLowerCase() || '')
-      )
-    }));
-
-    return NextResponse.json(processedMods);
   } catch (error) {
-    console.error('[Browse API] Error fetching available mods:', error);
+    console.error('[Browse API] Error fetching GitHub mods:', error);
+    return [];
+  }
+}
+
+// Removed Nexus Mods integration - simplified to GitHub only
+
+export async function GET(request: Request) {
+  try {
+    console.log('[Browse API] Fetching GitHub mods...');
+    
+    // Fetch GitHub mods only
+    const githubMods = await fetchGitHubMods();
+    
+    console.log(`[Browse API] GitHub: ${githubMods.length} mods loaded`);
+    
+    return NextResponse.json({
+      success: true,
+      sources: {
+        github: githubMods.length
+      },
+      mods: githubMods
+    });
+
+  } catch (error) {
+    console.error('[Browse API] Unexpected error:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch available mods', details: error instanceof Error ? error.message : 'Unknown error' },
+      { 
+        success: false, 
+        error: 'Failed to fetch mods',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      }, 
       { status: 500 }
     );
   }
