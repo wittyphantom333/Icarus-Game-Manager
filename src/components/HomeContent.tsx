@@ -69,25 +69,31 @@ function HomeContent() {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
         console.log('[WebSocket] Page became visible, checking connection...');
-        // If we're not connected and not currently reconnecting, try to reconnect
-        if (!wsConnected && !isReconnecting) {
-          console.log('[WebSocket] Reconnecting due to page visibility change');
-          setReconnectAttempts(0); // Reset attempts on manual reconnection
-          // Focus reconnection - don't reload logs
-          connectWebSocket();
-        }
+        // Add a small delay to prevent race conditions
+        setTimeout(() => {
+          // If we're not connected and not currently reconnecting, try to reconnect
+          if (!wsConnected && !isReconnecting) {
+            console.log('[WebSocket] Reconnecting due to page visibility change');
+            setReconnectAttempts(0); // Reset attempts on manual reconnection
+            // Focus reconnection - don't reload logs
+            connectWebSocket();
+          }
+        }, 100);
       }
     };
 
     // Handle window focus (additional reliability)
     const handleFocus = () => {
       console.log('[WebSocket] Window focused, checking connection...');
-      if (!wsConnected && !isReconnecting) {
-        console.log('[WebSocket] Reconnecting due to window focus');
-        setReconnectAttempts(0);
-        // Focus reconnection - don't reload logs
-        connectWebSocket();
-      }
+      // Add a small delay to prevent race conditions
+      setTimeout(() => {
+        if (!wsConnected && !isReconnecting) {
+          console.log('[WebSocket] Reconnecting due to window focus');
+          setReconnectAttempts(0);
+          // Focus reconnection - don't reload logs
+          connectWebSocket();
+        }
+      }, 100);
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -127,10 +133,22 @@ function HomeContent() {
   };
 
   const connectWebSocket = () => {
+    // Prevent multiple simultaneous connections
+    if (isReconnecting || wsConnected) {
+      console.log('[WebSocket] Connection attempt blocked - already connecting or connected');
+      return;
+    }
+
     // Clear any existing reconnection timeout
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current);
       reconnectTimeoutRef.current = null;
+    }
+
+    // Close any existing connection
+    if (wsConnection && wsConnection.readyState !== WebSocket.CLOSED) {
+      console.log('[WebSocket] Closing existing connection before creating new one');
+      wsConnection.close();
     }
 
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -177,8 +195,8 @@ function HomeContent() {
           setLogs([]);
         } else if (data.type === 'connection-ready') {
           console.log('[WebSocket] Connection ready:', data.message);
-          // Always request logs on page refresh/first load, skip on alt-tab reconnections
-          if (!hasLoadedInitialLogsRef.current || logs.length === 0) {
+          // Only request logs on first load or manual reconnection
+          if (!hasLoadedInitialLogsRef.current) {
             console.log('[WebSocket] Requesting all session logs with progressive loading');
             setIsLoadingLogs(true);
             ws.send(JSON.stringify({ type: 'request-logs' }));
