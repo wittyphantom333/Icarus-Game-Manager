@@ -181,6 +181,127 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /server/update:
+    get:
+      tags:
+        - Server Control
+      summary: Check server update status
+      description: Check if server can be updated and get current version information
+      responses:
+        '200':
+          description: Update status retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  canUpdate:
+                    type: boolean
+                    description: Whether the server can be updated
+                  steamcmdExists:
+                    type: boolean
+                    description: Whether SteamCMD is installed
+                  serverExists:
+                    type: boolean
+                    description: Whether server directory exists
+                  steamcmdPath:
+                    type: string
+                    description: Path to SteamCMD installation
+                  serverPath:
+                    type: string
+                    description: Path to server installation
+                  currentVersion:
+                    type: string
+                    description: Current server version/build
+                  requirements:
+                    type: object
+                    properties:
+                      steamcmd:
+                        type: string
+                        description: SteamCMD requirement status
+                      serverDirectory:
+                        type: string
+                        description: Server directory requirement status
+              example:
+                canUpdate: true
+                steamcmdExists: true
+                serverExists: true
+                steamcmdPath: "C:\\steamcmd"
+                serverPath: "C:\\icarusserver"
+                currentVersion: "Build 123456"
+                requirements:
+                  steamcmd: "Available"
+                  serverDirectory: "Available"
+        '500':
+          description: Failed to check update status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    post:
+      tags:
+        - Server Control
+      summary: Update the Icarus server
+      description: Update the server using SteamCMD (server must be stopped first)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: [update]
+                  description: Action to perform
+              required:
+                - action
+              example:
+                action: "update"
+      responses:
+        '200':
+          description: Server update started successfully (streaming response)
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                description: Server-sent events stream with update progress
+                example: |
+                  data: {"type":"status","message":"Starting server update...","progress":0}
+                  
+                  data: {"type":"progress","message":"Connecting to Steam...","progress":10}
+                  
+                  data: {"type":"progress","message":"Downloading server files...","progress":50}
+                  
+                  data: {"type":"complete","message":"Update completed successfully!","progress":100,"success":true}
+        '400':
+          description: Invalid request or server not stopped
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: SteamCMD or server directory not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: string
+                  downloadUrl:
+                    type: string
+                    description: URL to download SteamCMD (if missing)
+        '500':
+          description: Server update failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /server/stats:
     get:
       tags:

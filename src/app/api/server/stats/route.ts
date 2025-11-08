@@ -22,20 +22,16 @@ interface ServerStats {
 // Function to get process information for IcarusServer.exe
 async function getIcarusServerProcess() {
   try {
-    // Use a single efficient command to check for the main process
-    const { stdout } = await execAsync(`tasklist /FI "IMAGENAME eq IcarusServer-Win64-Shipping.exe" /FO CSV | findstr "IcarusServer-Win64-Shipping.exe"`);
+    // Use PowerShell directly to avoid tasklist/findstr issues when process doesn't exist
+    const detailResult = await execAsync(`powershell -Command "Get-Process -Name 'IcarusServer-Win64-Shipping' -ErrorAction SilentlyContinue | Select-Object Id, StartTime, WorkingSet64, ProcessName | ConvertTo-Json"`);
     
-    if (stdout.trim()) {
-      // If process is found, get detailed info with PowerShell (single call)
-      const detailResult = await execAsync(`powershell -Command "Get-Process -Name 'IcarusServer-Win64-Shipping' -ErrorAction SilentlyContinue | Select-Object Id, StartTime, WorkingSet64, ProcessName | ConvertTo-Json"`);
-      
-      if (detailResult.stdout.trim()) {
-        const processData = JSON.parse(detailResult.stdout);
-        return Array.isArray(processData) ? processData[0] : processData;
-      }
+    if (detailResult.stdout.trim()) {
+      const processData = JSON.parse(detailResult.stdout);
+      return Array.isArray(processData) ? processData[0] : processData;
     }
   } catch (error) {
-    console.log('Error getting IcarusServer process:', error);
+    // This is expected when the server is not running, so don't log as error
+    console.log('IcarusServer process not found (server likely stopped)');
   }
   return null;
 }
